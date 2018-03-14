@@ -1,0 +1,21 @@
+{
+  "name": "speedy-components",
+  "version": "0.0.1",
+  "authors": [
+    {
+      "name": "Jozz Hart",
+      "email": "me@jozzhart.com"
+    }
+  ],
+  "main": [
+    "dist/index.js"
+  ],
+  "ignore": [
+    "src",
+    "test",
+    "karma-*.conf.js",
+    "**/.*"
+  ],
+  "dependencies": {},
+  "devDependencies": {}
+}

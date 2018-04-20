@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head>		
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.9/angular.min.js"></script>
+    <script>
+      angular.module('app', ['app.components'])
+      .controller('SpeedyExampleController', function($scope) {
+        $scope.basicContent = 'working';
+        $scope.inputText ={
+          name: 'text',
+          description: 'A great description',
+          value: ''
+        };
+        $scope.inputNumber ={
+          name: 'number',
+          description: 'This has to be a number pal',
+          value: 12345
+        };
+        $scope.inputTextarea ={
+          name: 'textarea',
+          description: 'This has to be a number pal',
+          value: 'Some longer text and go in here, but I guess its not that long'
+        };
+      });
+    </script>
+
+    <script src="index.js"></script>
+</head>
+<body ng-app="app">	
+  <div ng-controller="SpeedyExampleController">
+    <spdy-basic content="{{basicContent}}"></spdy-basic>
+    <spdy-input-text name="{{inputText.name}}" description="{{inputText.description}}" value="inputText.value"></spdy-input-text>
+    <spdy-input-number name="{{inputNumber.name}}" description="{{inputNumber.description}}" value="inputNumber.value"></spdy-input-number>
+    <spdy-input-textarea name="{{inputTextarea.name}}" value="inputTextarea.value"></spdy-input-textarea>
+  </div>
+</body>

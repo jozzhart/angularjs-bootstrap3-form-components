@@ -19,3 +19,8 @@ To build
 npm run build
 ```
 
+## Kitchen sink
+
+Demo showing all components 
+
+[Kitchen sink demo]https://jozzhart.github.io/speedy-components/example/

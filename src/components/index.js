@@ -12,4 +12,7 @@ componentsModule.component('spdyInputNumber', InputNumberComponent);
 import InputTextareaComponent from './form/input-textarea/input-textarea.component'
 componentsModule.component('spdyInputTextarea', InputTextareaComponent);
 
+import StatusComponent from './smart/status'
+componentsModule.component('spdyStatus', StatusComponent);
+
 export default componentsModule;

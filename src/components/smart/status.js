@@ -2,10 +2,15 @@ import StatusTemplate from './status.html';
 
 class StatusController {
 
-  constructor() {}
+  constructor(collectorService) {
+    this.collectorService = collectorService;
+  }
 
   $onInit() {
-    console.log('status component initialised');
+    this.collectorService.status()
+    .then(data => {
+      this.collectors = data;
+    })
   }
 
   $onChanges() {
@@ -22,5 +27,9 @@ let StatusComponent = {
   template: StatusTemplate,
   controller: StatusController
 }
+
+
+StatusController.$inject = ['collectorService']
+
 
 export default StatusComponent;

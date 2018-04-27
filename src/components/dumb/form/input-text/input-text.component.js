@@ -17,6 +17,7 @@ let InputTextComponent = {
     placeholder: '@',
     name: '@',
     description: '@',
+    required: '@',
     value: '='
   },
   controller: Controller

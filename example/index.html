@@ -48,20 +48,18 @@
       })
       .run(function($httpBackend) {
         var collectors = [{
-                "collectorName": "Gitlab",
-                "lastExecutionStartTime": 1524489480162,
-                "lastExecutionEndTime": 1524489540205,
-                "lastCorrectExecutionEndTime": 1524489540205,
-                "executionErrors": []
-              }, {
-                "collectorName": "Sonar",
-                "lastExecutionStartTime": 1524489480162,
-                "lastExecutionEndTime": 1524489540205,
-                "lastCorrectExecutionEndTime": 1524489540205,
-                "executionErrors": ["There was a flipping error!"]
-              }];
+          "collectorName": "UDeploy",
+          "lastExecuted": 1524651360141,
+          "errors": [
+            { "errorCode": "Unreachable", "errorMessage": "https://ucd.intranet.group/rest/deploy/application", "timestamp": 1524651360140 }
+          ]
+        },{
+          "collectorName": "Github",
+          "lastExecuted": 1524651300141,
+          "errors": []
+        }];
 
-        $httpBackend.whenGET('https://jsonplaceholder.typicode.com/posts/1').respond(collectors);
+        $httpBackend.whenGET('/api/speedy/health').respond(collectors);
         $httpBackend.whenGET(/^/).passThrough();
       });
 

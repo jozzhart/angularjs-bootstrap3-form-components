@@ -9,7 +9,7 @@ class HealthService {
   }
 
   collectors() {
-    return this.$http.get('https://jsonplaceholder.typicode.com/posts/1')
+    return this.$http.get('/api/speedy/health')
     .then(response => response.data);
   }
 }

@@ -1,49 +1,107 @@
 <!doctype html>
 <html>
+
 <head>
-  
+
   <!-- Latest compiled and minified CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+    crossorigin="anonymous">
   <!-- Optional theme -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+    crossorigin="anonymous">
 
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.9/angular.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.3/angular-ui-router.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap-tpls.min.js"></script>
-	
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.9/angular-mocks.js"></script>
+
   <script>
-    angular.module('app', ['speedyComponents', 'ui.router', 'ui.bootstrap'])
-    .controller('SpeedySinkController', function($scope) {
-      $scope.basicContent = 'Kitchen Sink';
-      $scope.inputText ={
-        name: 'text',
-        description: 'A great description',
-        value: ''
-      };
-      $scope.inputNumber ={
-        name: 'number',
-        description: 'This has to be a number pal',
-        value: 12345
-      };
-      $scope.inputTextarea ={
-        name: 'textarea',
-        description: 'This has to be a number pal',
-        value: 'Some longer text and go in here, but I guess its not that long'
-      };
-    })
-    .config(function($stateProvider, $urlServiceProvider) {
-      $urlServiceProvider.rules.otherwise({ state: 'sinkState' }); 
+    angular.module('app', ['speedyComponents', 'ui.router', 'ui.bootstrap', 'ngMockE2E'])
+      .controller('SpeedySinkController', function ($scope) {
+        $scope.basicContent = 'Kitchen Sink';
+        $scope.inputText = {
+          name: 'text',
+          description: 'A great description',
+          value: ''
+        };
+        $scope.inputNumber = {
+          name: 'number',
+          description: 'This has to be a number pal',
+          value: 12345
+        };
+        $scope.inputTextarea = {
+          name: 'textarea',
+          description: 'This has to be a number pal',
+          value: 'Some longer text and go in here, but I guess its not that long'
+        };
+      })
+      .config(function ($stateProvider, $urlServiceProvider) {
+        $urlServiceProvider.rules.otherwise({
+          state: 'sinkState'
+        });
 
-      $stateProvider.state('sinkState', {
-        url: '/',
-        controller: 'SpeedySinkController',
-        templateUrl: './sink.html'
+        $stateProvider.state('sinkState', {
+          url: '/',
+          controller: 'SpeedySinkController',
+          templateUrl: './sink.html'
+        });
+      })
+      .run(function($httpBackend) {
+        var collectors = [{
+                "collectorName": "Gitlab",
+                "lastExecutionStartTime": 1524489480162,
+                "lastExecutionEndTime": 1524489540205,
+                "lastCorrectExecutionEndTime": 1524489540205,
+                "executionErrors": []
+              }, {
+                "collectorName": "Sonar",
+                "lastExecutionStartTime": 1524489480162,
+                "lastExecutionEndTime": 1524489540205,
+                "lastCorrectExecutionEndTime": 1524489540205,
+                "executionErrors": ["There was a flipping error!"]
+              }];
+
+        $httpBackend.whenGET('https://jsonplaceholder.typicode.com/posts/1').respond(collectors);
+        $httpBackend.whenGET(/^/).passThrough();
       });
-    })
-  </script>
 
-    <script src="index.js"></script>
+  </script>
+  <script src="../dist/index.js"></script>
 </head>
-<body ng-app="app">
-  <ui-view></ui-view>	
+
+<body ng-app="app" style="padding-top: 70px;">
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+          aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">Speedy</a>
+      </div>
+      <div id="navbar" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav  nav-pills pull-right">
+          <li role="presentation" class="dropdown" uib-dropdown>
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" uib-dropdown-toggle>
+              Welcome Speedy User
+              <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-right" uib-dropdown-menu>
+              <li>
+                <a href="/#/">Kitchen Sink</a>
+              </li>
+              <li>
+                <a href="/#/status">Status</a>
+              </li>
+            </ul>
+          </li>
+
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <ui-view></ui-view>
 </body>

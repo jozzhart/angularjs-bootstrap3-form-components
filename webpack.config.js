@@ -129,7 +129,8 @@ module.exports = function makeWebpackConfig() {
 
 
   config.devServer = {
-    contentBase: path.join(__dirname, "example")
+    contentBase: path.join(__dirname, "example"),
+    publicPath: "/dist/"
   }
 
 

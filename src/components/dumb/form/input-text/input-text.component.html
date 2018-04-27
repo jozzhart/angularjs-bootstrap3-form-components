@@ -3,4 +3,7 @@
     <span ng-if="$ctrl.description" class="glyphicon glyphicon-question-sign" uib-tooltip="{{$ctrl.description}}" tooltip-placement="top-left"></span>
   </label>
   <input type="text" class="form-control" placeholder="{{$ctrl.placeholder}}" ng-model="$ctrl.value">
+  <small ng-if="$ctrl.required" class="form-text text-muted">
+    This field is required
+  </small>
 </div>

@@ -1,51 +1,37 @@
 <!-- <ng-include src="ctrl.templateUrl"></ng-include> -->
 
 <div class="statusPage">
-    <div class="col-lg-8 col-lg-push-2">
-        <div class="widget-modal r">
-            <div class="widget-modal-heading">
-                Collectors status
-            </div>
-            <div class="widget-modal-body">
-                <table class="table table-x">
-                    <thead>
-                        <tr>
-                            <th>Status</th>
-                            <th>Name</th>
-                            <th>Last Execution</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <span class="glyphicon glyphicon-thumbs-up"></span>
-                            </td>
-                            <td>Gitlab</td>
-                            <td>25th Jun, 5:12:26pm</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span class="glyphicon glyphicon-thumbs-down"></span>
-                            </td>
-                            <td>Sonar</td>
-                            <td>25th Jun, 5:12:26pm</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3" style="padding:0">
-                                <div class="alert alert-danger">Error details will go in here.</div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span class="glyphicon glyphicon-thumbs-up"></span>
-                            </td>
-                            <td>Jenkins</td>
-                            <td>25th Jun, 5:12:26pm</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-        </div>
+  <div class="col-lg-8 col-lg-push-2">
+    <div class="widget-modal r">
+      <div class="widget-modal-heading">
+        <h1>Collectors status</h1>
+      </div>
+      <div class="widget-modal-body">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Status</th>
+              <th>Name</th>
+              <th>Last Execution</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat-start="collector in $ctrl.collectors">
+              <td>
+                <span ng-if="!collector.executionErrors.length" class="glyphicon glyphicon-thumbs-up"></span>
+                <span ng-if="collector.executionErrors.length" class="glyphicon glyphicon-thumbs-down"></span>
+              </td>
+              <td>{{collector.collectorName}}</td>
+              <td>{{collector.lastExecutionEndTime | date:'EEE, dd MMM @ HH:mm a'}}</td>
+            </tr>
+            <tr ng-repeat-end ng-if="collector.executionErrors.length">
+              <td colspan="3">
+                <div class="alert alert-danger">Error details will go in here.</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
+  </div>
 </div>

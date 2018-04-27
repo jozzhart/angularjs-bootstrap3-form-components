@@ -23,4 +23,4 @@ npm run build
 
 Demo showing all components 
 
-[Kitchen sink demo]https://jozzhart.github.io/speedy-components/example/
+[Kitchen sink demo](https://jozzhart.github.io/speedy-components/example)

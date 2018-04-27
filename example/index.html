@@ -13,9 +13,10 @@
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.9/angular.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.3/angular-ui-router.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap-tpls.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.9/angular-mocks.js"></script>
 
   <script>
-    angular.module('app', ['speedyComponents', 'ui.router', 'ui.bootstrap'])
+    angular.module('app', ['speedyComponents', 'ui.router', 'ui.bootstrap', 'ngMockE2E'])
       .controller('SpeedySinkController', function ($scope) {
         $scope.basicContent = 'Kitchen Sink';
         $scope.inputText = {
@@ -45,14 +46,8 @@
           templateUrl: './sink.html'
         });
       })
-      .factory('collectorService', ['$q', function ($q) {
-        var factoryService = {};
-
-        factoryService.status = function () {
-
-          return $q(function (resolve, reject) {
-            setTimeout(function () {
-              resolve([{
+      .run(function($httpBackend) {
+        var collectors = [{
                 "collectorName": "Gitlab",
                 "lastExecutionStartTime": 1524489480162,
                 "lastExecutionEndTime": 1524489540205,
@@ -64,15 +59,11 @@
                 "lastExecutionEndTime": 1524489540205,
                 "lastCorrectExecutionEndTime": 1524489540205,
                 "executionErrors": ["There was a flipping error!"]
-              }]);
-            }, 1);
-          });
+              }];
 
-
-        }
-
-        return factoryService;
-      }]);
+        $httpBackend.whenGET('https://jsonplaceholder.typicode.com/posts/1').respond(collectors);
+        $httpBackend.whenGET(/^/).passThrough();
+      });
 
   </script>
   <script src="../dist/index.js"></script>

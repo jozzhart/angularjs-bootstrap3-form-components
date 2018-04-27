@@ -2,25 +2,16 @@ import StatusTemplate from './status.html';
 
 class StatusController {
 
-  constructor(collectorService) {
-    this.collectorService = collectorService;
+  constructor(HealthService) {
+    this.healthService = HealthService;
   }
 
   $onInit() {
-    this.collectorService.status()
+    this.healthService.collectors()
     .then(data => {
       this.collectors = data;
     })
   }
-
-  $onChanges() {
-    console.log('status component changed');
-  }
-
-  $onDestroy() {
-    console.log('status component destroyed');
-  }
-
 }
 
 let StatusComponent = {
@@ -28,8 +19,6 @@ let StatusComponent = {
   controller: StatusController
 }
 
-
-StatusController.$inject = ['collectorService']
-
+StatusController.$inject = ['HealthService']
 
 export default StatusComponent;

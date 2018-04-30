@@ -2,6 +2,7 @@
 
 // Modules
 var webpack = require('webpack');
+var path = require('path');
 
 /**
  * Env
@@ -125,6 +126,12 @@ module.exports = function makeWebpackConfig() {
   };
 
   config.watch = true;
+
+
+  config.devServer = {
+    contentBase: path.join(__dirname, "example"),
+    publicPath: "/dist/"
+  }
 
 
   return config;

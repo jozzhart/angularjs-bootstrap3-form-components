@@ -18,15 +18,17 @@
           <tbody>
             <tr ng-repeat-start="collector in $ctrl.collectors">
               <td>
-                <span ng-if="!collector.executionErrors.length" class="glyphicon glyphicon-thumbs-up"></span>
-                <span ng-if="collector.executionErrors.length" class="glyphicon glyphicon-thumbs-down"></span>
+                <span ng-if="!collector.errors.length" class="glyphicon glyphicon-thumbs-up "></span>
+                <span ng-if="collector.errors.length" class="glyphicon glyphicon-thumbs-down"></span>
               </td>
               <td>{{collector.collectorName}}</td>
-              <td>{{collector.lastExecutionEndTime | date:'EEE, dd MMM @ HH:mm a'}}</td>
+              <td>{{collector.lastExecuted | date:'EEE, dd MMM @ HH:mm a'}}</td>
             </tr>
-            <tr ng-repeat-end ng-if="collector.executionErrors.length">
+            <tr ng-repeat-end ng-if="collector.errors.length">
               <td colspan="3">
-                <div class="alert alert-danger">Error details will go in here.</div>
+                <div class="alert alert-danger">
+                  <p ng-repeat="error in collector.errors"><strong>{{error.errorCode}}</strong>: {{error.errorMessage}}</p>
+                </div>
               </td>
             </tr>
           </tbody>

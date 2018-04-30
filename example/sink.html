@@ -2,7 +2,8 @@
   <div class="jumbotron">
     <spdy-basic content="{{basicContent}}"></spdy-basic> 
   </div>
-  <spdy-input-text name="{{inputText.name}}" description="{{inputText.description}}" value="inputText.value"></spdy-input-text> 
+  <spdy-input-text name="{{inputText[0].name}}" description="{{inputText[0].description}}" value="inputText[0].value" required="{{inputText[0].required}}"></spdy-input-text> 
+  <spdy-input-text name="{{inputText[1].name}}" description="{{inputText[1].description}}" value="inputText[1].value" required="{{inputText[1].required}}"></spdy-input-text> 
   <spdy-input-number name="{{inputNumber.name}}" description="{{inputNumber.description}}" value="inputNumber.value"></spdy-input-number> 
   <spdy-input-textarea name="{{inputTextarea.name}}" value="inputTextarea.value"></spdy-input-textarea> 
 </div>

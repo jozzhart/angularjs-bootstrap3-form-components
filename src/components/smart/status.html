@@ -18,7 +18,7 @@
           <tbody>
             <tr ng-repeat-start="collector in $ctrl.collectors">
               <td>
-                <span ng-if="!collector.errors.length" class="glyphicon glyphicon-thumbs-up"></span>
+                <span ng-if="!collector.errors.length" class="glyphicon glyphicon-thumbs-up "></span>
                 <span ng-if="collector.errors.length" class="glyphicon glyphicon-thumbs-down"></span>
               </td>
               <td>{{collector.collectorName}}</td>

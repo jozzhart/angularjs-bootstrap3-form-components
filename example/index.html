@@ -10,6 +10,16 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
     crossorigin="anonymous">
 
+  <style>
+    .navbar-header {
+      float: left;
+    }
+    .glyphicon-thumbs-down {
+      color: red;
+    }.glyphicon-thumbs-up {
+      color: green;
+    }
+  </style>
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.9/angular.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.3/angular-ui-router.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap-tpls.min.js"></script>
@@ -19,11 +29,16 @@
     angular.module('app', ['speedyComponents', 'ui.router', 'ui.bootstrap', 'ngMockE2E'])
       .controller('SpeedySinkController', function ($scope) {
         $scope.basicContent = 'Kitchen Sink';
-        $scope.inputText = {
+        $scope.inputText = [{
           name: 'text',
           description: 'A great description',
           value: ''
-        };
+        },{
+          name: 'required text',
+          description: 'A required description',
+          value: '',
+          required: true
+        }];
         $scope.inputNumber = {
           name: 'number',
           description: 'This has to be a number pal',
@@ -70,10 +85,10 @@
 <body ng-app="app" style="padding-top: 70px;">
   <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
-      <div class="">
+      <div class="navbar-header">
         <a class="navbar-brand" href="#">Speedy</a>
       </div>
-      <div id="navbar" class="">
+      <div id="navbar">
         <ul class="nav navbar-nav  nav-pills pull-right">
           <li role="presentation" class="dropdown" uib-dropdown>
             <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" uib-dropdown-toggle>

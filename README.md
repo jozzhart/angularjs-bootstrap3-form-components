@@ -8,7 +8,7 @@ It also includes an exmple app to showcase some of the components.
 
 The library includes upstream work done by a separate Sapient team as a dependency.
 
-![Code Coverage-shield-badge-1](https://img.shields.io/badge/Code%20Coverage-75.76%25-yellow.svg)
+![Code Coverage-shield-badge-1](https://img.shields.io/badge/Code%20Coverage-57.69%25-red.svg)
 
 To run tests
 ```

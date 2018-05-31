@@ -20,7 +20,7 @@ describe('Component: myComponent', function () {
 
     it('should render the text', function() {
       var h1 = element.find('h1');
-      expect(h1.text()).toBe('Speedy: basic');
+      expect(h1.text()).toBe('LBG Speedy: basic');
     });
 
   });

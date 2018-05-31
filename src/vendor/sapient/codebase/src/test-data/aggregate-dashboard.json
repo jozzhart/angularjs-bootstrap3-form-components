@@ -1,0 +1,155 @@
+{
+    "header": ["Service Lines", "Accounts", "Lead Time", "Backlog to DOR", "DOD to Live","Sprint Predictability", "Backlog health"],
+    "data": {
+        "serviceLabel": "Service Lines",
+        "serviceValue": [{
+            "serviceName": "Retail",
+            "serviceDetail": {
+                "accountLabel": "Accounts",
+                "accountValue": [{
+                        "accountName": "LLoyds",
+                        "accountDetail": [{
+                                "kpiLabel": "Lead Time",
+                                "kpiValue": {
+                                    "value": "24",
+                                    "unit": "Months",
+                                    "trend": "up",
+                                    "maturity": "M1"
+                                }
+                            },
+                            {
+                                "kpiLabel": "Backlog to DOR",
+                                "kpiValue": {
+                                    "value": "4.5",
+                                    "unit": "%",
+                                    "trend": "up",
+                                    "maturity": "M5"
+                                }
+                            },
+                            {
+                                "kpiLabel": "DOD to Live",
+                                "kpiValue": {
+                                    "value": "5",
+                                    "unit": "day",
+                                    "trend": "up",
+                                    "maturity": "M5"
+                                }
+                            },
+                            {
+                                "kpiLabel": "Sprint Predictability",
+                                "kpiValue": {
+                                    "value": "4.5",
+                                    "unit": "%",
+                                    "trend": "up",
+                                    "maturity": "M5"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "accountName": "LLoyds",
+                        "accountDetail": [{
+                                "kpiLabel": "Lead Time",
+                                "kpiValue": {
+                                    "value": "24",
+                                    "unit": "Months",
+                                    "trend": "up",
+                                    "maturity": "M4"
+                                }
+                            },
+                            {
+                                "kpiLabel": "Backlog to DOR",
+                                "kpiValue": {
+                                    "value": "4",
+                                    "unit": "days",
+                                    "trend": "up",
+                                    "maturity": "M3"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "serviceName": "Insurance",
+            "serviceDetail": {
+                "accountLabel": "Accounts",
+                "accountValue": [{
+                        "accountName": "BBB",
+                        "accountDetail": [{
+                                "kpiLabel": "Lead Time",
+                                "kpiValue": {
+                                    "value": "3",
+                                    "unit": "days",
+                                    "trend": "up",
+                                    "maturity": "M1"
+                                }
+                            },
+                            {
+                                "kpiLabel": "Backlog to DOR",
+                                "kpiValue": {
+                                    "value": "3.5",
+                                    "unit": "%",
+                                    "trend": "down",
+                                    "maturity": "M2"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "accountName": "M&S",
+                        "accountDetail": [{
+                                "kpiLabel": "Lead Time",
+                                "kpiValue": {
+                                    "value": "21",
+                                    "unit": "Months",
+                                    "trend": "up",
+                                    "maturity": "M1"
+                                }
+                            },
+                            {
+                                "kpiLabel": "Backlog to DOR",
+                                "kpiValue": {
+                                    "value": "3.0",
+                                    "unit": "Months",
+                                    "trend": "up",
+                                    "maturity": "M2"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "serviceName": "Financial Services",
+            "serviceDetail": {
+                "accountLabel": "Accounts",
+                "accountValue": [{
+                        "accountName": "Speedy",
+                        "accountDetail": [{
+                                "kpiLabel": "Lead Time",
+                                "kpiValue": {
+                                    "value": "3",
+                                    "unit": "days",
+                                    "trend": "up",
+                                    "maturity": "M1"
+                                }
+                            },
+                            {
+                                "kpiLabel": "Backlog to DOR",
+                                "kpiValue": {
+                                    "value": "3.5",
+                                    "unit": "%",
+                                    "trend": "down",
+                                    "maturity": "M2"
+                                }
+                            }
+                        ]
+                    }                                
+                ]
+            }
+        }]
+    }
+}

@@ -1,0 +1,12 @@
+<div class="modal-body">
+        During project setup below are the properties are missing
+        <div ng-if="!instance_owner">"instance_owner"</div>
+        <div ng-if="!project_name">"project_name"</div>
+        <div ng-if="!account_name">"account_name"</div>
+        <div>For properties details please refer <a href="{{analyticsConfigDescPath}}" target="_blank">Configuration and Properties</a></div>
+</div>
+    
+<div class="modal-footer">
+    <button class="btn btn-sm btn-default" type="button" ng-click="ok()">OK</button>
+    <button class="btn btn-sm btn-secondary" type="button" ng-click="cancel()">Cancel</button>
+</div>

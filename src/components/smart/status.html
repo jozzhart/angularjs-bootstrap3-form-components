@@ -1,10 +1,8 @@
-<!-- <ng-include src="ctrl.templateUrl"></ng-include> -->
-
 <div class="statusPage">
   <div class="col-lg-8 col-lg-push-2">
     <div class="widget-modal r">
       <div class="widget-modal-heading">
-        <h1>Collectors status</h1>
+        <h1 class="page-header">Collectors status</h1>
       </div>
       <div class="widget-modal-body">
         <table class="table">
@@ -27,7 +25,7 @@
             <tr ng-repeat-end ng-if="collector.errors.length">
               <td colspan="3">
                 <div class="alert alert-danger">
-                  <p ng-repeat="error in collector.errors"><strong>{{error.errorCode}}</strong>: {{error.errorMessage}}</p>
+                  <p ng-if="collector.errors.length"><strong>{{collector.errors[0].errorCode}}</strong>: {{collector.errors[0].errorMessage}}</p>
                 </div>
               </td>
             </tr>

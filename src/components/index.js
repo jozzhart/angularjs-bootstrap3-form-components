@@ -13,6 +13,12 @@ import InputTextareaComponent from './dumb/form/input-textarea/input-textarea.co
 componentsModule.component('spdyInputTextarea', InputTextareaComponent);
 
 import StatusComponent from './smart/status'
-componentsModule.component('spdyStatus', StatusComponent)
+componentsModule.component('spdyStatus', StatusComponent);
+
+import TeamDashboardComponent from './smart/team-dashboard'
+componentsModule.component('spdyTeamDashboard', TeamDashboardComponent);
+
+// import CustomWidgetComponent from './sapient/custom-widget.component'
+// componentsModule.component('customWidget', CustomWidgetComponent);
 
 export default componentsModule;

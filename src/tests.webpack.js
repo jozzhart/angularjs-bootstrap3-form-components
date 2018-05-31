@@ -3,6 +3,7 @@
 
 import angular from 'angular';
 import mocks from 'angular-mocks';
+import uiRouter from 'angular-ui-router';
 
 const context = require.context('./', true, /spec\.js$/);
 

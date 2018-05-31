@@ -1,6 +1,6 @@
 'use strict';
 
-import '../../';
+import '../../../../';
 
 describe('Component: myComponent', function () {
 

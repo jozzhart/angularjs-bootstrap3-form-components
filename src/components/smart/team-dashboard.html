@@ -1,0 +1,95 @@
+<!-- <div class="wrapper" ng-controller="CustomTemplateController as template"> -->
+  <div class="wrapper">
+    <div class="one">
+      <div class="category-head cellDoubleWidth" id="people">
+        <div>
+          <img src="../../assets/img/people-icon.png">
+          <h5>PEOPLE</h5>
+          <h6>Are people engaged?</h6>
+        </div>
+      </div>
+      <custom-widget class="custom-widget" ng-class="$ctrl.layout.improvement.classes" fetch-data="$ctrl.fetchImprovement()"></custom-widget>
+
+      <!-- HAPPINESS INDEX -->
+      <custom-widget class="custom-widget" ng-class="$ctrl.layout.happiness.classes" fetch-data="$ctrl.fetchHappinessIndex()"></custom-widget>
+      <div class="category-head cellDoubleWidth" id="quality">
+        <div>
+          <img src="../../assets/img/value-icon.png">
+          <h5>VALUE</h5>
+          <h6>Are we delivering value?</h6>
+        </div>
+      </div>
+      <custom-widget class="custom-widget" ng-class="$ctrl.layout.value.classes" fetch-data="$ctrl.fetchAssignValueMetric()"></custom-widget>
+    </div>
+
+    <div class="two">
+      <div class="category-head cellQuadWidth" id="productivity">
+        <div>
+          <img src="../../assets/img/productivity-icon.png">
+          <h5>SPEED</h5>
+          <h6>Are we going fast?</h6>
+        </div>
+      </div>
+      <!-- <custom-widget class="custom-widget" ng-class="$ctrl.layout.backlogToDOR.classes" fetch-data="$ctrl.fetchStoryBacklogtoDOR()"></custom-widget> -->
+
+      <custom-widget class="custom-widget" ng-class="$ctrl.layout.storyDORtoDOD.classes" fetch-data="$ctrl.fetchStoryDORtoDOD()"
+        data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle" ng-click="$ctrl.customWidgetClick('storyLeadTime')"></custom-widget>
+
+      <!-- <custom-widget class="custom-widget" ng-class="$ctrl.layout.storyLeadTime.classes" fetch-data="$ctrl.fetchStoryLeadTime()"></custom-widget> -->
+
+      <custom-widget class="custom-widget" ng-class="$ctrl.layout.dodToLive.classes" fetch-data="$ctrl.fetchStoryDODtoLive()"
+        data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle" ng-click="$ctrl.customWidgetClick('storyLiveLeadTime')"></custom-widget>
+
+      <custom-widget class="custom-widget" ng-class="$ctrl.layout.sprintPredictability.classes" fetch-data="$ctrl.fetchSprintPredictability()"
+        data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle" ng-click="$ctrl.customWidgetClick('sprintPredictability')"></custom-widget>
+
+      <custom-widget class="custom-widget" ng-class="$ctrl.layout.commitmentReliability.classes" fetch-data="$ctrl.commitmentReliability()"
+        data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle" ng-click="$ctrl.customWidgetClick('commitmentReliability')"></custom-widget>
+
+      <!-- NUMBER OF CHECK-IN PER DAY   -->
+      <custom-widget class="custom-widget" ng-class="$ctrl.layout.noOfCheckins.classes" fetch-data="$ctrl.fetchNoOfCheckins()"
+        data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle" ng-click="$ctrl.customWidgetClick('NoOfCheckins')"></custom-widget>
+
+      <!-- CUMULATIVE FLOW DIAGRAM -->
+      <custom-widget class="custom-widget" ng-class="$ctrl.layout.cfdData.classes" fetch-data="$ctrl.fetchCfdData()"
+        data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle" ng-click="$ctrl.customWidgetClick('CfdData')"></custom-widget>
+
+      <!-- BACKLOG HEALTH -->
+      <custom-widget class="custom-widget" ng-class="$ctrl.layout.backlogHealth.classes" fetch-data="$ctrl.fetchBacklogHealth()"></custom-widget>
+
+      <!-- CI TIME -->
+      <custom-widget class="custom-widget" ng-class="$ctrl.layout.ciTime.classes" fetch-data="$ctrl.fetchCITime()" data-toggle="modal"
+        focus-element="autofocus" on-widget-click="$ctrl.customWidgetClick(widgetType)"></custom-widget>
+
+      <!-- TECH DEBT -->
+      <custom-widget class="custom-widget" ng-class="$ctrl.layout.techDebit.classes" fetch-data="$ctrl.fetchTechDebt()"></custom-widget>
+
+      <custom-widget class="custom-widget" ng-class="$ctrl.layout.envCreationTime.classes" fetch-data="$ctrl.fetchEnvCreationTime()"></custom-widget>
+
+      <custom-widget class="custom-widget" ng-class="$ctrl.layout.releaseDeployTime.classes" fetch-data="$ctrl.fetchReleaseDeployTime()"></custom-widget>
+
+    </div>
+    <div class="three">
+      <div class="category-head cellDoubleWidth">
+        <div>
+          <img src="../../assets/img/quality-icon.png">
+          <h5>QUALITY</h5>
+          <h6>Are we building a quality product?</h6>
+        </div>
+      </div>
+      <!-- <custom-widget class="custom-widget" ng-class="$ctrl.layout.xxxxxxxx.classes" fetch-data="$ctrl.fetchDefectInjectionRatePostlive()"></custom-widget> -->
+      <custom-widget class="custom-widget" ng-class="$ctrl.layout.defectInjectionRate.classes" fetch-data="$ctrl.fetchDefectInjectionRate()"></custom-widget>
+
+      <custom-widget class="custom-widget" ng-class="$ctrl.layout.autoVsManualTest.classes" fetch-data="$ctrl.fetchAutoVsManualTest()"
+        data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle" ng-click="$ctrl.customWidgetClick('autoPercentage')"></custom-widget>
+
+      <!-- CODE QUALITY -->
+      <custom-widget class="custom-widget" ng-class="$ctrl.layout.codeQuality.classes" fetch-data="$ctrl.fetchCodeQuality()"
+        data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle" ng-click="$ctrl.customWidgetClick('codeQuality')"></custom-widget>
+
+      <custom-widget class="custom-widget" ng-class="$ctrl.layout.jUnitCoverage.classes" fetch-data="$ctrl.fetchJUnitCoverage()"
+        data-toggle="modal" focus-element="autofocus" on-widget-click="$ctrl.customWidgetClick(widgetType)"></custom-widget>
+
+      <custom-widget class="custom-widget" ng-class="$ctrl.layout.appDemonstration.classes" fetch-data="$ctrl.fetchAppDemonstration()"></custom-widget>
+    </div>
+  </div>

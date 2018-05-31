@@ -1,0 +1,49 @@
+#!/bin/bash
+#
+# Fetch dependencies for a given repo from Nexus
+#
+
+npm install pac
+
+NEXUS_URL=http://nexus.sandbox.extranet.group/nexus/content/repositories/app-node-modules
+
+if [ $# -eq 0 ]; then
+    echo "Usage: fetch-deps [repo_name]"
+    echo "e.g. fetch-deps cob-onboarding-hub-api"
+    exit 1
+fi
+
+REPO=$1
+BUNDLE_NAME=${REPO}-modules.tar.gz
+
+# Remove existing tarball, if any
+if [[ -f $BUNDLE_NAME ]]; then
+    /bin/rm $BUNDLE_NAME
+fi
+
+echo "Downloading bundle from Sonatype Nexus"
+# Fetch the bundle
+/usr/bin/wget ${NEXUS_URL}/$BUNDLE_NAME
+
+# Check tarball was downloaded
+if [[ ! -f $BUNDLE_NAME ]]; then
+    echo
+    echo "Something went wrong downloading the bundle. There may be debug information above."
+    exit 1
+fi
+
+# Extract the bundle
+/bin/tar -xvf $BUNDLE_NAME
+
+echo "Installing dependencies"
+# Install from bundle
+/bin/mkdir -p node_modules
+./node_modules/pac/bin/pac install
+
+/bin/rm -rf .modules
+/bin/rm $BUNDLE_NAME
+
+echo "Dependencies installed"
+
+wget -q http://nexus.sandbox.extranet.group/nexus/content/repositories/binaries/speedy/bower_components.zip
+unzip -q bower_components.zip

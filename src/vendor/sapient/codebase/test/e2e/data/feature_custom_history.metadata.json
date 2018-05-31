@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":1,"key":{"_id":1},"name":"_id_","ns":"rtn1.feature_custom_history"},{"v":1,"key":{"projectID":1},"name":"projectID","ns":"rtn1.feature_custom_history"},{"v":1,"key":{"storyID":1},"name":"storyID","ns":"rtn1.feature_custom_history"},{"v":1,"key":{"storyType":1},"name":"storyType","ns":"rtn1.feature_custom_history"}]}

@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":1,"key":{"_id":1},"name":"_id_","ns":"rtn1.cloud_virtual_network"},{"v":1,"key":{"virtualNetworkId":1},"name":"virtualNetworkId","ns":"rtn1.cloud_virtual_network"}]}

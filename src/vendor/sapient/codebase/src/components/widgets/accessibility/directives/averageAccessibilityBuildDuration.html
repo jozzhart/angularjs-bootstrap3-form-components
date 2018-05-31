@@ -1,0 +1,20 @@
+<div class="widget">
+    <div class="widget-heading">
+       Total Issues
+    </div>
+    <div class="widget-body latest-builds">
+        <div class="dash-row" ng-repeat="build in buildAccessibilityView.ByPriority"
+             >
+             <a href="{{::build.data}}" target="_blank" class="defect-priority">
+               <span ng-if="build.priority=='P5 - Trivial'" class='fa fa-angle-double-down trivial'></span>
+               <span ng-if="build.priority=='P4 - Minor'" class='fa fa-angle-double-down'></span>
+               <span ng-if="build.priority=='P3 - Major'" class='fa fa-angle-double-up'></span>
+               <span ng-if="build.priority=='P2 - Critical'" class='fa fa-arrow-up'></span>
+               <span ng-if="build.priority=='P1 - Blocker'" class='fa fa-ban'></span>
+               <span class="build-number">{{::build.priority}}</span>
+                (<span class="text-standard-date">{{::build.count}}</span>)
+                <span class="build-chevron pull-right fa fa-lg fa-angle-right"></span>
+              </a>
+        </div>
+    </div>
+</div>

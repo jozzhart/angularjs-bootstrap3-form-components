@@ -1,0 +1,411 @@
+<div ng-controller="AggregrateTemplateController as template">
+        <div id="header">                
+                <nav class="navbar navbar-default navbar-fixed-top">
+                    <a class="col-md-3 image-container" ng-href="#/">
+                        <img class="img-responsive" ng-src="{{ctrl.logoImage}}">
+                    </a> 
+                    <ng-include class="top-navbar-header custom-top-nav-header" src="ctrl.navheadertemplateUrl"/>
+                </nav>
+            </div>
+    <div class="container aggregrate-container">
+        <div class="row">
+            <div class="col-md-3">
+                <div ng-if="!template.isBackButtonActive && template.isAggregatedDashboardActive" ><button class="btn btn-details btn-sm" ng-click="template.backToAcrossView()">Back</button></div>
+                <div ng-if="template.isBackButtonActive"><button  class="btn btn-details btn-sm" ng-click="template.backToHome()">Back</button></div>
+            </div>
+            <div ng-show="template.isAggregatedDashboardActive && template.isAggregatedDashboardDataLoaded" class="col-md-9 legend-description">
+                <div class="col-md-1">Legend</div>
+                <div class="col-md-2">
+                    <span class="arrow"><i class="fa fa-long-arrow-up up"></i><span>Positive change</span></span>
+                    <div class="legend-sub">(direction shows direction of change)</div>
+                </div>
+                <div class="col-md-2">
+                    <span class="arrow"><i class="fa fa-arrows-h"></i><span>No movement</span></span>
+                    <div class="legend-sub">(direction shows direction of change)</div>
+                </div>
+                <div class="col-md-2">
+                        <span class="arrow"><i class="fa fa-long-arrow-down down"></i><span>Negative change</span></span>
+                        <div class="legend-sub">(direction shows direction of change)</div>
+                    </div>
+                <div class="col-md-5">
+                    <div class="col-md-4">
+                        <div class="arrow-down M1"><div class="m-description">M1-M2</div></div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="arrow-down M3"><div class="m-description">M3</div></div>
+                    </div>
+                    <div class="col-md-4">
+                    <div class="arrow-down M4"><div class="m-description">M4-M5</div></div> </div>
+                </div>
+            </div>
+        </div>
+        <div class="multi-select-filter">
+            <span class="mulitselectddl">
+                <dropdown-multiselect model="template.selectedFilterIds.organisation" isdetail="template.isBackButtonActive"
+                options="template.data.organisation" filter="Organisation" click="template.applyFilters(selectedIds, 'organisation')"></dropdown-multiselect>
+            </span>
+            <span class="mulitselectddl">
+                <dropdown-multiselect model="template.selectedFilterIds.businessUnit" isdetail="template.isBackButtonActive"
+                options="template.data.businessUnit" filter="BusinessUnit" click="template.applyFilters(selectedIds, 'businessUnit')"></dropdown-multiselect>
+            </span>
+            <span class="mulitselectddl">
+                <dropdown-multiselect model="template.selectedFilterIds.account" isdetail="template.isBackButtonActive"
+                options="template.data.account" filter="Account" click="template.applyFilters(selectedIds, 'account')"></dropdown-multiselect>
+            </span>
+            <span class="mulitselectddl" ng-if="template.isBackButtonActive">
+                <dropdown-multiselect model="template.selectedFilterIds.project" isdetail="!template.isBackButtonActive"
+                options="template.data.project" filter="Project" click="template.applyFilters(selectedIds, 'project')"></dropdown-multiselect>
+            </span>
+        </div>
+        <div class="grid-dashboard" ng-show="template.isAggregatedDashboardActive">
+            <div ng-if="template.isAggregatedDashboardDataLoaded">
+                <div>
+                    <div class="aggregate-list-group col-md-12">
+                        <div class="header-aggregate-list-group aggregate-list-header" ng-repeat="(i, headerContent) in template.aggregateDashboardData.header">
+                                {{headerContent}}
+                        <div class="bottom-border"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row service-level-content" ng-repeat="serviceLevel in template.aggregateDashboardData.data.serviceValue">
+                    <div class="list-group-item col-md-3 aggregate-list-content aggregate-list-content-background" ng-style="{'height': serviceLevel.serviceDetail.accountValue.length * 100 + 'px'}">
+                        <div class="sub-item"></span>{{serviceLevel.serviceName}}</div>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="aggregate-list-group col-md-12" ng-repeat="accountLevel in serviceLevel.serviceDetail.accountValue">
+                            <div class="list-group-item aggregate-list-content">
+                                <div class="account-label">{{accountLevel.accountName}}</div>
+                                <div class="account-button" ng-if="template.viewType === 'account'" ng-click="template.aggregateDashboardDetails(accountLevel)"><button class="btn btn-details btn-sm">Details</button></div>
+                            </div>
+                            <div class="aggregate-list-group"  ng-repeat="accountDetailLevel in accountLevel.accountDetail">
+                                <div ng-if="accountDetailLevel.kpiValue.maturity && accountDetailLevel.kpiValue.maturity!=='0'" class="arrow-down M{{accountDetailLevel.kpiValue.maturity}}"></div>
+                                <span class="arrow"> 
+                                    <i ng-if="accountDetailLevel.kpiValue.trend === 'equal'" class="fa fa fa-arrows-h"></i>
+                                    <i class="fa fa-long-arrow-{{accountDetailLevel.kpiValue.trend}} {{accountDetailLevel.kpiValue.trend}}"  ></i>
+                                </span>
+                                <div class="list-group-item aggregate-list-content">
+                                    <span class="na-symbol symbol" ng-if="!accountDetailLevel.kpiValue.value">NA</span>
+                                    <span class="symbol"> {{accountDetailLevel.kpiValue.value}}</span><span class="sub-symbol">{{accountDetailLevel.kpiValue.unit}}</span>
+                                    <div class="hr-style"></div>
+                                    <div ng-if="accountDetailLevel.kpiValue.baseLineValue">
+                                        <div class="small-content">from a baseline of</div>
+                                        <div class="small-bold">{{accountDetailLevel.kpiValue.baseLineValue}}{{accountDetailLevel.kpiValue.baseLineUnit}}</div>
+                                    </div>
+                                </div>
+                            
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h6 class="no-data" ng-if="template.isAggregatedDashboardDataLoaded && template.aggregateDashboardData.data.length === 0">
+                No Data Available
+            </h6>
+            <div ng-show="!template.isAggregatedDashboardDataLoaded">Loading...</div>
+        </div>
+        <div class="grid-dashboard hide-overflow" ng-show="!template.isAggregatedDashboardActive">
+            <div>
+                <div class="list-group-item col-md-2 across-dashboard-side-header aggregate-list-content aggregate-list-content-background" ng-style="{'height': (4 * 100)+ 5 + 'px'}">
+                    <div class="across-sub-item">
+                        <img src="../../assets/img/aggregrated-speed-icon.png">
+                    <div class="header-content">Speed</div></div>
+                </div>
+                <div class="col-md-10 across-dashboard-content">
+                    <div class="col-md-6">
+                        <div class="list-group-item across-dashboard-bigger-box">
+                            <div>Lead Time</div>
+                            <div class="col-md-4">
+                                <span class="arrow">                                   
+                                    <i class="fa fa-long-arrow-{{template.leadTimeNochart.trend}} {{template.leadTimeNochart.trend}}"  ></i></span>
+                                <div class="magnitude-container">                                          
+                                    <span class="number">{{template.leadTimeNochart.value}}</span>
+                                </div> 
+                                <span class="unit">{{template.leadTimeNochart.unit}}</span>
+                            
+                                <div class="widget-body">
+                                    <div class="graph-container lead-time-pie-chart"  ng-if="template.leadTimePiechart.isDataAvailable">
+                                        <canvas id="base"
+                                            class="chart-base"
+                                            height="300"
+                                            chart-type="template.leadTimePiechart.type"
+                                            chart-data="template.leadTimePiechart.data.data"
+                                            chart-labels="template.leadTimePiechart.data.labels"
+                                            chart-options="template.leadTimePiechart.data.options"
+                                            chart-colors="template.leadTimePiechart.data.colors"
+                                        ></canvas>
+                                    </div>
+                                    <h6 class="no-data" ng-if="!template.leadTimePiechart.isDataAvailable">
+                                        No Data Available
+                                    </h6>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="widget-body">
+                                    <canvas id="base"           
+                                        ng-if="template.leadTimeLineChart.data"
+                                        class="chart-base"
+                                        height="90"
+                                        chart-type="template.leadTimeLineChart.type"
+                                        chart-data="template.leadTimeLineChart.data.data"
+                                        chart-labels="template.leadTimeLineChart.data.labels"
+                                        chart-series="template.leadTimeLineChart.data.series"
+                                        chart-options="template.leadTimeLineChart.data.options"
+                                        chart-colors="template.leadTimeLineChart.data.colors"
+                                        chart-dataset-override="template.leadTimeLineChart.data.datasetOverride"
+                                    ></canvas>            
+                                    <h6 class="no-data" ng-if="!template.leadTimeLineChart.data">
+                                        No Data Available
+                                    </h6>
+                                </div>
+
+                                <div ng-show="template.backlogBox" class="box-container">                                           
+                                    <div class="box first-box" ng-style="{'width': template.backlogBox + '%'}">
+                                        <div class="left-scale-number">0</div>
+                                        <div class="left-border-line"></div>
+                                        <div class="top-border-line"></div>
+                                        <span class="first-label">Backlog</span>
+                                    </div>
+                                    <div class="box second-box" ng-style="{'width': template.dORtoDODBox + '%'}">
+                                        <div class="left-scale-number">{{template.leadTimeBacklogtoDOR_BlockChart}}</div>
+                                        <div class="left-border-line"></div>
+                                        <div class="top-border-line"></div>
+                                        <span class="first-label">DOR</span>
+                                    </div>
+                                    <div class="box third-box" ng-style="{'width': template.dODtoLiveBox + '%'}">
+                                        <div class="left-scale-number">{{template.leadTimeBacklogtoDOR_BlockChart + template.leadTimeDORtoDOD_BlockChart}}</div>
+                                        <div class="left-border-line"></div>
+                                        <div class="top-border-line"></div>
+                                        <span class="first-label">DOD</span>
+                                        <div class="right-border-line"></div>
+                                        <div class="right-scale-number">{{template.leadTimeBacklogtoDOR_BlockChart + template.leadTimeDORtoDOD_BlockChart + template.leadTimeDODtoLive_BlockChart}}</div>
+                                    </div>
+                                    <span class="last-label">LIVE</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="list-group-item across-dashboard-smaller-box">
+                            <div class="row">
+                                <div class="col-md-10">Backlog Health</div>
+                                <div class="col-md-2" ng-click="template.openAggregateDashboardDetails()"><button class="btn btn-details btn-sm">Details</button></div>
+                            </div>
+                            <div class="col-md-4">
+                                <span class="arrow"><i class="fa fa-long-arrow-{{template.backlogHealthNochart.trend}} {{template.backlogHealthNochart.trend}}"  ></i></span>
+                                <div class="magnitude-container">                                          
+                                    <span class="number">{{template.backlogHealthNochart.value}}</span>
+                                </div> 
+                                <span class="unit">{{template.backlogHealthNochart.unit}}</span>
+                                <h6 class="no-data" ng-if="!template.backlogHealthNochart.value">
+                                    No Data Available
+                                </h6>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="widget-body">
+                                    <canvas id="base"           
+                                        ng-if="template.baclogHealthLineChart.data"
+                                        class="chart-base"
+                                        height="80"
+                                        chart-type="template.baclogHealthLineChart.type"
+                                        chart-data="template.baclogHealthLineChart.data.data"
+                                        chart-labels="template.baclogHealthLineChart.data.labels"
+                                        chart-series="template.baclogHealthLineChart.data.series"
+                                        chart-options="template.baclogHealthLineChart.data.options"
+                                        chart-colors="template.baclogHealthLineChart.data.colors"
+                                        chart-dataset-override="template.baclogHealthLineChart.data.datasetOverride"
+                                    ></canvas>            
+                                    <h6 class="no-data" ng-if="!template.baclogHealthLineChart.data">
+                                        No Data Available
+                                    </h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="list-group-item across-dashboard-medium-box">
+                            <div class="row">
+                                <div class="col-md-10">Automation Percentage</div>
+                                <div class="col-md-2" ng-click="template.openAggregateDashboardDetails()"><button class="btn btn-details btn-sm">Details</button></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="widget-body">
+                                    <div class="graph-container" ng-if="template.automationPercentageNochart.isDataAvailable">
+                                        <h5 class="graph-inner-data">
+                                            <span class="arrow">
+                                            <i class="fa fa-long-arrow-{{template.automationPercentageNochart.trend}} {{template.automationPercentageNochart.trend}}"></i></span>{{template.automationPercentageNochart.data.data[0]}}<span class="unit">{{template.automationPercentageNochart.data.symbol}}</span>
+                                        </h5>
+                                        <canvas id="base"
+                                            ng-if="template.automationPercentageNochart.data"
+                                            class="chart-base"
+                                            height="225"
+                                            chart-type="template.automationPercentageNochart.type"
+                                            chart-data="template.automationPercentageNochart.data.data"
+                                            chart-labels="template.automationPercentageNochart.data.labels"
+                                            chart-options="template.automationPercentageNochart.data.options"
+                                            chart-colors="template.automationPercentageNochart.data.colors"
+                                        ></canvas>
+                                        <span></span>          
+                                    </div>
+                                    <h6 class="no-data" ng-if="!template.automationPercentageNochart.isDataAvailable">
+                                        No Data Available
+                                    </h6>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="widget-body">
+                                    <canvas id="base"           
+                                        ng-if="template.automationPercentageLineChart.data"
+                                        class="chart-base"
+                                        height="125"
+                                        chart-type="template.automationPercentageLineChart.type"
+                                        chart-data="template.automationPercentageLineChart.data.data"
+                                        chart-labels="template.automationPercentageLineChart.data.labels"
+                                        chart-series="template.automationPercentageLineChart.data.series"
+                                        chart-options="template.automationPercentageLineChart.data.options"
+                                        chart-colors="template.automationPercentageLineChart.data.colors"
+                                        chart-dataset-override="template.automationPercentageLineChart.data.datasetOverride"
+                                    ></canvas>            
+                                    <h6 class="no-data" ng-if="!template.automationPercentageLineChart.data">
+                                        No Data Available
+                                    </h6>
+                                </div>
+                            </div>  
+                        </div>
+                        <div class="list-group-item across-dashboard-medium-box">
+                                <div class="row">
+                                    <div class="col-md-10">Sprint Predictibility</div>
+                                    <div class="col-md-2" ng-click="template.openAggregateDashboardDetails()"><button class="btn btn-details btn-sm">Details</button></div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="widget-body">
+                                        <div class="graph-container" ng-if="template.sprintPredictibilityNochart.isDataAvailable">
+                                            <h5 class="graph-inner-data"><span class="arrow"><i class="fa fa-long-arrow-{{template.sprintPredictibilityNochart.trend}} {{template.sprintPredictibilityNochart.trend}}"></i></span>{{template.sprintPredictibilityNochart.data.data[0]}}<span class="unit">{{template.sprintPredictibilityNochart.data.symbol}}</span></h5>
+                                            <canvas id="base"           
+                                                class="chart-base"
+                                                height="225"
+                                                chart-type="template.sprintPredictibilityNochart.type"
+                                                chart-data="template.sprintPredictibilityNochart.data.data"
+                                                chart-labels="template.sprintPredictibilityNochart.data.labels"
+                                                chart-options="template.sprintPredictibilityNochart.data.options"
+                                                chart-colors="template.sprintPredictibilityNochart.data.colors"
+                                            ></canvas>
+                                            <span></span>          
+                                            </div>
+                                        <h6 class="no-data" ng-if="!template.sprintPredictibilityNochart.isDataAvailable">
+                                            No Data Available
+                                        </h6>
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="widget-body">
+                                        <canvas id="base"           
+                                            ng-if="template.sprintPredictibilityLineChart.data"
+                                            class="chart-base"
+                                            height="120"
+                                            chart-type="template.sprintPredictibilityLineChart.type"
+                                            chart-data="template.sprintPredictibilityLineChart.data.data"
+                                            chart-labels="template.sprintPredictibilityLineChart.data.labels"
+                                            chart-series="template.sprintPredictibilityLineChart.data.series"
+                                            chart-options="template.sprintPredictibilityLineChart.data.options"
+                                            chart-colors="template.sprintPredictibilityLineChart.data.colors"
+                                            chart-dataset-override="template.sprintPredictibilityLineChart.data.datasetOverride"
+                                        ></canvas>            
+                                        <h6 class="no-data" ng-if="!template.sprintPredictibilityLineChart.data">
+                                            No Data Available
+                                        </h6>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="list-group-item col-md-2 across-dashboard-side-header aggregate-list-content aggregate-list-content-background" ng-style="{'height': 1.5 * 100 + 'px'}">
+                    <div class="across-sub-item">
+                        <img src="../../assets/img/aggregrated-quality-icon.png">
+                    <div class="header-content">Quality</div></div>
+                </div>
+                <div class="col-md-10 across-dashboard-content">
+                    <div class="col-md-6">
+                        <div class="list-group-item across-dashboard-smaller-box">
+                            <div>DIR Post Live</div>
+                            <div class="col-md-4">
+                                <span class="arrow"><i class="fa fa-long-arrow-{{template.dirPostLiveNochart.trend}} {{template.dirPostLiveNochart.trend}}"  ></i></span>
+                                <div class="magnitude-container">                                          
+                                    <span class="number">{{template.dirPostLiveNochart.value}}</span>
+                                </div> 
+                                <span class="unit">{{template.dirPostLiveNochart.unit}}</span>
+                                <h6 class="no-data" ng-if="!template.dirPostLiveNochart.value">
+                                    No Data Available
+                                </h6>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="widget-body">
+                                    <canvas id="base"           
+                                        ng-if="template.dirPostLiveLineChart.data"
+                                        class="chart-base"
+                                        height="80"
+                                        chart-type="template.dirPostLiveLineChart.type"
+                                        chart-data="template.dirPostLiveLineChart.data.data"
+                                        chart-labels="template.dirPostLiveLineChart.data.labels"
+                                        chart-series="template.dirPostLiveLineChart.data.series"
+                                        chart-options="template.dirPostLiveLineChart.data.options"
+                                        chart-colors="template.dirPostLiveLineChart.data.colors"
+                                        chart-dataset-override="template.dirPostLiveLineChart.data.datasetOverride"
+                                    ></canvas>            
+                                    <h6 class="no-data" ng-if="!template.dirPostLiveLineChart.data">
+                                        No Data Available
+                                    </h6>
+                                </div>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="list-group-item col-md-2 aggregate-list-content-background" ng-style="{'height': 1.5*100 + 'px'}">
+                            <div class="sub-item">
+                                <img src="../../assets/img/aggregrated-people-icon.png">
+                                <div class="header-content">People</div>
+                            </div>
+                        </div>
+                        <div class="col-md-10">
+                            <div class="list-group-item across-dashboard-smaller-box  aggregrate-happiness-content ">
+                                <div class="row">
+                                    <div class="col-md-9">Happiness Index</div>
+                                    <span class="detail-button" ng-click="template.openAggregateDashboardDetails()"><button class="btn btn-details btn-sm">Details</button></span>
+                                </div>
+                                <div class="col-md-4">
+                                    <span class="arrow"><i class="fa fa-long-arrow-{{template.happinessIndexNochart.trend}} {{template.happinessIndexNochart.trend}}"  ></i></span>
+                                    <div class="magnitude-container" ng-if="template.happinessIndexNochart.value">                                          
+                                        <span class="number">{{template.happinessIndexNochart.value}}</span>
+                                    </div> 
+                                    <span class="unit">{{template.happinessIndexNochart.unit}}</span>
+                                    <div uib-rating ng-model="template.happinessIndexNochart.value" max="template.maxStar" read-only="template.isStarReadonly" titles="['one','two','three','four','five']" aria-labelledby="default-rating"></div>
+                                    <h6 class="no-data" ng-if="!template.happinessIndexNochart.value">
+                                        No Data Available
+                                    </h6>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="widget-body">
+                                        <canvas id="base"           
+                                            ng-if="template.happinessIndexBarChart.data"
+                                            class="chart-base"
+                                            height="90" 
+                                            chart-type="template.happinessIndexBarChart.type"
+                                            chart-data="template.happinessIndexBarChart.data.data"
+                                            chart-labels="template.happinessIndexBarChart.data.labels"
+                                            chart-series="template.happinessIndexBarChart.data.series"
+                                            chart-options="template.happinessIndexBarChart.data.options"
+                                            chart-colors="template.happinessIndexBarChart.data.colors"
+                                            chart-dataset-override="template.happinessIndexBarChart.data.datasetOverride"
+                                        ></canvas>            
+                                        <h6 class="no-data" ng-if="!template.automationPercentageLineChart.data">
+                                            No Data Available
+                                        </h6>
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

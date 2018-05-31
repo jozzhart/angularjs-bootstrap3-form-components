@@ -28,9 +28,13 @@ module.exports = function makeWebpackConfig() {
    * Should be an empty object if it's generating a test build
    * Karma will set this when it's a test build
    */
-  config.entry = isTest ? void 0 : {
-    app: './src/index.js'
-  };
+  // config.entry = isTest ? void 0 : {
+  //   app: './src/index.js'
+  // };
+  config.entry = isTest ? void 0 : [
+    './src/styles/lloyds.less',
+    './src/index'
+  ];
 
   /**
    * Output
@@ -51,11 +55,9 @@ module.exports = function makeWebpackConfig() {
    */
   if (isTest) {
     config.devtool = 'inline-source-map';
-  }
-  else if (isProd) {
+  } else if (isProd) {
     config.devtool = 'source-map';
-  }
-  else {
+  } else {
     config.devtool = 'eval-source-map';
   }
 
@@ -80,8 +82,24 @@ module.exports = function makeWebpackConfig() {
       // HTML LOADER
       // Reference: https://github.com/webpack/raw-loader
       // Allow loading html through js
-      test: /\.html$/,
+      test: /\.html$|.md$/,
       loader: 'raw-loader'
+    }, {
+      test: /\.less$/,
+      use: [{
+        loader: 'style-loader' // creates style nodes from JS strings
+      }, {
+        loader: 'css-loader', options: {
+          sourceMap: true
+        } // translates CSS into CommonJS
+      }, {
+        loader: 'less-loader', options: {
+          sourceMap: true
+        } // compiles Less to CSS
+      }]
+    }, {
+      test: /.jpe?g$|.gif$|.png$|.svg$|.woff$|.woff2$|.ttf$|.eot$/,
+      loader: "url-loader"
     }]
   };
 
@@ -118,11 +136,13 @@ module.exports = function makeWebpackConfig() {
 
       // Reference: http://webpack.github.io/docs/list-of-plugins.html#uglifyjsplugin
       // Minify all javascript, switch loaders to minimizing mode
-      new webpack.optimize.UglifyJsPlugin()
-    )
+      new webpack.optimize.UglifyJsPlugin(),
+
+      )
   }
 
-  config.externals = { 
+  config.externals = {
+    jQuery : '$'
   };
 
   config.watch = true;

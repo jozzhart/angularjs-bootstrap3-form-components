@@ -1,0 +1,33 @@
+<div ng-controller="SpeedySettingsController" class="container"> 
+  
+  <h1 class="page-header">Settings</h1>
+
+  <uib-tabset active="active" class="tabs">
+    <uib-tab>
+      <uib-tab-heading>
+        JIRA
+      </uib-tab-heading>
+      <div ng-repeat="(key, value) in properties">
+        <spdy-input-text ng-if="value.inputType === 'text' && (value.technical === undefined || value.technical === 'false')" name="{{value.label}}" description="{{value.description}}" value="ctrl.data[key]" required="{{value.required}}"></spdy-input-text>
+        <spdy-input-number ng-if="value.inputType === 'number' && (value.technical === undefined || value.technical === 'false')" name="{{value.label}}" description="{{value.description}}" value="ctrl.data[key]"></spdy-input-number>
+        <spdy-input-textarea ng-if="value.inputType === 'textarea' && (value.technical === undefined || value.technical === 'false')" name="{{value.label}}" description="{{value.description}}" value="ctrl.data[key]"></spdy-input-textarea>
+      </div>
+    </uib-tab>
+    <uib-tab heading="Dashboard">
+        <br />
+      Dashboard
+    </uib-tab>  
+    <uib-tab heading="Sonar">
+        <br />
+      Sonar
+    </uib-tab>  
+  </uib-tabset>
+  <div class="row">
+    <div class="col-md-12">
+    <input class="btn btn-default" type="submit" value="Save">
+  </div>
+  </div>
+
+  
+
+</div>

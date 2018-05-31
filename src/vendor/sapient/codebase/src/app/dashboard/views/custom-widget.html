@@ -1,0 +1,112 @@
+<div class="widget-content">
+    <div class="widget-title">
+        <h6>{{widgetInfo.title}}</h6>
+        <i ng-if="widgetInfo.tooltipText" ng-mouseover="showTooltip($event)" ng-mouseout="hideTooltip()" data-tooltip-text={{widgetInfo.tooltipText}} class="fa fa-info" aria-hidden="true"></i>
+    </div>
+
+    <div ng-if="widgetInfo.type==='text'" class="widget-body">
+        <div ng-if="widgetInfo.data" class="widget-metric">
+            <div class="magnitude-container">
+                <span ng-class="{'glyphicon':widgetInfo.name==='storyLeadTime' || widgetInfo.name==='storyLiveLeadTime', 'glyphicon-arrow-up':widgetInfo.data.trend==='up', 'glyphicon-minus':widgetInfo.data.trend==='equal', 'glyphicon-arrow-down':widgetInfo.data.trend==='down'}" class="symbol">{{widgetInfo.data.symbol}}</span>
+                <span class="number">{{widgetInfo.data.value}}</span>
+            </div> 
+            <span class="unit">{{widgetInfo.data.unit}}</span>
+        </div>
+        <h6 class="no-data" ng-if="!widgetInfo.data">
+            No Data Available
+        </h6>
+    </div>
+
+    <div ng-if="widgetInfo.type==='multipleTextWidget'" class="widget-body">
+        <div ng-repeat="subWidget in widgetInfo.data" class="sub-widget" style="width:{{widgetInfo.width}};">
+            <div ng-if="(subWidget.data && subWidget.data.value !== ' ')" class="widget-metric" ng-click="widgetInfoClicked(subWidget.name)">
+                <div class="magnitude-container">
+                    <span class="symbol">{{subWidget.data.symbol}}</span>
+                    <span class="number">{{subWidget.data.value}}</span>
+                </div> 
+                <span class="unit">{{subWidget.data.unit}}</span>
+            </div>
+            <h6 class="no-data" ng-if="!subWidget.data" ng-click="widgetInfoClicked(widgetInfo.type)">
+                No Data Available
+            </h6>
+            <h6 class="no-data" ng-if="(subWidget.data && subWidget.data.value === ' ')">
+                {{subWidget.data.unit}}
+            </h6>
+            <span class="sub-widget-name">{{subWidget.title}}</span>
+        </div>
+    </div>
+
+    <div ng-if="widgetInfo.type==='doughnut' || widgetInfo.type==='pie'" class="widget-body">
+        <div ng-if="widgetInfo.data" class="graph-container" ng-class="{'pie-chart':widgetInfo.type==='pie'}">
+            <h5 ng-if="widgetInfo.type==='doughnut'" class="graph-inner-data">{{widgetInfo.data.data[0]}}{{widgetInfo.data.symbol}}</h5>
+            <canvas id="base"
+                class="chart-base"
+                chart-type="widgetInfo.type"
+                chart-data="widgetInfo.data.data"
+                chart-labels="widgetInfo.data.labels"
+                chart-options="widgetInfo.data.options"
+                chart-colors="widgetInfo.data.colors"
+            ></canvas>
+        </div>
+        <h6 class="no-data" ng-if="!widgetInfo.data">
+            No Data Available
+        </h6>
+    </div>
+
+    <div ng-if="widgetInfo.type==='status'" class="widget-body">
+        <i ng-if="widgetInfo.data && widgetInfo.data.response" class="fa fa-thumbs-up" aria-hidden="true"></i>
+        <i ng-if="widgetInfo.data && !widgetInfo.data.response" class="fa fa-thumbs-down" aria-hidden="true"></i>
+        <h6 class="no-data" ng-if="!widgetInfo.data">
+            No Data Available
+        </h6>
+    </div>
+
+    <div ng-if="widgetInfo.type==='table'" class="widget-body">
+        <div ng-if="widgetInfo.data">
+           <table class="table-widget">
+                <tr> 
+                    <td class="table-widget-header"><b>Priority</b></td>
+                    <td class="table-widget-header" ng-repeat="header in widgetInfo.data">{{header.priority}}</td>
+                </tr>
+                <tr>
+                    <td class="table-widget-header"><b>Count</b></td>
+                    <td class="table-widget-header" ng-repeat="data in widgetInfo.data">{{data.count}}</td>
+                </tr>
+            </table>
+           
+        </div>
+        <h6 class="no-data" ng-if="!widgetInfo.data">
+            No Data Available
+        </h6>
+    </div>
+
+    <div ng-if="widgetInfo.type==='list'" class="widget-body">
+        <div ng-if="widgetInfo.data">
+            <ul class="list-widget" ng-repeat="item in widgetInfo.data">
+                <li><a href = "https://tools.publicis.sapient.com/jira/browse/"+{{item.data}}>{{item.data}}</a></li>
+            </ul>
+        </div>
+        <h6 class="no-data" ng-if="!widgetInfo.data.length">
+            No Data Available
+          
+        </h6>
+    </div>
+
+    <div ng-if="widgetInfo.type!=='text' && widgetInfo.type!=='doughnut' && widgetInfo.type!=='pie' && widgetInfo.type!=='status' && widgetInfo.type!=='multipleTextWidget'" class="widget-body">
+        <canvas id="base"           
+            ng-if="widgetInfo.data"
+            class="chart-base"
+            height="200"
+            chart-type="widgetInfo.type"
+            chart-data="widgetInfo.data.data"
+            chart-labels="widgetInfo.data.labels"
+            chart-series="widgetInfo.data.series"
+            chart-options="chartModalDialog ? widgetInfo.data.dialogoptions : widgetInfo.data.options"
+            chart-colors="widgetInfo.data.colors"
+            chart-dataset-override="widgetInfo.data.datasetOverride"
+        ></canvas>            
+        <h6 class="no-data" ng-if="!widgetInfo.data">
+            No Data Available
+        </h6>
+    </div>
+</div>

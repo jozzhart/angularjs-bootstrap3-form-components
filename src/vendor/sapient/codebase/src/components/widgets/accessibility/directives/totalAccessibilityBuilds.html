@@ -1,0 +1,27 @@
+<div class="widget feature-view ">
+    <div class="widget-heading">
+        Issues By Status
+    </div>
+    <div class="widget-body" fit-text=".build-summary-count > span" fit-text-max="40">
+        <div class="row">
+            <div class="col-xs-4">
+                <div class="build-summary-count story-open">
+                     <a href="{{buildAccessibilityView.ByStatus.Open.data}}" target="_blank" class="defect-priority"><span>{{buildAccessibilityView.ByStatus.Open.count}}</span></a>
+                </div>
+                <div class="build-summary-type">Open</div>
+            </div>
+            <div class="col-xs-4">
+                <div class="build-summary-count story-wip">
+                     <a href="{{buildAccessibilityView.ByStatus.InProgress.data}}" target="_blank" class="defect-priority"><span>{{buildAccessibilityView.ByStatus.InProgress.count}}</span></a>
+                </div>
+                <div class="build-summary-type">WIP</div>
+            </div>
+            <div class="col-xs-4">
+                <div class="build-summary-count story-done">
+                     <a href="{{buildAccessibilityView.ByStatus.Done.data}}" target="_blank" class="defect-priority"><span>{{buildAccessibilityView.ByStatus.Done.count}}</span></a>
+                </div>
+                <div class="build-summary-type">Done</div>
+            </div>
+        </div>
+    </div>
+</div>

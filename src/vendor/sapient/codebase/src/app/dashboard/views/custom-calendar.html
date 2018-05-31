@@ -1,0 +1,46 @@
+<div class="custom-calendar form-group" >
+  <div ng-show="errorMessage" class="alert alert-danger fade in">
+    {{errorMessage}}
+  </div>
+  <div class="row">
+    <div class="col-md-5">      
+      <p class="input-group">
+        <span class="date-label">From Date:</span>       
+        <input type="text" class="form-control"
+          placeholder="From date"
+          uib-datepicker-popup="{{format}}"
+          ng-model="startDate"
+          is-open="startDateCalendarPopup.opened"
+          datepicker-options="dateOptions"
+          ng-required="true"
+          close-text="Close"
+          required="required" readonly/>
+        <span class="input-group-btn">
+          <button type="button" class="btn btn-default" ng-click="startDateCalendarPopupOpen()">
+              <i class="glyphicon glyphicon-calendar"></i></button>
+        </span>
+      </p>
+    </div>
+
+    <div class="col-md-5">      
+      <p class="input-group">
+        <span class="date-label">To Date:</span>      
+        <input type="text" class="form-control" 
+        uib-datepicker-popup="{{format}}"
+        ng-model="endDate"
+        placeholder="To date"
+        is-open="endDateCalendarPopup.opened" 
+        datepicker-options="dateOptions"
+        ng-required="true"
+        close-text="Close"
+        required="required" readonly/>
+        <span class="input-group-btn">
+          <button type="button" class="btn btn-default" ng-click="endDateCalendarPopupOpen()">
+              <i class="glyphicon glyphicon-calendar"></i></button>
+        </span>
+      </p>
+    </div>    
+    <button  class="btn btn-sm btn-default" ng-disabled="enableApplyButton" ng-click="applyDates()">Apply</button>
+    <button type="button" class="btn btn-sm btn-danger" ng-click="clear()">Clear</button>
+  </div>
+</div>

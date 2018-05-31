@@ -1,0 +1,31 @@
+{
+    "leakageInfo": [{
+            "sprintId": 9551,
+            "sprintName": "Aesop_Sap_Sprint 1",
+            "leakageDefectCount": 10,
+            "totalDefectCount": 100,
+            "leakagePercentage": 10
+        },
+        {
+            "sprintId": 9552,
+            "sprintName": "Aesop_Sap_Sprint 2",
+            "leakageDefectCount": 10,
+            "totalDefectCount": 100,
+            "leakagePercentage": 10
+        },
+        {
+            "sprintId": 9553,
+            "sprintName": "Aesop_Sap_Sprint 3",
+            "leakageDefectCount": 10,
+            "totalDefectCount": 100,
+            "leakagePercentage": 10
+        },
+        {
+            "sprintId": 9554,
+            "sprintName": "Aesop_Sap_Sprint 4",
+            "leakageDefectCount": 10,
+            "totalDefectCount": 100,
+            "leakagePercentage": 10
+        }
+    ]
+}

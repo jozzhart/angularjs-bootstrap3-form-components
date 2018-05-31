@@ -1,0 +1,514 @@
+<ng-include src="ctrl.templateUrl"></ng-include>
+
+<div id="admin">
+
+  <div class="col-md-2">
+    <ul class="nav nav-pills nav-stacked">
+      <li role="presentation" ng-class="{active:ctrl.tab === 'dashboards'}">
+        <a href ng-click="ctrl.navigateToTab('dashboards')">Edit Dashboards</a>
+      </li>
+      <li role="presentation" ng-class="{active:ctrl.tab === 'users'}">
+        <a href ng-click="ctrl.navigateToTab('users')">Manage Admins</a>
+      </li>
+      <li role="presentation" ng-class="{active:ctrl.tab === 'settings'}">
+        <a href ng-click="ctrl.navigateToTab('settings')">Dashboard Settings</a>
+      </li>
+      <li role="presentation" ng-class="{active:ctrl.tab === 'jirasettings'}">
+        <a href ng-click="ctrl.navigateToTab('jirasettings')">Jira Settings</a>
+      </li>
+      <li role="presentation" ng-class="{active:ctrl.tab === 'apitokens'}">
+        <a href ng-click="ctrl.navigateToTab('apitokens')">Generate ApiTokens</a>
+      </li>
+      <li role="presentation" ng-class="{active:ctrl.tab === 'uploadlogo'}">
+        <a href ng-click="ctrl.navigateToTab('uploadlogo')">Upload Logo</a>
+      </li>
+      <li role="presentation" ng-class="{active:ctrl.tab === 'uploadOfflineData'}" ng-if="ctrl.toggleFeatures.uploadOfflineData === 'true'">
+        <a href ng-click="ctrl.navigateToTab('uploadOfflineData')">Upload Offline Data</a>
+      </li>
+      <li role="presentation" ng-class="{active:ctrl.tab === 'downloadOfflineData'}" ng-if="ctrl.toggleFeatures.downloadOfflineData === 'true'">
+        <a href ng-click="ctrl.navigateToTab('downloadOfflineData')">Download Offline Data</a>
+      </li>
+      <li role="presentation" ng-class="{active:ctrl.tab === 'validationData'}">
+        <a href ng-click="ctrl.navigateToTab('validationData')">Validation Data</a>
+      </li>
+      <li role="presentation" ng-class="{active:tab === 'projectsettings'}"> 
+        <a href ng-click="ctrl.navigateToTab('projectsettings')">Project Settings</a> 
+      </li> 
+      <li role="presentation" ng-class="{active:tab === 'kpisetup'}">
+        <a href ng-click="ctrl.navigateToTab('kpisetup')">KPI Setup</a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="container-fluid">
+    <div class="col-md-8">
+      <div ng-show="ctrl.tab === 'dashboards'">
+        <div class="widget-modal">
+          <div class="widget-modal-heading">
+            Rename/Delete Dashboard
+          </div>
+          <div class="widget-modal-body">
+            <div class="row">
+              <div class="col-xs-push-2 col-xs-8">
+                <div class="text-center" ng-hide="ctrl.dashboards">Loading Dashboards...</div>
+
+                <div class="list-animate">
+                  <div class="dash-modal-row delete-dashboard-row clearfix" ng-repeat="item in ctrl.dashboards | orderBy:'name'">
+                    <div title="{{item.name}}" class="btn-block">{{item.name | trunText:30}}
+                      <dash-trash class="clickable pull-right" ng-click="ctrl.deleteDashboard(item.id)"></dash-trash>
+                      <dash-edit class="clickable pull-right" ng-click="ctrl.editDashboard(item)"></dash-edit>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="text-center" ng-show="ctrl.dashboards && !ctrl.dashboards.length">
+                  No results
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div ng-show="ctrl.tab === 'users'">
+        <div class="widget-modal">
+          <div class="widget-modal-heading">
+            Manage Admins
+          </div>
+          <div class="widget-modal-body">
+            <div class="row">
+              <div class="col-xs-12">
+                <div class="text-center" ng-hide="users">Loading Users...</div>
+                <div ng-show="error">
+                  {{error.data}}
+                </div>
+
+                <div class="row">
+                  <div class="col-xs-5">
+                    <h3>Users</h3>
+                    <input type="text" class="form-control" id="userSearch" placeholder="Filter Users" ng-model="userSearch">
+
+                    <div class="dash-modal-row delete-dashboard-row clearfix" ng-repeat="user in users | filter:{username:userSearch, authorities:'!ROLE_ADMIN'} | orderBy:'username'">
+                      <div class="btn-block">
+                        <span class="label label-primary" ng-show="isActiveUser(user)">You</span>
+                        {{user.username}}
+                        <span class="badge">{{user.authType}}</span>
+                        <div title="Promote User" class="clickable pull-right" ng-click="promoteUserToAdmin(user)">
+                          <span class="clickable fa fa-stack">
+                            <span class="fa-circle-thin fa-stack-2x text-success"></span>
+                            <span class="fa-angle-right fa-stack-1x text-success"></span>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-push-2 col-xs-5">
+                    <h3>Admins</h3>
+                    <div class="dash-modal-row delete-dashboard-row clearfix" ng-repeat="user in users | orderBy:'username' | filter:{authorities:'ROLE_ADMIN'} as filteredAdmins">
+                      <div class="btn-block">
+                        <span class="label label-primary" ng-show="isActiveUser(user)">You</span>
+                        {{user.username}}
+                        <span class="badge">{{user.authType}}</span>
+                        <div title="Demote User" ng-show="filteredAdmins.length > 1" class="clickable pull-right" ng-click="demoteUserFromAdmin(user)">
+                          <span class="clickable fa fa-stack">
+                            <span class="fa-circle-thin fa-stack-2x text-danger"></span>
+                            <span class="fa-angle-left fa-stack-1x text-danger"></span>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="text-center" ng-show="users && !users.length">
+                  No results
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div ng-show="ctrl.tab === 'settings'">
+        <div class="widget-modal">
+          <div class="widget-modal-heading">
+            Manage configuration
+            <a href="https://confluence.devops.lloydsbanking.com/display/ENGTRAN/Speedy+Configurations#SpeedyConfigurations-Custom" target="_blank">(
+              <u>Properties Documentation</u>)</a>
+          </div>
+          <div class="widget-modal-body">
+            <span ng-show="ctrl.errorMessage" class="alert alert-danger alert-configuration">
+              {{ctrl.errorMessage}}
+            </span>
+            <span ng-show="ctrl.successMessage" class="alert alert-success alert-configuration">
+              {{ctrl.successMessage}}
+            </span>
+            <div class="row">
+              <form name="cdf" role="form" ng-submit="ctrl.saveConfiguration(cdf)" novalidate>
+                <fieldset>
+                  <legend>Custom API</legend>
+                  <div ng-repeat="(key, value) in ctrl.schema">
+                    <spdy-input-text ng-if="value.inputType === 'text' && (value.technical === undefined || value.technical === 'false')" name="{{value.label}}"
+                      description="{{value.description}}" value="ctrl.data[key]" required="{{value.required}}"></spdy-input-text>
+                    <spdy-input-number ng-if="value.inputType === 'number' && (value.technical === undefined || value.technical === 'false')"
+                      name="{{value.label}}" description="{{value.description}}" value="ctrl.data[key]"></spdy-input-number>
+                    <spdy-input-textarea ng-if="value.inputType === 'textarea' && (value.technical === undefined || value.technical === 'false')"
+                      name="{{value.label}}" description="{{value.description}}" value="ctrl.data[key]"></spdy-input-textarea>
+                  </div>
+                  </br>
+                  <legend>Technical Prop:
+                    <input type="checkbox" ng-model="techProp">
+                  </legend>
+                  </br>
+                  <div ng-repeat="(key, value) in ctrl.schema" ng-show="techProp">
+                    <spdy-input-text ng-if="value.inputType === 'text' && value.technical === 'true'" name="{{value.label}}" description="{{value.description}}"
+                      value="ctrl.data[key]"></spdy-input-text>
+                    <spdy-input-number ng-if="value.inputType === 'number' && value.technical === 'true'" name="{{value.label}}" description="{{value.description}}"
+                      value="ctrl.data[key]"></spdy-input-number>
+                    <spdy-input-textarea ng-if="value.inputType === 'textarea' && value.technical === 'true'" name="{{value.label}}" description="{{value.description}}"
+                      value="ctrl.data[key]"></spdy-input-textarea>
+                  </div>
+                </fieldset>
+                <div class="button-row row text-center">
+                  <button type="submit" class="btn btn-primary btn-wide">Save</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div ng-show="ctrl.tab === 'jirasettings'">
+        <div class="widget-modal">
+          <div class="widget-modal-heading">
+            Manage configuration
+            <a href="https://confluence.devops.lloydsbanking.com/display/ENGTRAN/Speedy+Configurations#SpeedyConfigurations-JIRA" target="_blank">(
+              <u>Properties Documentation</u>)</a>
+          </div>
+          <div class="widget-modal-body">
+            <span ng-show="ctrl.errorMessage" class="alert alert-danger alert-configuration">
+              {{ctrl.errorMessage}}
+            </span>
+            <span ng-show="ctrl.successMessage" class="alert alert-success alert-configuration">
+              {{ctrl.successMessage}}
+            </span>
+            <div class="row">
+              <form name="cdf" role="form" ng-submit="ctrl.saveJiraConfiguration(cdf)" novalidate>
+                <fieldset>
+                  <legend>JIRA</legend>
+                  <div ng-repeat="(key, value) in ctrl.jiraSchema">
+                    <spdy-input-text ng-if="value.inputType === 'text' && (value.technical === undefined || value.technical === 'false')" name="{{value.label}}"
+                      description="{{value.description}}" value="ctrl.jiradata[key]"></spdy-input-text>
+                    <spdy-input-number ng-if="value.inputType === 'number' && (value.technical === undefined || value.technical === 'false')"
+                      name="{{value.label}}" description="{{value.description}}" value="ctrl.jiradata[key]"></spdy-input-number>
+                    <spdy-input-textarea ng-if="value.inputType === 'textarea' && (value.technical === undefined || value.technical === 'false')"
+                      name="{{value.label}}" description="{{value.description}}" value="ctrl.jiradata[key]"></spdy-input-textarea>
+                  </div>
+                  </br>
+                  <legend>Technical Prop:
+                    <input type="checkbox" ng-model="techProp">
+                  </legend>
+                  </br>
+                  <div ng-repeat="(key, value) in ctrl.jiraSchema" ng-show="techProp">
+                    <spdy-input-text ng-if="value.inputType === 'text' && value.technical === 'true'" name="{{value.label}}" description="{{value.description}}"
+                      value="ctrl.jiradata[key]"></spdy-input-text>
+                    <spdy-input-number ng-if="value.inputType === 'number' && value.technical === 'true'" name="{{value.label}}" description="{{value.description}}"
+                      value="ctrl.jiradata[key]"></spdy-input-number>
+                    <spdy-input-textarea ng-if="value.inputType === 'textarea' && value.technical === 'true'" name="{{value.label}}" description="{{value.description}}"
+                      value="ctrl.jiradata[key]"></spdy-input-textarea>
+                  </div>
+                </fieldset>
+                <div class="button-row row text-center">
+                  <button type="submit" class="btn btn-primary btn-wide">Save</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div ng-show="ctrl.tab === 'apitokens'">
+        <div class="widget-modal">
+          <div class="widget-modal-heading">
+            Generate Api Tokens
+          </div>
+          <div class="widget-modal-body">
+            <div class="row">
+              <div class="col-xs-12">
+                <div class="text-center" ng-hide="apitokens">Loading Api Tokens...</div>
+                <div ng-show="error">
+                  {{error.data}}
+                </div>
+
+                <div class="row">
+                  <div class="col-xs-15">
+
+                    <div class="btn-block col-xs-15">
+                      <span class="col-xs-3">
+                        <h3>Api User</h3>
+                      </span>
+                      <span class="col-xs-3">
+                        <h3>Expiration Date</h3>
+                      </span>
+                      <span class="col-xs-6">
+                        <button type="button" class="btn btn-primary btn-wide pull-right" ng-click="ctrl.generateToken()">New</button>
+                      </span>
+                    </div>
+
+                    <input type="text" class="form-control" id="tokenSearch" placeholder="Filter Api Users" ng-model="tokenSearch">
+
+                    <div class="dash-modal-row delete-dashboard-row clearfix" ng-repeat="apitoken in apitokens | filter:{apiUser:tokenSearch} | orderBy:'apiUser'">
+                      <div class="btn-block col-xs-15">
+                        <span class="col-xs-3">{{apitoken.apiUser}}</span>
+                        <span>{{::apitoken.expirationDt | date:'MM/dd/yyyy HH:mm:ss'}}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="text-center" ng-show="apitokens && !apitokens.length">
+                  No results
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div ng-show="ctrl.tab === 'uploadlogo'">
+        <div class="widget-modal">
+          <div class="widget-modal-heading">
+            Upload logo
+          </div>
+          <div class="widget-modal-body">
+            <div class="row">
+              <div class="file-upload">
+                <input type="file" upload-image="ctrl.myFile" class="form-control" id="myFileField" accept="image/x-png,image/gif,image/jpeg"
+                />
+                <button ng-click="ctrl.uploadFile()" class="btn btn-secondary btn-info">Upload File</button>
+                <span class="instruction-message">*only gif/jpeg/png/jpg file accepted,best suited dimensions 180 * 180 </span>
+              </div>
+            </div>
+            <span ng-show="ctrl.errorMessage" class="alert alert-danger file-upload-message fade in">
+              {{ctrl.errorMessage}}
+            </span>
+            <span ng-show="ctrl.successMessage" class="alert alert-success file-upload-message fade in">
+              {{ctrl.successMessage}}
+            </span>
+          </div>
+        </div>
+      </div>
+      <div ng-show="ctrl.tab === 'uploadOfflineData'">
+        <div class="widget-modal">
+          <div class="widget-modal-heading">
+            Upload Offline Data
+          </div>
+          <div class="widget-modal-body">
+            <div class="row">
+              <div class="file-upload">
+                <input type="file" upload-image="ctrl.myOfflineData" class="form-control" id="myOfflineDataField" accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                />
+                <button ng-click="ctrl.uploadOfflineData()" class="btn btn-secondary btn-info">Upload File</button>
+                <span class="instruction-message">*only excel sheets</span>
+              </div>
+            </div>
+            <span ng-show="ctrl.errorMessage" class="alert alert-danger file-upload-message fade in">
+              {{ctrl.errorMessage}}
+            </span>
+            <span ng-show="ctrl.successMessage" class="alert alert-success file-upload-message fade in">
+              {{ctrl.successMessage}}
+            </span>
+          </div>
+        </div>
+      </div>
+      <div ng-show="ctrl.tab === 'downloadOfflineData'">
+        <div class="widget-modal">
+          <div class="widget-modal-heading">
+            Download Offline Data
+          </div>
+          <div class="widget-modal-body">
+            <div class="row">
+              <a class="btn btn-secondary btn-info" href="/api/excel/downloadOfflineData">Download File</a>
+            </div>
+            <span ng-show="ctrl.errorMessage" class="alert alert-danger file-upload-message fade in">
+              {{ctrl.errorMessage}}
+            </span>
+            <span ng-show="ctrl.successMessage" class="alert alert-success file-upload-message fade in">
+              {{ctrl.successMessage}}
+            </span>
+          </div>
+        </div>
+      </div>
+      <div ng-show="ctrl.tab === 'validationData'">
+        <div class="widget-modal">
+          <div class="widget-modal-heading">
+            Validation Data
+          </div>
+
+          <div class="row">
+            <div class="col-xs-4">
+              <div class="btn-group" uib-dropdown is-open="validationSelect.isopen" style="width: 100%;">
+                <button type="button" class="btn btn-default btn-lg" style="text-align:left; width: 75%; overflow: hidden; text-overflow: ellipsis;">
+                  {{ctrl.validationSelect.title}}
+                </button>
+                <button type="button" class="btn btn-default btn-lg dropdown-toggle" uib-dropdown-toggle>
+                  <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                  <li ng-class="{'active': ctrl.theme == theme.filename}" ng-repeat="listObj in ctrl.validationForms">
+                    <a class="clickable btn-block" ng-click="ctrl.validationData(listObj)">
+                      {{listObj.name}}
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-xs-3">
+              <button class="btn btn-primary" ng-disabled="ctrl.downloadButtonDisabled" ng-json-export-excel data="ctrl.dataList" report-fields="ctrl.reportHeaders"
+                separator="," filename="filename">Download</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div ng-show="tab === 'projectsettings'">
+        <div class="widget-modal">
+          <div class="widget-modal-heading">
+            Project Settings
+          </div>
+          <div class="widget-modal-body projectsettings">
+            <form name="projectSettingForm" ng-submit="saveAggregateProjectSettings()" novalidate>
+              <table>
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>LABEL</th>
+                    <th>VALUE</th>
+                  </tr>
+                </thead>
+                <tbody ng-repeat="(key, values) in ctrl.aggregateProjectSettings">
+                  <tr>
+                    <td>LEVEL {{key}}</td>
+                    <td>
+                      <div class="col-md-9">
+                        <select class="form-control" id="label{{key}}" ng-model="selectedItem">
+                          <option value="">Select</option>
+                          <option value="{{values[0]}}" ng-selected="values[0]">{{values[0].labelName}}</option>
+                        </select>
+                      </div>
+                      <!-- <div class="col-md-9" ng-show="item.value.length === 0"> 
+                                                  <input type="text"  class="text-box"/> 
+                                              </div> 
+                                              <div class="col-md-3" ng-show="item.value.length === 0"> 
+                                                  <div ng-click="template.aggregateDashboardDetails(accountLevel)"><button class="btn btn-details btn-sm">Add New</button></div> 
+                                              </div> -->
+                    </td>
+                    <td>
+                      <span class="mandatory">*</span>
+                      <div class="col-md-9" ng-if="key == 1">
+                        <select name="value1" class="form-control" id="value{{key}}" ng-model="selectedValue1" ng-change="update(selectedValue1)"
+                          ng-options="item.nodeName for item in values track by item.nodeId" required>
+                          <option value="">Select</option>
+                        </select>
+                        <div class="alert-danger" ng-show="projectSettingForm.value{{key}}.$invalid && !projectSettingForm.value{{key}}.$pristine">Please select value</div>
+                      </div>
+                      <div class="col-md-9" ng-if="key == 2">
+                        <select name="value2" class="form-control" id="value{{key}}" ng-model="selectedValue2" ng-change="update(selectedValue2)"
+                          ng-options="item.nodeName for item in values track by item.nodeId" required>
+                          <option value="">Select</option>
+                        </select>
+                        <div class="alert-danger" ng-show="projectSettingForm.value{{key}}.$invalid && !projectSettingForm.value{{key}}.$pristine">Please select value</div>
+                      </div>
+                      <div class="col-md-9" ng-if="key == 3">
+                        <input name="value3" required type="text" ng-model="ctrl.selectedLevel3" ng-change="updateAccount(3)" class="text-box" />
+                        <div class="alert-danger text-box" ng-show="projectSettingForm.value3.$invalid && !projectSettingForm.value3.$pristine">Please enter value.</div>
+                      </div>
+                      <div class="col-md-9" ng-if="key == 4">
+                        <input name="value4" required type="text" ng-model="ctrl.selectedLevel4" ng-change="updateAccount(4)" class="form-control text-box"
+                        />
+                        <div class="alert-danger text-box" ng-show="projectSettingForm.value4.$invalid && !projectSettingForm.value4.$pristine">Please enter value.</div>
+                      </div>
+                      <div class="col-md-3" ng-show="$last">
+                        <div>
+                          <input type="text" class="text-box" ng-change="updateAccount(4)" ng-model="ctrl.currentSelectedValue" />
+                          <span>weight</span>
+                        </div>
+
+                      </div>
+                    </td>
+                  </tr>
+
+                </tbody>
+              </table>
+              <div class="project-setting-message">
+                <span ng-show="ctrl.errorMessage" class="alert alert-danger file-upload-message fade in">
+                  {{ctrl.errorMessage}}
+                </span>
+                <span ng-show="ctrl.successMessage" class="alert alert-success file-upload-message fade in">
+                  {{ctrl.successMessage}}
+                </span>
+                <span class="project-setting-save">
+                  <button type="submit" ng-disabled="projectSettingForm.$invalid" class="btn btn-details btn-sm">Save</button>
+                </span>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div ng-show="tab === 'kpisetup'">
+        <div class="widget-modal">
+          <div class="widget-modal-heading">
+            KPI Setup
+          </div>
+          <div class="widget-modal-body ">
+            <div class="col-xs-push-2 col-xs-8 dash-modal-row kpi-row" ng-repeat="item in ctrl.kpiList track by $index">
+              <div class="dash-modal-row">
+                <div class="col-md-2">
+                  KPI Name
+                </div>
+                <div class="col-md-10">
+                  {{item.kpiName}}
+                </div>
+                <div class="col-md-2">
+                  Base Line
+                </div>
+                <div class="col-md-10">
+                  <input type="text" ng-model="ctrl.kpiList[$index].kpiBaseLine" />
+                  <span>{{item.kpiUnit}}</span>
+                </div>
+              </div>
+              <hr>
+            </div>
+            <div class="col-xs-push-2 col-xs-8 kpi-setup-save">
+              <div class="col-md-9">
+                <span ng-show="ctrl.errorMessage" class="alert alert-danger file-upload-message fade in">
+                  {{ctrl.errorMessage}}
+                </span>
+                <span ng-show="ctrl.successMessage" class="alert alert-success file-upload-message fade in">
+                  {{ctrl.successMessage}}
+                </span>
+              </div>
+              <div class="col-md-3">
+                <span ng-click="saveKpiSetup()">
+                  <button class="btn btn-details btn-sm">Save</button>
+                </span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="themes" ng-show="::ctrl.storageAvailable">
+      <div class="btn-group" uib-dropdown is-open="status.isopen">
+        <button type="button" class="btn btn-default dropdown-toggle" uib-dropdown-toggle>
+          Themes
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-right" role="menu">
+          <li ng-class="{'active': ctrl.theme == theme.filename}" ng-repeat="theme in ctrl.themes">
+
+            <a class="clickable btn-block" ng-click="ctrl.applyTheme(theme.filename)">
+              {{theme.name}}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,145 @@
+<div ng-controller="CustomTemplateController as template">
+    <div class="custom-dashboard-container">
+        <div id="header">
+            <nav class="navbar navbar-default navbar-fixed-top">
+                <a class="col-md-3 image-container" ng-href="#/">
+                    <img class="img-responsive" ng-src="{{template.logoImage}}">
+                </a>               
+                <div class="col-md-9 container-fluid">                
+                    <h3>SPEEDY Lite-OKR</h3>
+                    <h4 id="projectName">{{template.projectDetails.name}}</h4>
+                    <div id="projectDetails">
+                        <label ng-if="(template.projectDetails.monetoryValue && template.projectDetails.monetoryValue !== '')">Revenue:</label>
+                        <h5>&nbsp;{{template.projectDetails.monetoryValue}}&emsp;</h5>
+                        <label ng-if="(template.projectDetails.teamSize && (template.projectDetails.teamSize > 0 || template.projectDetails.teamSize !=='') )">Team Size:</label>
+                        <h5 ng-if="(template.projectDetails.teamSize && (template.projectDetails.teamSize > 0 || template.projectDetails.teamSize !=='') )">&nbsp;{{template.projectDetails.teamSize}}&emsp;</h5>
+                        <label ng-if="(template.projectDetails.startDate && template.projectDetails.startDate !=='')">Start Date:</label>
+                        <h5>&nbsp;{{template.projectDetails.startDate}}&emsp;</h5>
+                        <label ng-if="(template.projectDetails.endDate && template.projectDetails.endDate !=='')">End Date:</label>
+                        <h5>&nbsp;{{template.projectDetails.endDate}}&emsp;</h5>
+                    </div>
+                    <!-- <h4 id="dashboardTitle" title="{{::ctrl.dashboard.title }}">{{::ctrl.dashboard.title | trunText:50}}</h4> -->
+                </div>
+                <ng-include class="top-navbar-header custom-top-nav-header" src="ctrl.navheadertemplateUrl"/>
+            </nav>
+        </div>
+
+        <div ng-if="!template.showRadar" class="dashboard-widgets container-fluid" dashboard="ctrl.dashboard">
+            <div class="row">
+                <div class="col-md-5 four-four">
+                    <div class="row">
+                        <div class="col-md-12 widget-category">
+                            <div class="category-head" id="productivity">
+                                <img src="../../assets/img/productivity-icon.png">
+                                <div class="category-detail">
+                                    <h5>SPEED OF EXECUTION</h5>
+                                    <h6>Are we going fast?</h6>
+                                </div>
+                            </div>
+                             <div class="category-content">
+                                <div class="widget-container black col-md-6">
+                                    <custom-widget fetch-data="template.fetchStoryBacklogtoDOR()">
+                                    </custom-widget>
+                                </div>
+                                <div class="widget-container black col-md-6">
+                                    <custom-widget fetch-data="template.fetchStoryDODtoLive()">
+                                    </custom-widget>
+                                </div>
+                                <div class="widget-container black col-md-6">
+                                    <custom-widget fetch-data="template.fetchStoryDORtoDOD()">
+                                    </custom-widget>
+                                </div>
+                                <div class="widget-container black col-md-6">
+                                    <custom-widget fetch-data="template.fetchStoryLeadTime()">
+                                    </custom-widget>
+                                </div>
+                                <!--  <div class="widget-container col-md-6" data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle" ng-click="template.chartModalDialog('FlowEfficiency')">
+                                    <custom-widget fetch-data="template.fetchFlowEfficiency()">
+                                    </custom-widget>
+                                 </div> -->
+                                 <div class="widget-container col-md-6">
+                                    <custom-widget fetch-data="template.fetchDeploymentFrequency()">
+                                    </custom-widget>
+                                 </div>
+                            </div>
+                        </div>                        
+                    </div>
+                </div>
+                <div class="col-md-6 five-two">
+                    <div class="row">
+                        <div class="col-md-9 widget-category">
+                            <div class="category-head" id="quality">
+                                <img src="../../assets/img/quality-icon.png">
+                                <div class="category-detail">
+                                    <h5>EFFECTIVENESS</h5>
+                                    <h6>Are we building the quality product?</h6>
+                                </div>
+                            </div>
+                            <div class="category-content">
+                                    <div class="widget-container black col-md-6">
+                                        <custom-widget fetch-data="template.fetchDefectInjectionRate()"></custom-widget>
+                                    </div>
+                                    <div class="widget-container col-md-6">
+                                        <custom-widget fetch-data="template.fetchAutoVsManualTest()"></custom-widget>
+                                   </div>         
+                            </div>
+                         </div>                           
+                       </div>                    
+                    </div>
+                </div>
+            </div>
+        </div>
+       
+    <div id="overlay">
+        <div id="textPopup"></div>
+    </div>
+    <div class="modal-xl">
+        <div class="dialog">
+            <div class="modal fade modal-toggle" role="dialog" aria-labelledby="modalPopUp" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                  </div>
+                  <div class="modal-body">
+                    <div class="form-group" ng-if="template.isCalendarOpen">
+                        <custom-calendar from-date="template.startDate" to-date="template.endDate" click="template.applyTrendOverDates(selectedDates)"></custom-calendar>
+                    </div>
+                    <div class="row" ng-if="template.isTrendOverDropdownActive">
+                            <div ng-show="template.errorMessage" class="alert alert-danger fade in">
+                                {{template.errorMessage}}
+                            </div>
+                            <div class="sprint-dropdown col-md-5">
+                                <span class="sprint-label">From Sprint:</span>
+                                <select name="dashboardType"
+                                        class="form-control"
+                                        ng-model="template.selectedFromSprintList"
+                                        ng-options="x for x in template.allSprintList"
+                                        ng-change="template.fromToSplitList()"
+                                        required>
+                                    <option value="" disabled>Select a type</option>
+                                </select>
+                            </div>
+                            <div  class="sprint-dropdown col-md-5">
+                                <span class="sprint-label">To Sprint:</span>
+                                <select name="dashboardType"
+                                        class="form-control"
+                                        ng-model="template.selectedToSprintList" 
+                                        ng-options="x for x in template.allSprintList"
+                                        ng-change="template.fromToSplitList()"
+                                        required>
+                                    <option value="" disabled>Select a type</option>
+                                </select>
+                            </div>
+                            <button  class="btn btn-sm btn-default" ng-disabled="template.isApplyTrendOverActive" ng-click="template.applyTrendOverDates()">Apply</button>
+                        </div>
+                    <custom-widget chart-modal-dialog="template.selectedChart !== ''" chart-modal-data="template.chartdata">
+                    </custom-widget>
+                  </div>
+                </div>
+              </div>
+              </div>
+            </div>
+        </div>
+    </div>
+</div>

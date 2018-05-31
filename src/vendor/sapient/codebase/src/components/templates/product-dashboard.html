@@ -1,0 +1,24 @@
+<div>
+    <div id="header">
+
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <a class="col-md-3 image-container" ng-href="#/">
+                <img class="img-responsive" src="../../logo/default.gif">
+            </a>
+
+            <div title="{{::ctrl.dashboard.title }}">{{::ctrl.dashboard.title | trunText:50}}</div>
+            <ng-include class="top-navbar-header" src="ctrl.navheadertemplateUrl"></ng-include>
+        </nav>
+
+        <div class="clear"></div>
+    </div>
+
+    <div class="dashboard-widgets container-fluid" widget-container dashboard="ctrl.dashboard">
+        <div class="row">
+            <div class="col-xs-12">
+                <widget name="product" header="false"></widget>
+            </div>
+        </div>
+    </div>
+
+</div>

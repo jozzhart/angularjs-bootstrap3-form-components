@@ -1,0 +1,93 @@
+<div id="auth">
+    <ng-include src="signup.templateUrl"></ng-include>
+    <div class="col-md-8 col-md-push-2">
+
+        <div class="auth-modal-heading">
+            Please Signup
+        </div>
+        <div class="auth-modal-body">
+            <form class="col-xs-10 col-xs-push-1 col-sm-8 col-sm-push-2"
+                  name="suf"
+                  class="form"
+                  ng-submit="signup.doSignup(suf.$valid)"
+                  role="form"
+                  novalidate>
+
+                <div class="alert alert-success" ng-if="signup.userCreated">
+                    User created successfully
+                </div>
+
+                <form-group input="id" errors="{exists:'Cannot register with this username', required:'Username is required'}">
+                    <input type="text"
+                           class="form-control text-center"
+                           ng-model="signup.id"
+                           ng-change="resetUsernameFieldValidity()"
+                           minlength="4"
+                           name="id"
+                           placeholder="Enter your username"
+                           autocomplete="off"
+                           required />
+                </form-group>
+
+                <form-group>
+                    <p>Password should be:</p>
+                        <ul>
+                            <li>8 to 20 characters.</li>
+                            <li>Be a mix of numeric, lowercase, uppercase characters</li>
+                            <li>Have at least one of the following special characters: -@#$%</li>
+                        </ul>
+                    </p>
+                </form-group>
+                
+                <form-group input="password" errors="{pexists:'Please use a mix of numeric, lowercase, uppercase characters and at least one of the following special characters: -@#$%' ,required: 'Password is required', minlength: 'Password should be a min length of 8 characters'}">
+                    <input type="password" class="form-control text-center"
+                           ng-model="signup.password"
+                           minLength=8
+                           name="password"
+                           ng-change="resetUsernameFieldValidity()"
+                           placeholder="Enter your password"
+                           required />
+
+                </form-group>
+
+                <form-group input="confirm" errors="{match: 'Passwords do not match!'}">
+                    <input type="password"
+                           class="form-control text-center"
+                           ng-model="signup.confirm"
+                           required
+                           match="signup.password"
+                           name="confirm"
+                           placeholder="Confirm password"/>
+                </form-group>
+                <form-group ng-if="signup.isCaptchaRequired" input="captcha" errors="{validcaptcha: 'captcha do not match!'}">
+                    <div>
+                    <input type="captcha"
+                        class="captcha-form-control text-center"
+                        ng-model="signup.captchaText"
+                        required
+                        ng-change="resetUsernameFieldValidity()"
+                        name="captcha"
+                        placeholder="Type Captcha"/>
+                        <img ng-src="{{signup.captchaSource}}"/>
+                        <i class="fa fa-refresh" aria-hidden="true" ng-click="refreshCaptcha()"></i>
+                    </div>
+                </form-group>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-default btn-wide">
+                        <i class="fa fa-lg fa fa-thumbs-o-up"></i>
+                        Sign up
+                    </button>
+                </div>
+
+                <div class="gap text-center">
+                    <p>Already have an account?</p>
+
+                    <div class="btn btn-link btn-wide" ng-click="signup.doLogin()">
+                        <span class="fa fa-lg fa-key"></span>
+                        Log in
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

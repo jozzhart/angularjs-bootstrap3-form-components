@@ -3,6 +3,8 @@
 // Modules
 var webpack = require('webpack');
 var path = require('path');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const devMode = process.env.NODE_ENV !== 'production'
 
 /**
  * Env
@@ -10,7 +12,7 @@ var path = require('path');
  */
 var ENV = process.env.npm_lifecycle_event;
 var isTest = ENV === 'test' || ENV === 'test-watch';
-var isProd = ENV === 'build';
+var isProd = ENV === 'build' || ENV === 'prod';
 
 module.exports = function makeWebpackConfig() {
   /**
@@ -86,8 +88,12 @@ module.exports = function makeWebpackConfig() {
       loader: 'raw-loader'
     }, {
       test: /\.less$/,
-      use: [{
+      use: [
+        devMode ? 
+      {
         loader: 'style-loader' // creates style nodes from JS strings
+      } : {
+        loader: MiniCssExtractPlugin.loader
       }, {
         loader: 'css-loader', options: {
           sourceMap: true
@@ -122,21 +128,25 @@ module.exports = function makeWebpackConfig() {
     })
   }
 
+  config.plugins = [];
+
 
   // Add build specific plugins
   if (isProd) {
     config.plugins.push(
       // Reference: http://webpack.github.io/docs/list-of-plugins.html#noerrorsplugin
       // Only emit files when there are no errors
-      new webpack.NoErrorsPlugin(),
+      // new webpack.NoErrorsPlugin(),
 
       // Reference: http://webpack.github.io/docs/list-of-plugins.html#dedupeplugin
       // Dedupe modules in the output
-      new webpack.optimize.DedupePlugin(),
+      // new webpack.optimize.DedupePlugin(),
 
       // Reference: http://webpack.github.io/docs/list-of-plugins.html#uglifyjsplugin
       // Minify all javascript, switch loaders to minimizing mode
-      new webpack.optimize.UglifyJsPlugin(),
+      // new webpack.optimize.UglifyJsPlugin(),
+
+      new MiniCssExtractPlugin()
 
       )
   }
@@ -145,7 +155,9 @@ module.exports = function makeWebpackConfig() {
     jQuery : '$'
   };
 
-  config.watch = true;
+  if (!isProd) {
+    config.watch = true;
+  }
 
 
   config.devServer = {

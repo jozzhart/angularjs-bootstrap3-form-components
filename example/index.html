@@ -4,7 +4,7 @@
 <head>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link href="../dist/main.css"></link>
+    <link rel="stylesheet" href="../dist/main.css"></link>
     
     <script>
       var HygieiaConfig = {"module":"hygieia-dashboard","refresh":60};
@@ -102,26 +102,27 @@
         };
       })
       .config(function ($stateProvider, $urlServiceProvider) {
-        $urlServiceProvider.rules.otherwise({
-          state: 'readmeState'
+        $stateProvider.state('readmeState', {
+          url: '/',
+          controller: 'ReadMeController',
+          templateUrl: './readme.html'
         });
-
+        
         $stateProvider.state('sinkState', {
           url: '/sink',
           controller: 'SpeedySinkController',
           templateUrl: './sink.html'
         });
 
-        $stateProvider.state('readmeState', {
-          url: '/',
-          controller: 'ReadMeController',
-          templateUrl: './readme.html'
-        });
-
         $stateProvider.state('settingsState', {
           url: '/settings',
           controller: 'SpeedySettingsController',
           templateUrl: './settings.html'
+        });
+
+
+        $urlServiceProvider.rules.otherwise({
+          state: 'readmeState'
         });
       })
       .run(function ($httpBackend) {
@@ -189,7 +190,7 @@
                 </a>
                 <ul class="dropdown-menu dropdown-menu-right" uib-dropdown-menu>
                   <li>
-                    <a href="#/">Readme</a>
+                    <a href="/">Readme</a>
                   </li>
                   <li>
                     <a href="#/sink">Kitchen Sink</a>

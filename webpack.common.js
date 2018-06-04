@@ -3,7 +3,6 @@
 // Modules
 var webpack = require('webpack');
 var path = require('path');
-const devMode = process.env.NODE_ENV !== 'production'
 
 /**
  * Env

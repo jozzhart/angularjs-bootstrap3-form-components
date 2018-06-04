@@ -95,6 +95,7 @@
                         });
                 }
 
+                
                function openAnalyticsModal() {
                     $uibModal.open({
                         templateUrl: "app/dashboard/views/missingTagsInGA.html",

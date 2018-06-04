@@ -1,8 +1,9 @@
 'use strict';
 
 // Modules
-var webpack = require('webpack');
-var path = require('path');
+const webpack = require('webpack');
+const path = require('path');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 /**
  * Env
@@ -32,8 +33,8 @@ module.exports = {
    */
   output : {
     // Absolute output directory
-    path: __dirname + '/dist',
-    filename: 'index.js'
+    path: path.join(__dirname, 'dist'),
+    filename: 'index.js',
   },
 
 
@@ -79,13 +80,15 @@ module.exports = {
     }]
   },
 
+  plugins: [
+    new CopyWebpackPlugin([{
+      from: 'src/assets', 
+      to: 'assets/'
+    }])
+  ],
+
   externals: {
     jQuery : '$'
   },
-
-  // if (!isProd) {
-  //   watch = true;
-  // }
-
 
 };

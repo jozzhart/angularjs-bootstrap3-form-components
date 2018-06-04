@@ -30,7 +30,7 @@ npm run build
 Demo showing all components 
 
 Live example
-[Kitchen sink demo](https://jozzhart.github.io/speedy-components/example)
+[Kitchen sink demo](https://jozzhart.github.io/speedy-components/example/#/sink)
 
 To run locally
 ```

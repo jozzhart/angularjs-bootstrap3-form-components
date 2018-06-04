@@ -57,7 +57,7 @@ module.exports = merge(common, {
   },
 
   plugins: [
-      new MiniCssExtractPlugin()
+    new MiniCssExtractPlugin()
   ],
   
   optimization: {

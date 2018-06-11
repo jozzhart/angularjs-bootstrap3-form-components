@@ -12,6 +12,9 @@ componentsModule.component('spdyInputNumber', InputNumberComponent);
 import InputTextareaComponent from './dumb/form/input-textarea/input-textarea.component'
 componentsModule.component('spdyInputTextarea', InputTextareaComponent);
 
+import NavComponent from './dumb/nav/nav.component'
+componentsModule.component('spdyNav', NavComponent);
+
 import StatusComponent from './smart/status'
 componentsModule.component('spdyStatus', StatusComponent);
 

@@ -14,6 +14,7 @@
   function AdminController($scope, $timeout, $rootScope, dashboardData, $location, $uibModal, userService, authService, userData, dashboardService, fileUploadService, $filter, $window, customDashboardData, orderBy) {
     var ctrl = this;
 
+    
     //  TODO testing refactor
     if ((userService.isAuthenticated() && userService.isAdmin()) || HygieiaConfig.local) {
       $location.path('/admin');

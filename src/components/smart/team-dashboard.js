@@ -6,7 +6,9 @@ class TeamDashboardController {
     'ngInject'; // ng-annotate
 
     this.$controller = $controller;
-    this.$scope = $scope;  
+    this.$scope = $scope; 
+    
+    this.minimised = false;
 
     this.fetchData = function(){
       return $q(function(resolve, reject) {
@@ -15,6 +17,10 @@ class TeamDashboardController {
         }), 1);
       })   
     };
+  }
+
+  showHide(state){
+    this.minimised = state === 'hide' ? true : false;
   }
 
   $onInit() {

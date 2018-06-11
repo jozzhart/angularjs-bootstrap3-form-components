@@ -32,7 +32,7 @@
 //##
 
 // Basics of a navbar
-@navbar-height:                    100px;
+@navbar-height:                    60px;
 @navbar-margin-bottom:             @line-height-computed;
 @navbar-border-radius:             @border-radius-base;
 @navbar-padding-horizontal:        floor((@grid-gutter-width / 2));
@@ -40,7 +40,7 @@
 @navbar-collapse-max-height:       50px;
 
 @navbar-default-color:             @text-color;
-@navbar-default-bg:                @gray-dark;
+@navbar-default-bg:                white;
 @navbar-default-border:            darken(@navbar-default-bg, 6.5%);
 
 // Navbar links
@@ -66,7 +66,7 @@
 // Inverted navbar
 // Reset inverted navbar basics
 @navbar-inverse-color:                      #ccc;
-@navbar-inverse-bg:                         @brand-primary;
+@navbar-inverse-bg:                         @lloyds-primary-core;
 @navbar-inverse-border:                     darken(@navbar-inverse-bg, 10%);
 
 // Inverted navbar links
@@ -138,15 +138,26 @@ body {
   padding: 10px 15px;
 }
 
-.navbar-inverse {
-  background: @lloyds-primary-racing;
+.navbar {
   margin-bottom: 0;
   border: 0;
 
-  .navbar-nav > li > a,
-  .navbar-brand,
-  a {
+  .navbar-brand {
     color: white;
+
+    img {
+      height:40px; 
+      width: auto;
+      background: @lloyds-primary-core;
+      padding: 0 0 0 15px;
+    }
+  }
+}
+
+.navbar-inverse {
+  .navbar-nav > li > a {
+    color: white;
+
   }
 }
 
@@ -179,6 +190,111 @@ body {
 
 .glyphicon-thumbs-up {
   color: green;
+}
+
+
+
+
+.panel-default {
+  
+  position: absolute; right: 40px; bottom: -20px; width: 330px; height: 420px; 
+  box-shadow: 0 4px 25px 0 rgba(0, 0, 0, 0.6);
+  border: 0;
+
+  &>.panel-heading {
+    color: white;
+    background: @lloyds-primary-core;
+    height: 105px;
+
+    .panel-title {
+      font-size: 2.5rem;
+
+
+      img {
+        height: 48px; 
+        margin-bottom:0.25rem; 
+        margin-right: 10px; 
+        padding: 5px; 
+        background: white; 
+        border-radius: 50%; 
+        width: 48px;
+      }
+    }
+
+    p {
+      padding: 1rem 0 0 0; 
+    }
+
+    .glyphicon {
+      margin-top: 10px;
+      cursor: pointer;
+    }
+
+    .glyphicon-triangle-bottom {
+      display: block;
+    }
+    .glyphicon-triangle-top {
+      display: none;
+    }
+
+  }
+
+  .bubble {
+    background: @lloyds-primary-apple;
+    padding: 8px;
+    border-radius: 8px;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1.4rem; 
+
+    a {
+      color: white;
+      font-weight: bold;
+    }
+
+  }
+
+  .panel-footer {
+    bottom: 0;
+    position: absolute;
+    width: 100%;
+  }
+  
+}
+
+.panel-default.minimised {
+
+  height: 68px;
+  overflow: hidden;
+
+
+  &>.panel-heading {
+
+    height: 68px;
+
+    // p {
+    //   height: 0;
+    //   padding: 0;
+    //   overflow: hidden;
+    //   margin: 0;
+
+    // }
+
+    .glyphicon-triangle-bottom {
+      display: none;
+    }
+    .glyphicon-triangle-top {
+      display: block;
+    }
+
+  }
+
+  .panel-body,
+  .panel-footer {
+    margin: 0;
+    height: 0;
+    padding: 0;
+  }
 }
 
 @import "lloyds-widgets.less";

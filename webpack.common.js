@@ -4,8 +4,12 @@
 const webpack = require('webpack');
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
 
 /**
+ * 
  * Env
  * Get npm lifecycle event to identify the environment
  */
@@ -92,3 +96,4 @@ module.exports = {
   },
 
 };
+

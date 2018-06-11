@@ -1,13 +1,12 @@
-<div ng-controller="SpeedySettingsController" class="container"> 
-  
+<!-- Not actually used, here for reference only -->
+<div class="container"> 
   <h1 class="page-header">Settings</h1>
-
   <uib-tabset active="active" class="tabs">
     <uib-tab>
       <uib-tab-heading>
         JIRA
       </uib-tab-heading>
-      <div ng-repeat="(key, value) in properties">
+      <div ng-repeat="(key, value) in $ctrl.properties">
         <spdy-input-text ng-if="value.inputType === 'text' && (value.technical === undefined || value.technical === 'false')" name="{{value.label}}" description="{{value.description}}" value="ctrl.data[key]" required="{{value.required}}"></spdy-input-text>
         <spdy-input-number ng-if="value.inputType === 'number' && (value.technical === undefined || value.technical === 'false')" name="{{value.label}}" description="{{value.description}}" value="ctrl.data[key]"></spdy-input-number>
         <spdy-input-textarea ng-if="value.inputType === 'textarea' && (value.technical === undefined || value.technical === 'false')" name="{{value.label}}" description="{{value.description}}" value="ctrl.data[key]"></spdy-input-textarea>
@@ -27,7 +26,4 @@
     <input class="btn btn-default" type="submit" value="Save">
   </div>
   </div>
-
-  
-
 </div>

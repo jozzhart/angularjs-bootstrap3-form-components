@@ -1,115 +1,129 @@
 <div class="wrapper">
-  <div class="one">
-    <div class="category-head cellDoubleWidth" id="people">
+  <div class="one" ng-if="$ctrl.showValueHeader || $ctrl.showPeopleHeader">
+    <div ng-show="$ctrl.showPeopleHeader" class="category-head cellDoubleWidth" id="people">
       <div>
         <img src="../dist/assets/img/people-icon.png">
         <h5>PEOPLE</h5>
         <h6>Are people engaged?</h6>
       </div>
     </div>
-    <custom-widget class="custom-widget" ng-class="$ctrl.layout.improvement.classes" fetch-data="$ctrl.fetchImprovement()"></custom-widget>
+    <custom-widget ng-if="$ctrl.layout.col0.improvement.show" class="custom-widget" ng-class="$ctrl.layout.col0.improvement.classes"
+      fetch-data="$ctrl.fetchImprovement()"></custom-widget>
 
     <!-- HAPPINESS INDEX -->
-    <custom-widget class="custom-widget" ng-class="$ctrl.layout.happiness.classes" fetch-data="$ctrl.fetchHappinessIndex()"></custom-widget>
-    <div class="category-head cellDoubleWidth" id="quality">
+    <custom-widget ng-if="$ctrl.layout.col0.happiness.show" class="custom-widget" ng-class="$ctrl.layout.col0.happiness.classes"
+      fetch-data="$ctrl.fetchHappinessIndex()"></custom-widget>
+    <div ng-show="$ctrl.showValueHeader" class="category-head cellDoubleWidth" id="quality">
       <div>
         <img src="../dist/assets/img/value-icon.png">
         <h5>VALUE</h5>
         <h6>Are we delivering value?</h6>
       </div>
     </div>
-    <custom-widget class="custom-widget" ng-class="$ctrl.layout.value.classes" fetch-data="$ctrl.fetchAssignValueMetric()"></custom-widget>
+    <custom-widget ng-if="$ctrl.layout.col0.value.show" class="custom-widget" ng-class="$ctrl.layout.col0.value.classes" fetch-data="$ctrl.fetchAssignValueMetric()"></custom-widget>
   </div>
 
-  <div class="two">
-    <div class="category-head cellQuadWidth" id="productivity">
+  <div class="two" ng-class="[{ col1Hidden: !($ctrl.showValueHeader || $ctrl.showPeopleHeader) }, { col3Hidden: !$ctrl.showQualityHeader }]">
+    <div ng-show="$ctrl.showSpeedHeader" class="category-head" id="productivity">
       <div>
         <img src="../dist/assets/img/productivity-icon.png">
         <h5>SPEED</h5>
         <h6>Are we going fast?</h6>
       </div>
     </div>
-    <!-- <custom-widget class="custom-widget" ng-class="$ctrl.layout.backlogToDOR.classes" fetch-data="$ctrl.fetchStoryBacklogtoDOR()"></custom-widget> -->
+    <!-- <custom-widget ng-if="$ctrl.layout.col1.backlogToDOR.show" class="custom-widget" ng-class="$ctrl.layout.col1.backlogToDOR.classes" fetch-data="$ctrl.fetchStoryBacklogtoDOR()"></custom-widget> -->
 
-    <custom-widget class="custom-widget" ng-class="$ctrl.layout.storyDORtoDOD.classes" fetch-data="$ctrl.fetchStoryDORtoDOD()"
-      data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle" ng-click="$ctrl.customWidgetClick('storyLeadTime')"></custom-widget>
+    <custom-widget ng-if="$ctrl.layout.col1.storyDORtoDOD.show" class="custom-widget" ng-class="$ctrl.layout.col1.storyDORtoDOD.classes"
+      fetch-data="$ctrl.fetchStoryDORtoDOD()" data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle"
+      ng-click="$ctrl.customWidgetClick('storyLeadTime')"></custom-widget>
 
-    <!-- <custom-widget class="custom-widget" ng-class="$ctrl.layout.storyLeadTime.classes" fetch-data="$ctrl.fetchStoryLeadTime()"></custom-widget> -->
+    <!-- <custom-widget ng-if="$ctrl.layout.col1.storyLeadTime.show" class="custom-widget" ng-class="$ctrl.layout.col1.storyLeadTime.classes" fetch-data="$ctrl.fetchStoryLeadTime()"></custom-widget> -->
 
-    <custom-widget class="custom-widget" ng-class="$ctrl.layout.dodToLive.classes" fetch-data="$ctrl.fetchStoryDODtoLive()" data-toggle="modal"
-      focus-element="autofocus" data-target=".modal-toggle" ng-click="$ctrl.customWidgetClick('storyLiveLeadTime')"></custom-widget>
+    <custom-widget ng-if="$ctrl.layout.col1.dodToLive.show" class="custom-widget" ng-class="$ctrl.layout.col1.dodToLive.classes"
+      fetch-data="$ctrl.fetchStoryDODtoLive()" data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle"
+      ng-click="$ctrl.customWidgetClick('storyLiveLeadTime')"></custom-widget>
 
-    <custom-widget class="custom-widget" ng-class="$ctrl.layout.sprintPredictability.classes" fetch-data="$ctrl.fetchSprintPredictability()"
-      data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle" ng-click="$ctrl.customWidgetClick('sprintPredictability')"></custom-widget>
+    <custom-widget ng-if="$ctrl.layout.col1.sprintPredictability.show" class="custom-widget" ng-class="$ctrl.layout.col1.sprintPredictability.classes"
+      fetch-data="$ctrl.fetchSprintPredictability()" data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle"
+      ng-click="$ctrl.customWidgetClick('sprintPredictability')"></custom-widget>
 
-    <custom-widget class="custom-widget" ng-class="$ctrl.layout.commitmentReliability.classes" fetch-data="$ctrl.commitmentReliability()"
-      data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle" ng-click="$ctrl.customWidgetClick('commitmentReliability')"></custom-widget>
+    <custom-widget ng-if="$ctrl.layout.col1.commitmentReliability.show" class="custom-widget" ng-class="$ctrl.layout.col1.commitmentReliability.classes"
+      fetch-data="$ctrl.commitmentReliability()" data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle"
+      ng-click="$ctrl.customWidgetClick('commitmentReliability')"></custom-widget>
 
     <!-- NUMBER OF CHECK-IN PER DAY   -->
-    <custom-widget class="custom-widget" ng-class="$ctrl.layout.noOfCheckins.classes" fetch-data="$ctrl.fetchNoOfCheckins()"
-      data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle" ng-click="$ctrl.customWidgetClick('NoOfCheckins')"></custom-widget>
+    <custom-widget ng-if="$ctrl.layout.col1.noOfCheckins.show" class="custom-widget" ng-class="$ctrl.layout.col1.noOfCheckins.classes"
+      fetch-data="$ctrl.fetchNoOfCheckins()" data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle"
+      ng-click="$ctrl.customWidgetClick('NoOfCheckins')"></custom-widget>
 
     <!-- CUMULATIVE FLOW DIAGRAM -->
-    <custom-widget class="custom-widget" ng-class="$ctrl.layout.cfdData.classes" fetch-data="$ctrl.fetchCfdData()" data-toggle="modal"
-      focus-element="autofocus" data-target=".modal-toggle" ng-click="$ctrl.customWidgetClick('CfdData')"></custom-widget>
+    <custom-widget ng-if="$ctrl.layout.col1.cfdData.show" class="custom-widget" ng-class="$ctrl.layout.col1.cfdData.classes"
+      fetch-data="$ctrl.fetchCfdData()" data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle" ng-click="$ctrl.customWidgetClick('CfdData')"></custom-widget>
 
     <!-- BACKLOG HEALTH -->
-    <custom-widget class="custom-widget" ng-class="$ctrl.layout.backlogHealth.classes" fetch-data="$ctrl.fetchBacklogHealth()"></custom-widget>
-
-    <!-- CI TIME -->
-    <custom-widget class="custom-widget" ng-class="$ctrl.layout.ciTime.classes" fetch-data="$ctrl.fetchCITime()" data-toggle="modal"
-      focus-element="autofocus" on-widget-click="$ctrl.customWidgetClick(widgetType)"></custom-widget>
+    <custom-widget ng-if="$ctrl.layout.col1.backlogHealth.show" class="custom-widget" ng-class="$ctrl.layout.col1.backlogHealth.classes"
+      fetch-data="$ctrl.fetchBacklogHealth()"></custom-widget>
 
     <!-- TECH DEBT -->
-    <custom-widget class="custom-widget" ng-class="$ctrl.layout.techDebit.classes" fetch-data="$ctrl.fetchTechDebt()"></custom-widget>
+    <custom-widget ng-if="$ctrl.layout.col1.techDebit.show" class="custom-widget" ng-class="$ctrl.layout.col1.techDebit.classes"
+      fetch-data="$ctrl.fetchTechDebt()"></custom-widget>
 
-    <custom-widget class="custom-widget" ng-class="$ctrl.layout.envCreationTime.classes" fetch-data="$ctrl.fetchEnvCreationTime()"></custom-widget>
+       <!-- CI TIME -->
+    <custom-widget ng-if="$ctrl.layout.col1.ciTime.show" class="custom-widget" ng-class="$ctrl.layout.col1.ciTime.classes" fetch-data="$ctrl.fetchCITime()"
+    data-toggle="modal" focus-element="autofocus" on-widget-click="$ctrl.customWidgetClick(widgetType)"></custom-widget>
 
-    <custom-widget class="custom-widget" ng-class="$ctrl.layout.releaseDeployTime.classes" fetch-data="$ctrl.fetchReleaseDeployTime()"></custom-widget>
+    <custom-widget ng-if="$ctrl.layout.col1.envCreationTime.show" class="custom-widget" ng-class="$ctrl.layout.col1.envCreationTime.classes"
+      fetch-data="$ctrl.fetchEnvCreationTime()"></custom-widget>
+  
+
+    <custom-widget ng-if="$ctrl.layout.col1.releaseDeployTime.show" class="custom-widget" ng-class="$ctrl.layout.col1.releaseDeployTime.classes"
+      fetch-data="$ctrl.fetchReleaseDeployTime()"></custom-widget>
 
   </div>
-  <div class="three">
-    <div class="category-head cellDoubleWidth">
+  <div class="three" ng-if="$ctrl.showQualityHeader">
+    <div ng-show="$ctrl.showQualityHeader" class="category-head">
       <div>
         <img src="../dist/assets/img/quality-icon.png">
         <h5>QUALITY</h5>
         <h6>Are we building a quality product?</h6>
       </div>
     </div>
-    <!-- <custom-widget class="custom-widget" ng-class="$ctrl.layout.xxxxxxxx.classes" fetch-data="$ctrl.fetchDefectInjectionRatePostlive()"></custom-widget> -->
-    <custom-widget class="custom-widget" ng-class="$ctrl.layout.defectInjectionRate.classes" fetch-data="$ctrl.fetchDefectInjectionRate()"></custom-widget>
+    <!-- <custom-widget ng-if="$ctrl.layout.col2.xxxxxxx.show" class="custom-widget" ng-class="$ctrl.layout.col2.xxxxxxxx.classes" fetch-data="$ctrl.fetchDefectInjectionRatePostlive()"></custom-widget> -->
+    <custom-widget ng-if="$ctrl.layout.col2.defectInjectionRate.show" class="custom-widget" ng-class="$ctrl.layout.col2.defectInjectionRate.classes"
+      fetch-data="$ctrl.fetchDefectInjectionRate()"></custom-widget>
 
-    <custom-widget class="custom-widget" ng-class="$ctrl.layout.autoVsManualTest.classes" fetch-data="$ctrl.fetchAutoVsManualTest()"
-      data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle" ng-click="$ctrl.customWidgetClick('autoPercentage')"></custom-widget>
+    <custom-widget ng-if="$ctrl.layout.col2.autoVsManualTest.show" class="custom-widget" ng-class="$ctrl.layout.col2.autoVsManualTest.classes"
+      fetch-data="$ctrl.fetchAutoVsManualTest()" data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle"
+      ng-click="$ctrl.customWidgetClick('autoPercentage')"></custom-widget>
 
     <!-- CODE QUALITY -->
-    <custom-widget class="custom-widget" ng-class="$ctrl.layout.codeQuality.classes" fetch-data="$ctrl.fetchCodeQuality()" data-toggle="modal"
-      focus-element="autofocus" data-target=".modal-toggle" ng-click="$ctrl.customWidgetClick('codeQuality')"></custom-widget>
+    <custom-widget ng-if="$ctrl.layout.col2.codeQuality.show" class="custom-widget" ng-class="$ctrl.layout.col2.codeQuality.classes"
+      fetch-data="$ctrl.fetchCodeQuality()" data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle"
+      ng-click="$ctrl.customWidgetClick('codeQuality')"></custom-widget>
 
-    <custom-widget class="custom-widget" ng-class="$ctrl.layout.jUnitCoverage.classes" fetch-data="$ctrl.fetchJUnitCoverage()"
-      data-toggle="modal" focus-element="autofocus" on-widget-click="$ctrl.customWidgetClick(widgetType)"></custom-widget>
+    <custom-widget ng-if="$ctrl.layout.col2.jUnitCoverage.show" class="custom-widget" ng-class="$ctrl.layout.col2.jUnitCoverage.classes"
+      fetch-data="$ctrl.fetchJUnitCoverage()" data-toggle="modal" focus-element="autofocus" on-widget-click="$ctrl.customWidgetClick(widgetType)"></custom-widget>
 
-    <custom-widget class="custom-widget" ng-class="$ctrl.layout.appDemonstration.classes" fetch-data="$ctrl.fetchAppDemonstration()"></custom-widget>
+    <custom-widget ng-if="$ctrl.layout.col2.appDemonstration.show" class="custom-widget" ng-class="$ctrl.layout.col2.appDemonstration.classes"
+      fetch-data="$ctrl.fetchAppDemonstration()"></custom-widget>
   </div>
 </div>
-
-
-<div class="panel panel-default" ng-class="{ minimised: $ctrl.minimised }">
-  <div class="panel-heading">
-    <h3 class="panel-title"><img src="../dist/assets/img/bot.png" /> 
-      Insights 
-      <span class="glyphicon glyphicon-triangle-bottom pull-right" ng-click="$ctrl.showHide('hide')"></span>
-      <span class="glyphicon glyphicon-triangle-top pull-right" ng-click="$ctrl.showHide('show')"></span>
-    </h3>
-    <p>I'm here to provide some insights into your metrics.</p>
-  </div>
-  <div class="panel-body">
-    <div class="bubble">It looks like your DOR to DOD is slipping.
-      <a target="_blank" href="https://confluence.devops.lloydsbanking.com/display/ET/Speedy+FAQ">Find out to to improve this <span class="glyphicon glyphicon-new-window"></span></a>
-    </div>
-  </div>
-  <div class="panel-footer">
-    <input type="text" placeholder="Potential future chat feature" style="padding: 9px 20px; width: 230px;" />
-    <a class="btn btn-primary pull-right">send</a>
-  </div>
+<div class="panel panel-default" ng-class="{ minimised: $ctrl.minimised }"> 
+  <div class="panel-heading"> 
+    <h3 class="panel-title"><img src="../dist/assets/img/bot.png" />  
+      Insights <span ng-if="$ctrl.insightsCount" class="badge badge-error">{{$ctrl.insightsCount}}</span>
+      <span class="glyphicon glyphicon-triangle-bottom pull-right" ng-click="$ctrl.showHide('hide')"></span> 
+      <span class="glyphicon glyphicon-triangle-top pull-right" ng-click="$ctrl.showHide('show')"></span> 
+    </h3> 
+    <p>I'm here to provide some insights into your metrics.</p> 
+  </div> 
+  <div class="panel-body"> 
+    <div class="bubble">It looks like your DOR to DOD is slipping. 
+      <a ng-click="$ctrl.also()" target="_blank" href="https://confluence.devops.lloydsbanking.com/display/ET/Speedy+FAQ">Find out how to improve this <span class="glyphicon glyphicon-new-window"></span></a> 
+    </div> 
+  </div> 
+  <div class="panel-footer"> 
+    <input type="text" placeholder="Potential future chat feature" style="padding: 9px 20px; width: 230px;" /> 
+    <a class="btn btn-primary pull-right">send</a> 
+  </div> 
 </div>

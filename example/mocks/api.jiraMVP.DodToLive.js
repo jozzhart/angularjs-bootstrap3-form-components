@@ -1,6 +1,15 @@
 angular.module('app')
-.run(function ($httpBackend) {
+  .run(function ($httpBackend) {
 
-  $httpBackend.whenGET('/api/jiraMVP/DodToLive').respond({"storyLiveLeadTime":{"symbol":"","value":"22","unit":"Weeks","trend":""},"dodToLiveMaturitylevel":"1","validationFlag":"false"});
-  
-});
+    $httpBackend.whenGET('/api/jiraMVP/DodToLive').respond({
+      "storyLiveLeadTime": {
+        "symbol": "",
+        "value": "22",
+        "unit": "Weeks",
+        "trend": ""
+      },
+      "dodToLiveMaturitylevel": "1",
+      "validationFlag": "false"
+    });
+
+  });

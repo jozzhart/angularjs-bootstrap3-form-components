@@ -2,116 +2,71 @@ import TeamDashboardTemplate from './team-dashboard.html';
 
 class TeamDashboardController {
 
-  constructor(HealthService, $q, $scope, $controller) {
+  constructor(HealthService, $q, $scope, $controller, customDashboardData) {
     'ngInject'; // ng-annotate
 
     this.$controller = $controller;
-    this.$scope = $scope; 
-    
-    this.minimised = false;
+    this.$scope = $scope;
+    this.customDashboardData = customDashboardData;
 
-    this.fetchData = function(){
-      return $q(function(resolve, reject) {
-        setTimeout(resolve({
-          title: 'Mocked Widget'
-        }), 1);
-      })   
-    };
+    this.minimised = true;
+
+    this.insightsCount = 1;
+    
+    this.firstColumnBgColor = "#02874f";
+    this.secondColumnBgColor = "#18519d";
+    this.thirdColumnBgColor = "#b2174f";
+    this.fourthColumnBgColor = "#d74f14";
+    
+
+    // this.fetchData = function () {
+    //   return $q(function (resolve, reject) {
+    //     setTimeout(resolve({
+    //       title: 'Mocked Widget'
+    //     }), 1);
+    //   })
+    // };
   }
 
-  showHide(state){
+  showHide(state) {
     this.minimised = state === 'hide' ? true : false;
+  }
+
+  
+  also(){
+    this.insightsCount = null;
+    console.log()
   }
 
   $onInit() {
 
-    // this.layout = {
-    //   speed: [{
-    //     classes: ['cellDoubleWidth'],
-    //     visible: true
-    //   },{
-    //     visible: true
-    //   }]
-    // }
+    // this.customDashboardData.fetchHelpers()
+    // .then(function(response) {
 
-    var defaultLayout = {
-      improvement: {
-          classes: 'cellDoubleWidth'
-      },
-      happiness: {
-          classes: 'cellDoubleWidth cellDoubleHeight'
-      },
-      value: {
-          classes: 'cellDoubleWidth'
-      },
-      backlogToDOR: {
-          classes: 'cellDoubleWidth'
-      },
-      storyDORtoDOD: {
-          classes: 'cellDoubleWidth'
-      },
-      dodToLive: {
-          classes: 'cellDoubleWidth'
-      },
-      storyLeadTime: {
-          classes: 'cellDoubleWidth'
-      },
-      sprintPredictability: {
-          classes: ''
-      },
-      commitmentReliability: {
-          classes: ''
-      },
-      cfdData: {
-          classes: 'cellDoubleWidth'
-      },
-      backlogHealth: {
-          classes: 'cellDoubleWidth'
-      },
-      noOfCheckins: {
-          classes: 'cellDoubleWidth'
-      },
-      ciTime: {
-          classes: 'cellTripleWidth'
-      },
-      releaseDeployTime: {
-          classes: ''
-      },
-      techDebit: {
-          classes: ''
-      },
-      envCreationTime: {
-          classes: ''
-      },
-      defectInjectionRate: {
-          classes: ''
-      },
-      autoVsManualTest: {
-          classes: ''
-      },
-      codeQuality: {
-          classes: 'cellDoubleWidth'
-      },
-      jUnitCoverage: {
-          classes: 'cellDoubleWidth'
-      },
-      appDemonstration: {
-          classes: 'cellDoubleWidth'
+    angular.extend(this, this.$controller('CustomTemplateController', {
+      $scope: this.$scope,
+      $rootScope: {
+        commonResourseConfig: {
+          "0": "#02874f",
+          "1": "#18519d",
+          "2": "#b2174f",
+          "3": "#d74f14"
+        }
       }
+    }));
 
-      
-      
-    }
+   this.$scope.$watch('this.layout', (newValue, oldValue) => {
     
-    this.layout = defaultLayout;
+      this.showPeopleHeader = this.layout.col0.improvement.show || this.layout.col0.happiness.show;
+      this.showValueHeader = this.layout.col0.value.show;
 
-    angular.extend(this, this.$controller('CustomTemplateController', {$scope: this.$scope}));
-
-    console.log(this)
-
-
-    
-
+      this.showSpeedHeader = _.find(this.layout.col1, function(widget){
+          return widget.show; 
+      });
+      this.showQualityHeader = _.find(this.layout.col2, function(widget){
+          return widget.show; 
+      });
+    });
   }
 }
 

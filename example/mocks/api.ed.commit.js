@@ -1,6 +1,10 @@
 angular.module('app')
-.run(function ($httpBackend) {
+  .run(function ($httpBackend) {
 
-  $httpBackend.whenGET('/api/ed/commit').respond({"maturityLevel":"0","labels":[],"data":[]});
-  
-});
+    $httpBackend.whenGET('/api/ed/commit').respond({
+      "maturityLevel": "0",
+      "labels": [],
+      "data": []
+    });
+
+  });

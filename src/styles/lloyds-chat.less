@@ -1,0 +1,111 @@
+.panel-default {
+  
+  position: absolute; right: 40px; bottom: -21px; width: 330px; height: 420px; 
+  box-shadow: 0 4px 25px 0 rgba(0, 0, 0, 0.6);
+  border: 0;
+
+  &>.panel-heading {
+    color: white;
+    background: @lloyds-primary-core;
+    height: 100px;
+
+    .panel-title {
+      font-size: 2rem;
+
+      img {
+        height: 42px; 
+        margin-bottom:0.25rem; 
+        margin-right: 10px; 
+        padding: 5px; 
+        background: white; 
+        border-radius: 50%; 
+        width: 42px;
+      }
+    }
+
+    p {
+      padding: 1rem 0 0 0; 
+    }
+
+    .glyphicon {
+      margin-top: 10px;
+      cursor: pointer;
+    }
+
+    .glyphicon-triangle-bottom {
+      display: block;
+    }
+    .glyphicon-triangle-top {
+      display: none;
+    }
+
+  }
+
+  .bubble {
+    background: @lloyds-primary-apple;
+    padding: 8px;
+    border-radius: 8px;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1.4rem; 
+
+    a {
+      color: white;
+      font-weight: bold;
+    }
+
+  }
+
+  .panel-footer {
+    bottom: 0;
+    position: absolute;
+    width: 100%;
+  }
+
+  &> .panel-heading .badge.badge-error {
+    background-color: @lloyds-secondary-red;
+    font-size: 2rem;
+    margin-left: 4px;
+    margin-top: -4px;
+  }
+  
+}
+
+
+
+.panel-default.minimised {
+
+  height: 60px;
+  overflow: hidden;
+
+
+  &>.panel-heading {
+
+    height: 60px;
+
+    // p {
+    //   height: 0;
+    //   padding: 0;
+    //   overflow: hidden;
+    //   margin: 0;
+
+    // }
+
+    .glyphicon-triangle-bottom {
+      display: none;
+    }
+    .glyphicon-triangle-top {
+      display: block;
+    }
+
+  }
+
+  .panel-body,
+  .panel-footer {
+    margin: 0;
+    height: 0;
+    padding: 0;
+  }
+
+  
+}

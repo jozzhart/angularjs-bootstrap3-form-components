@@ -1,6 +1,9 @@
 angular.module('app')
-.run(function ($httpBackend) {
+  .run(function ($httpBackend) {
 
-  $httpBackend.whenGET('/api/jiraMVP/assignedMetrics').respond({"assignedValuePercentage":{},"assignedValueMaturitylevel":"0"});
-  
-});
+    $httpBackend.whenGET('/api/jiraMVP/assignedMetrics').respond({
+      "assignedValuePercentage": {},
+      "assignedValueMaturitylevel": "0"
+    });
+
+  });

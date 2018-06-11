@@ -51,36 +51,50 @@
 
         ctrl.showDetail = showDetail;
         ctrl.load = function() {
+
             var deferred = $q.defer();
             var params = {
                 componentId: $scope.widgetConfig.componentId,
-                numberOfDays: 14
+                numberOfDays: 14,
+                collectorItemId: $scope.collectoritemid
             };
 
-            codeRepoData.details(params).then(function (data) {
+            //  TODO - Jozz
+            codeRepoData.details(params)
+            .then(function (data) {
                 processCommitResponse(data.result, params.numberOfDays);
                 ctrl.lastUpdated = data.lastUpdated;
-            }).then(function () {
-                collectorData.getCollectorItem($scope.widgetConfig.componentId, 'scm').then(function (data) {
+            })
+            .then(function () {
+                collectorData.getCollectorItem($scope.widgetConfig.componentId, 'scm')
+                .then(function (data) {
                     deferred.resolve( {lastUpdated: ctrl.lastUpdated, collectorItem: data});
                 });
             });
-            pullRepoData.details(params).then(function (data) {
+            
+            pullRepoData.details(params)
+            .then(function (data) {
                 processPullResponse(data.result, params.numberOfDays);
                 ctrl.lastUpdated = data.lastUpdated;
-            }).then(function () {
-                collectorData.getCollectorItem($scope.widgetConfig.componentId, 'scm').then(function (data) {
-                    deferred.resolve( {lastUpdated: ctrl.lastUpdated, collectorItem: data});
-                });
-            });
-            issueRepoData.details(params).then(function (data) {
+            })
+            // .then(function () {
+            //     collectorData.getCollectorItem($scope.widgetConfig.componentId, 'scm')
+            //     .then(function (data) {
+            //         deferred.resolve( {lastUpdated: ctrl.lastUpdated, collectorItem: data});
+            //     });
+            // });
+            
+            issueRepoData.details(params)
+            .then(function (data) {
                 processIssueResponse(data.result, params.numberOfDays);
                 ctrl.lastUpdated = data.lastUpdated;
-            }).then(function () {
-                collectorData.getCollectorItem($scope.widgetConfig.componentId, 'scm').then(function (data) {
-                    deferred.resolve( {lastUpdated: ctrl.lastUpdated, collectorItem: data});
-                });
-            });
+            })
+            // .then(function () {
+            //     collectorData.getCollectorItem($scope.widgetConfig.componentId, 'scm')
+            //     .then(function (data) {
+            //         deferred.resolve( {lastUpdated: ctrl.lastUpdated, collectorItem: data});
+            //     });
+            // });
             
             return deferred.promise;
         };

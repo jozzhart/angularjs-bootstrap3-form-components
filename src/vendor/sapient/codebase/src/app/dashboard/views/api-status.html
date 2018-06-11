@@ -1,19 +1,23 @@
-<div class="col-md-4  col-md-push-1">
-    <div class="animate-hide">
-        <span class="text-center">API Connectivity</span>
+<div class="col-xs-7">
+    <div class="animate-hide" ng-if="version">
+        <dl>
+            <dt>Current Version:</dt>
+            <dd>
+                <b>{{ version.currentVersion }}&nbsp;</b>
+            </dd>
+            <dt> Latest Version:</dt>
+            <dd>
+                <b>{{ version.latestVersion }}</b> -
+                <a href="{{version.releaseNotes}}">Release notes</a>
+            </dd>
+        </dl>
     </div>
 </div>
-<div class="col-md-2 col-md-push-1">
-    <div class="animate-hide">
-        <i class="fa fa-2x fa-check-circle text-success"
-            ng-if="apiup"></i>
-        <i class="fa fa-2x fa-times-circle text-danger"
-            ng-if="!apiup"></i>
+<div class="col-xs-5">
+    <div class="animate-hide api-connectivity">
+        <span>API Connectivity &nbsp;</span>
+        <i class="fa fa-2x fa-check-circle text-success" ng-if="apiup"></i>
+        <i class="fa fa-2x fa-times-circle text-danger" ng-if="!apiup"></i>
     </div>
 </div>
 
-<div class="col-md-4 col-md-push-1">
-    <div class="animate-hide">
-      <span class="text-center">{{appVersion}}</span>
-    </div>
-</div>

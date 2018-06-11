@@ -17,7 +17,7 @@
         }
 
         this.register = function (credentials) {
-          return signupData.signup(credentials.username, credentials.password).then(processResponse)
+          return signupData.signup(credentials.username, credentials.password,credentials.securityQuestion).then(processResponse)
         }
 
         this.login = function (credentials) {
@@ -32,6 +32,14 @@
           return loginData.loginCrowdSso(credentials.username, credentials.password).then(processResponse)
         }
 
+        this.resetPassword = function (credentials) {
+          return loginData.resetPassword(credentials)
+        }
+
+        this.setSecurityQuestion = function (credentials) {
+          return loginData.setSecurityQuestion(credentials)
+        }
+        
         this.logout = function () {
           $http.get('/api/userlogout').then(function(response){
             tokenService.removeToken();

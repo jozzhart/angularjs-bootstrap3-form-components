@@ -44,8 +44,8 @@
         })
         .controller('AggregrateTemplateController', AggregrateTemplateController);
 
-    AggregrateTemplateController.$inject = ['$http', '$q','$location', 'dashboardData', 'MasterKpiType', 'MasterKpiRequestType'];
-    function AggregrateTemplateController($http, $q, $location, dashboardData, MasterKpiType, MasterKpiRequestType) {
+    AggregrateTemplateController.$inject = ['$scope','$rootScope', '$http', '$q','$location', 'dashboardData', 'MasterKpiType', 'MasterKpiRequestType'];
+    function AggregrateTemplateController($scope, $rootScope, $http, $q, $location, dashboardData, MasterKpiType, MasterKpiRequestType) {
         var ctrl = this;
         ctrl.viewType = 'account';
         ctrl.isBackButtonActive = false;   
@@ -61,12 +61,17 @@
             organisation : [],
             businessUnit :[],
             account :[],
-            project :[]           
+            project :[]
         };
         ctrl.queryParam = '';
         ctrl.maxStar = 5;
         ctrl.isStarReadonly = true;
-
+        ctrl.leadTimeNochart = {
+            value: '',
+            unit:'',
+            trend:''
+        }
+        
         function aggregateDashboard(){
             if(ctrl.isAggregatedDashboardActive) {
                 dashboardData.getAggregateDashboard(postData, ctrl.viewType).then(processAggregateDashboard, processAggregateDashboardError);
@@ -114,6 +119,7 @@
             ctrl.viewType = accountLevel.accountId;
             ctrl.queryParam = 'account';
             ctrl.isBackButtonActive = true;
+            postData.account = [];
             postData.account.push({id:accountLevel.accountId, name: accountLevel.accountName, isSelected: true})
             aggregateDashboard();
             aggregateFilteredlist(postData); 
@@ -198,6 +204,13 @@
                 account :[],
                 project :[]
             };
+            ctrl.selectedFilterIds = {
+                organisation : [],
+                businessUnit :[],
+                account :[],
+                project :[]           
+            };
+            
             ctrl.isBackButtonActive = false;
             ctrl.viewType = 'account';
             aggregateDashboard();
@@ -217,11 +230,11 @@
 
         function acrossviewkpi(firstKpi, graphType, kpiRequestType, secondKpi){
             dashboardData.getAcrossviewkpi(postData, firstKpi, graphType, kpiRequestType, secondKpi).then(function(response) {
-              if(response.response) {
+              if(response.response) {                
                   switch (response.kpiRequestType) {
                         case MasterKpiRequestType.LEAD_TIME_NOCHART:
                             ctrl.leadTimeNochart = {
-                                value: response.response.value ? response.response.value : "",
+                                value: '',//response.response.value ? response.response.value : "",
                                 unit: response.response.unit,
                                 trend : response.response.trend
                             }
@@ -288,7 +301,11 @@
                                     ],
                                     options: {
                                         tooltips: {
-                                            enabled: true
+                                            enabled: false,
+                                            custom: function(tooltipModel) {
+                                                var current = this;
+                                                customTooltip(current, tooltipModel, response.response.dateList);
+                                            }
                                         },
                                         legend: {
                                             display: true,
@@ -327,7 +344,7 @@
                                 }
                             }
                         break;
-                        case MasterKpiRequestType.LEAD_TIME_LINECHART:
+                        case MasterKpiRequestType.LEAD_TIME_LINECHART:   
                             ctrl.leadTimeLineChart = {
                                 type:"line",
                                 data : {
@@ -335,9 +352,14 @@
                                     labels: response.response.labels,
                                     symbol: response.response.unit,
                                     options: {
+                                        elements: { point: { radius:1.3, hoverRadius: 1.3 } },//reduce dots canvas dots size
                                         maintainAspectRatio: false,
                                         tooltips: {
-                                            enabled: true
+                                            enabled: false,
+                                            custom: function(tooltipModel) {
+                                                var current = this;
+                                                customTooltip(current, tooltipModel, response.response.dateList);
+                                            }
                                         },
                                         scales: {
                                         yAxes: [
@@ -347,7 +369,12 @@
                                             display: true,
                                             position: 'left',
                                             ticks: {
-                                                fontSize: 8
+                                                beginAtZero: true,
+                                                 fontSize: 8
+                                            },
+                                            scaleLabel: {
+                                                display: true,
+                                                labelString: response.response.yAxisLabel || ''
                                             }
                                             }
                                         ],
@@ -355,8 +382,14 @@
                                             {
                                             id: 'x-axis',
                                             display: true,
+                                            stacked: true,
                                             ticks: {
-                                                fontSize: 8
+                                                fontSize: 8,
+                                                autoSkip: false
+                                            },
+                                            scaleLabel: {
+                                                display: true,
+                                                labelString: response.response.xAxisLabel || ''
                                             },
                                             gridLines: {
                                                 display: false
@@ -366,8 +399,9 @@
                                         }
                                     },
                                     datasetOverride: {
-                                        backgroundColor: 'rgba(0,0,0,0)',
-                                        borderColor: '#709dca'
+                                        borderColor: '#666666',
+                                        backgroundColor: '#6666661c',
+                                        borderWidth: "0.8",
                                     }
                                 }
                             }
@@ -380,9 +414,14 @@
                                     labels: response.response.labels,
                                     symbol: response.response.unit,
                                     options: {
+                                        elements: { point: { radius:1.3, hoverRadius: 1.3 } },
                                         maintainAspectRatio: false,
                                         tooltips: {
-                                            enabled: true
+                                            enabled: false,
+                                            custom: function(tooltipModel) {
+                                                var current = this;
+                                                customTooltip(current, tooltipModel, response.response.dateList);
+                                            }
                                         },
                                         scales: {
                                         yAxes: [
@@ -392,7 +431,12 @@
                                             display: true,
                                             position: 'left',
                                             ticks: {
+                                                beginAtZero: true,
                                                 fontSize: 8
+                                            },
+                                            scaleLabel: {
+                                                display: true,
+                                                labelString: response.response.yAxisLabel || ''
                                             }
                                             }
                                         ],
@@ -400,8 +444,14 @@
                                             {
                                             id: 'x-axis',
                                             display: true,
+                                            stacked: true,
                                             ticks: {
-                                                fontSize: 8
+                                                fontSize: 8,
+                                                autoSkip: false
+                                            },
+                                            scaleLabel: {
+                                                display: true,
+                                                labelString: response.response.xAxisLabel || ''
                                             },
                                             gridLines: {
                                                 display: false
@@ -411,8 +461,9 @@
                                         }
                                     },
                                     datasetOverride: {
-                                        backgroundColor: 'rgba(0,0,0,0)',
-                                        borderColor: '#709dca'
+                                        borderColor: '#666666',
+                                        backgroundColor: '#6666661c',
+                                        borderWidth: "0.8",
                                     }
                                 }
                             }
@@ -425,9 +476,14 @@
                                     labels: response.response.labels,
                                     symbol: response.response.unit,
                                     options: {
+                                        elements: { point: { radius:1.3, hoverRadius: 1.3 } },
                                         maintainAspectRatio: false,
                                         tooltips: {
-                                            enabled: true
+                                            enabled: false,
+                                            custom: function(tooltipModel) {
+                                                var current = this;
+                                                customTooltip(current, tooltipModel, response.response.dateList);
+                                            }
                                         },
                                         scales: {
                                         yAxes: [
@@ -437,7 +493,12 @@
                                             display: true,
                                             position: 'left',
                                             ticks: {
+                                                beginAtZero: true,
                                                 fontSize: 8
+                                            },
+                                            scaleLabel: {
+                                                display: true,
+                                                labelString: response.response.yAxisLabel || ''
                                             }
                                             }
                                         ],
@@ -445,8 +506,14 @@
                                             {
                                             id: 'x-axis',
                                             display: true,
+                                            stacked: true,
                                             ticks: {
-                                                fontSize: 8
+                                                fontSize: 8,
+                                                autoSkip: false
+                                            },
+                                            scaleLabel: {
+                                                display: true,
+                                                labelString: response.response.xAxisLabel || ''
                                             },
                                             gridLines: {
                                                 display: false
@@ -456,23 +523,29 @@
                                         }
                                     },
                                     datasetOverride: {
-                                        backgroundColor: 'rgba(0,0,0,0)',
-                                        borderColor: '#709dca'
+                                        borderColor: '#666666',
+                                        backgroundColor: '#6666661c',
+                                        borderWidth: "0.8",
                                     }
                                 }
                             }
                         break;
                         case MasterKpiRequestType.BACKLOG_HEALTH_LINECHART:
-                            ctrl.baclogHealthLineChart = {
+                            ctrl.backlogHealthLineChart = {
                                 type:"line",
                                 data : {
                                     data: response.response.data,
                                     labels: response.response.labels,
                                     symbol: response.response.unit,
                                     options: {
+                                        elements: { point: { radius:1.3, hoverRadius: 1.3 } },
                                         maintainAspectRatio: false,
                                         tooltips: {
-                                            enabled: true
+                                            enabled: false,
+                                            custom: function(tooltipModel) {
+                                                var current = this;
+                                                customTooltip(current, tooltipModel, response.response.dateList);
+                                            }
                                         },
                                         scales: {
                                         yAxes: [
@@ -482,7 +555,12 @@
                                             display: true,
                                             position: 'left',
                                             ticks: {
+                                                beginAtZero: true,
                                                 fontSize: 8
+                                            },
+                                            scaleLabel: {
+                                                display: true,
+                                                labelString: response.response.yAxisLabel || ''
                                             }
                                             }
                                         ],
@@ -490,8 +568,14 @@
                                             {
                                             id: 'x-axis',
                                             display: true,
+                                            stacked: true,
                                             ticks: {
-                                                fontSize: 8
+                                                fontSize: 8,
+                                                autoSkip: false
+                                            },
+                                            scaleLabel: {
+                                                display: true,
+                                                labelString: response.response.xAxisLabel || ''
                                             },
                                             gridLines: {
                                                 display: false
@@ -501,8 +585,9 @@
                                         }
                                     },
                                     datasetOverride: {
-                                        backgroundColor: 'rgba(0,0,0,0)',
-                                        borderColor: '#709dca'
+                                        borderColor: '#666666',
+                                        backgroundColor: '#6666661c',
+                                        borderWidth: "0.8",
                                     }
                                 }
                             }
@@ -515,9 +600,14 @@
                                     labels: response.response.labels,
                                     symbol: response.response.unit,
                                     options: {
+                                        elements: { point: { radius:1.3, hoverRadius: 1.3 } },
                                         maintainAspectRatio: false,
                                         tooltips: {
-                                            enabled: true
+                                            enabled: false,
+                                            custom: function(tooltipModel) {
+                                                var current = this;
+                                                customTooltip(current, tooltipModel, response.response.dateList);
+                                            }
                                         },
                                         scales: {
                                         yAxes: [
@@ -527,7 +617,12 @@
                                             display: true,
                                             position: 'left',
                                             ticks: {
+                                                beginAtZero: true,
                                                 fontSize: 8
+                                            },
+                                            scaleLabel: {
+                                                display: true,
+                                                labelString: response.response.yAxisLabel || ''
                                             }
                                             }
                                         ],
@@ -535,8 +630,14 @@
                                             {
                                             id: 'x-axis',
                                             display: true,
+                                            stacked: true,
                                             ticks: {
-                                                fontSize: 8
+                                                fontSize: 8,
+                                                autoSkip: false
+                                            },
+                                            scaleLabel: {
+                                                display: true,
+                                                labelString: response.response.xAxisLabel || ''
                                             },
                                             gridLines: {
                                                 display: false
@@ -546,8 +647,9 @@
                                         }
                                     },
                                     datasetOverride: {
-                                        backgroundColor: 'rgba(0,0,0,0)',
-                                        borderColor: '#709dca'
+                                        borderColor: '#666666',
+                                        backgroundColor: '#6666661c',
+                                        borderWidth: "0.8",
                                     }
                                 }
                             }
@@ -562,7 +664,11 @@
                                     options: {
                                         maintainAspectRatio: false,
                                         tooltips: {
-                                            enabled: true
+                                            enabled: false,
+                                            custom: function(tooltipModel) {
+                                                var current = this;
+                                                customTooltip(current, tooltipModel, response.response.dateList);
+                                            }
                                         },
                                         scales: {
                                         yAxes: [
@@ -574,16 +680,22 @@
                                             ticks: {
                                                 beginAtZero: true,
                                                 fontSize: 8
-                                            }
+                                            },
+                                            scaleLabel: {
+                                                display: true,
+                                                labelString: response.response.yAxisLabel || ''
+                                            }                                          
                                             }
                                         ],
                                         xAxes: [
                                             {
                                             id: 'x-axis',
                                             display: true,
+                                            stacked: true,
                                             ticks: {
-                                                fontSize: 8
-                                            },
+                                                fontSize: 8,
+                                                autoSkip: false
+                                            },                                           
                                             gridLines: {
                                                 display: false
                                             }
@@ -592,7 +704,8 @@
                                         }
                                     },
                                     datasetOverride: {
-                                        backgroundColor: '#96cee0'
+                                        backgroundColor: '#96cee0',
+                                        borderColor: '#709dca'
                                     }
                                 }
                             }
@@ -610,9 +723,13 @@
                             break;
                   }
               }
-              
+              ctrl.backlogBox = "";
+              ctrl.dORtoDODBox = "";
+              ctrl.dODtoLiveBox = "";
               if(ctrl.leadTimeBacklogtoDOR_BlockChart && ctrl.leadTimeDORtoDOD_BlockChart && ctrl.leadTimeDODtoLive_BlockChart) {
                   var total = ctrl.leadTimeBacklogtoDOR_BlockChart + ctrl.leadTimeDORtoDOD_BlockChart + ctrl.leadTimeDODtoLive_BlockChart;
+                  ctrl.leadTimeNochart.value = total;
+                  
                   ctrl.backlogBox = 100 * ctrl.leadTimeBacklogtoDOR_BlockChart/(total)
                   ctrl.dORtoDODBox = 100 * ctrl.leadTimeDORtoDOD_BlockChart/(total)
                   ctrl.dODtoLiveBox= 100 * ctrl.leadTimeDODtoLive_BlockChart/(total)
@@ -670,12 +787,87 @@
 
         ctrl.backToAcrossView = function() {
             ctrl.isAggregatedDashboardActive = false;
+            kpimastermap();
         }
-            
+
+        function customTooltip(current, tooltipModel, dateList) {
+                // Tooltip Element
+                var tooltipEl = document.getElementById('chartjs-tooltip');
+
+                // Create element on first render
+                if (!tooltipEl) {
+                    tooltipEl = document.createElement('div');
+                    tooltipEl.id = 'chartjs-tooltip';
+                    tooltipEl.style="background:#000;color:#fff;border:1px solid gray";
+                    tooltipEl.innerHTML = "<table></table>";
+                    document.body.appendChild(tooltipEl);
+                }
+
+                // Hide if no tooltip
+                if (tooltipModel.opacity === 0) {
+                    tooltipEl.style.opacity = 0;
+                    return;
+                }
+
+                // Set caret Position
+                tooltipEl.classList.remove('above', 'below', 'no-transform');
+                if (tooltipModel.yAlign) {
+                    tooltipEl.classList.add(tooltipModel.yAlign);
+                } else {
+                    tooltipEl.classList.add('no-transform');
+                }
+
+                function getBody(bodyItem) {
+                    return bodyItem.lines//bodyItem.lines[0] === "-1"? ["NA"] : bodyItem.lines;
+                }
+
+                // Set Text
+                if (tooltipModel.body) {
+                    var titleLines = dateList && [dateList[tooltipModel.dataPoints[0].index]] || []//tooltipModel.title || [];//hide x-lables on tooltip and display external dateList objects
+                    var bodyLines = tooltipModel.body.map(getBody);
+
+                    var innerHtml = '<thead>';
+
+                    titleLines.forEach(function(title) {
+                        innerHtml += '<tr><th>' + title + '</th></tr>';
+                    });
+                    innerHtml += '</thead><tbody>';
+
+                    bodyLines.forEach(function(body, i) {
+                        var colors = tooltipModel.labelColors[i];
+                        var style = 'background:#fff' + colors.backgroundColor;
+                        style += '; border-color:' + colors.borderColor;
+                        style += '; border-width: 2px';
+                        var span = '<span style="' + style + '">'+body+'</span>';
+                        innerHtml += '<tr><td>' + span + '</td></tr>';
+                    });
+                    innerHtml += '</tbody>';
+
+                    var tableRoot = tooltipEl.querySelector('table');
+                    tableRoot.innerHTML = innerHtml;
+                }
+
+                // `this` will be the overall tooltip
+                var position = current._chart.canvas.getBoundingClientRect();
+                
+                // Display, position, and set styles for font
+                tooltipEl.style.opacity = 1;
+                tooltipEl.style.position = 'absolute';
+                tooltipEl.style.left = position.left + tooltipModel.caretX + 'px';
+                tooltipEl.style.top = window.scrollY + position.top + tooltipModel.caretY + 'px';
+                tooltipEl.style.fontFamily = tooltipModel._bodyFontFamily;
+                tooltipEl.style.fontSize = tooltipModel.bodyFontSize + 'px';
+                tooltipEl.style.fontStyle = tooltipModel._bodyFontStyle;
+                tooltipEl.style.padding = tooltipModel.yPadding + 'px ' + tooltipModel.xPadding + 'px';
+        }
         aggregateDashboard();
         
         kpimastermap()
 
         aggregateFilteredlist({});
+
+        $scope.$watch('$root.logoImage', function() {
+            ctrl.logoImage = $rootScope.logoImage || localStorage.getItem('logoImage');
+        });
     }
 })();

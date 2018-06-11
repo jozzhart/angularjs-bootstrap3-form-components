@@ -1,266 +1,226 @@
 <div ng-controller="CustomTemplateController as template">
-    <div class="custom-dashboard-container">
-        <div id="header">
-                
-            <nav class="navbar navbar-default navbar-fixed-top">
-                <a class="col-md-3 image-container" ng-href="#/">
-                    <img class="img-responsive" ng-src="{{template.logoImage}}">
-                </a> 
-                <div class="col-md-9 container-fluid">
-                    <h3>SPEEDY</h3>
-                    <h4 id="projectName">{{template.projectDetails.name}}</h4>
-                    <div id="projectDetails">
-                        <label ng-if="(template.projectDetails.monetoryValue && template.projectDetails.monetoryValue !== '')">Revenue:</label>
-                        <h5>&nbsp;{{template.projectDetails.monetoryValue}}&emsp;</h5>
-                        <label ng-if="(template.projectDetails.teamSize && (template.projectDetails.teamSize > 0 || template.projectDetails.teamSize !=='') )">Team Size:</label>
-                        <h5 ng-if="(template.projectDetails.teamSize && (template.projectDetails.teamSize > 0 || template.projectDetails.teamSize !=='') )">&nbsp;{{template.projectDetails.teamSize}}&emsp;</h5>
-                        <label ng-if="(template.projectDetails.startDate && template.projectDetails.startDate !=='')">Start Date:</label>
-                        <h5>&nbsp;{{template.projectDetails.startDate}}&emsp;</h5>
-                        <label ng-if="(template.projectDetails.endDate && template.projectDetails.endDate !=='')">End Date:</label>
-                        <h5>&nbsp;{{template.projectDetails.endDate}}&emsp;</h5>
-                    </div>
-                </div>
-                <ng-include class="top-navbar-header custom-top-nav-header" src="ctrl.navheadertemplateUrl"/>
-            </nav>
-        </div>
+  <div id="header">
 
-        <div ng-if="!template.showRadar" class="dashboard-widgets container-fluid" dashboard="ctrl.dashboard">
-            <div class="row">
-                <div class="col-md-7 five-three">
-                    <div class="row">
-                        <div class="col-md-4 widget-category">
-                            <div class="category-head" id="people">
-                                <img src="../../assets/img/people-icon.png">
-                                <div class="category-detail">
-                                    <h5>PEOPLE</h5>
-                                    <h6>Are people engaged?</h6>
-                                </div>
-                            </div>
-                            <div class="category-content">
-                                    <div class="widget-container col-md-12">
-                                        <custom-widget fetch-data="template.fetchImprovement()">
-                                        </custom-widget>
-                                    </div>
-                                    <div class="widget-container col-md-12 two-row-height">
-                                        <custom-widget fetch-data="template.fetchHappinessIndex()">
-                                        </custom-widget>
-                                    </div>
-                            </div>
-                        </div>
-                        <div class="col-md-8 widget-category">
-                            <div class="category-head" id="productivity">
-                                <img src="../../assets/img/productivity-icon.png">
-                                <div class="category-detail">
-                                    <h5>SPEED</h5>
-                                    <h6>Are we going fast?</h6>
-                                </div>
-                            </div>
-                            <div class="category-content">
-                                <div class="widget-container black col-md-6">
-                                        <custom-widget fetch-data="template.fetchStoryBacklogtoDOR()">
-                                        </custom-widget>
-                                    </div>
-                                <div class="widget-container black col-md-6">
-                                    <custom-widget fetch-data="template.fetchStoryDORtoDOD()"  data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle" ng-click="template.customWidgetClick('storyLeadTime')">
-                                    </custom-widget>
-                                </div>
-                                <div class="widget-container black col-md-6">
-                                    <custom-widget fetch-data="template.fetchStoryDODtoLive()"  data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle" ng-click="template.customWidgetClick('storyLiveLeadTime')">
-                                    </custom-widget>
-                                </div>
-                                <div class="widget-container black col-md-6">
-                                    <custom-widget fetch-data="template.fetchStoryLeadTime()">
-                                    </custom-widget>
-                                </div>
-                                <div class="widget-container col-md-3">
-                                    <custom-widget fetch-data="template.fetchSprintPredictability()" data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle" ng-click="template.customWidgetClick('sprintPredictability')">
-                                    </custom-widget>
-                                </div>
-                                <div class="widget-container col-md-3">
-                                    <custom-widget fetch-data="template.commitmentReliability()" data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle" ng-click="template.customWidgetClick('commitmentReliability')">
-                                    </custom-widget>
-                                </div>
-                                <div class="widget-container col-md-6" data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle" ng-click="template.chartModalDialog('CfdData')">
-                                    <custom-widget fetch-data="template.fetchCfdData()">
-                                    </custom-widget>
-                                </div>
-                               <!--  <div class="widget-container col-md-6" data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle" ng-click="template.chartModalDialog('FlowEfficiency')">
-                                    <custom-widget fetch-data="template.fetchFlowEfficiency()">
-                                    </custom-widget>
-                                </div> -->
-                                
-                                <div class="widget-container col-md-6">
-	                                <custom-widget fetch-data="template.fetchBacklogHealth()">
-	                                </custom-widget>
-                                </div>
-                                 <div class="widget-container col-md-6" data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle" ng-click="template.chartModalDialog('NoOfCheckins')">
-                                    <custom-widget fetch-data="template.fetchNoOfCheckins()">
-                                    </custom-widget>
-                                </div>
-                                                              
-                                <div class="widget-container col-md-9">
-                                    <custom-widget fetch-data="template.fetchCITime()" data-toggle="modal" focus-element="autofocus" on-widget-click="template.customWidgetClick(widgetType)">
-                                    </custom-widget>
-                                </div>
-                                <div class="widget-container col-md-3">
-                                    <custom-widget fetch-data="template.fetchReleaseDeployTime()">
-                                    </custom-widget>
-                                </div>
-                                <div class="widget-container col-md-4">
-	                                    <custom-widget fetch-data="template.fetchTechDebt()">
-	                                    </custom-widget>
-                                </div>
-                                <!-- <div class="widget-container col-md-4">
-	                                    <custom-widget fetch-data="template.fetchSonarTechDebt()">
-	                                    </custom-widget>
-                                </div> -->
-                                 <div class="widget-container col-md-4">
-                                    <custom-widget fetch-data="template.fetchEnvCreationTime()">
-                                    </custom-widget>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-5 five-two">
-                    <div class="row">
-                        <div class="col-md-6 widget-category">
-                            <div class="category-head" id="quality">
-                                <img src="../../assets/img/quality-icon.png">
-                                <div class="category-detail">
-                                    <h5>QUALITY</h5>
-                                    <h6>Are we building the quality product?</h6>
-                                </div>
-                            </div>
-                            <div class="category-content">
-                                    <div class="widget-container black col-md-6">
-                                        <custom-widget fetch-data="template.fetchDefectInjectionRatePostlive()"></custom-widget>
-                                    </div>
-                                    <div class="widget-container black col-md-6">
-                                        <custom-widget fetch-data="template.fetchDefectInjectionRate()"></custom-widget>
-                                    </div>
-                                    <div class="widget-container col-md-12">
-                                        <custom-widget fetch-data="template.fetchCodeQuality()" data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle" ng-click="template.customWidgetClick('codeQuality')"></custom-widget>
-                                    </div>
-                                    <div class="widget-container col-md-12">
-                                        <custom-widget fetch-data="template.fetchJUnitCoverage()" data-toggle="modal" focus-element="autofocus" on-widget-click="template.customWidgetClick(widgetType)"></custom-widget>
-                                    </div>
-                                    <!-- <div class="widget-container col-md-6">
-                                        <custom-widget fetch-data="template.fetchPassPercent()"></custom-widget>
-                                    </div> -->
-                                    <div class="widget-container col-md-12" data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle" ng-click="template.chartModalDialog('AppDemonstration')">
-                                        <custom-widget fetch-data="template.fetchAppDemonstration()">
-                                        </custom-widget>                                        
-                                    </div>
-                                    <div class="widget-container col-md-6">
-                                        <custom-widget fetch-data="template.fetchAutoVsManualTest()" data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle" ng-click="template.customWidgetClick('autoPercentage')"></custom-widget>
-                                    </div>
-                                    
-                               </div>
-                         </div>
-                        <div class="col-md-6 widget-category">
-                            <div class="category-head" id="value">
-                                <img src="../../assets/img/value-icon.png">
-                                <div class="category-detail">
-                                    <h5>VALUE</h5>
-                                    <h6>Are we delivering value?</h6>
-                                </div>
-                            </div>
-                            <div class="category-content">
-                                     <!--  <div class="widget-container black col-md-12">
-                                        <div class="widget-content black">
-                                            <div class="widget-title">
-                                                <h6>Delivered Value</h6>
-                                                <i class="fa fa-info" aria-hidden="true"></i>
-                                            </div>
-                                            <div class="widget-body">
-                                                
-                                            </div>
-                                        </div>
-                                    </div>
-                                   <div class="widget-container col-md-12">
-                                        <div class="widget-content">
-                                            <div class="widget-title">
-                                                <h6>Value Association</h6>
-                                                <i class="fa fa-info" aria-hidden="true"></i>
-                                            </div>
-                                            <div class="widget-body">
-                                                
-                                            </div>
-                                        </div>
-                                    </div>
-                                       <div class="widget-container col-md-12">
-	                                    <custom-widget fetch-data="template.fetchAssignValueTrend()">
-	                                    </custom-widget>
-                                     </div> -->
-                                    <div class="widget-container col-md-12">
-	                                    <custom-widget fetch-data="template.fetchAssignValueMetric()">
-	                                    </custom-widget>
-                                    </div>
-                                   <!--  <div class="widget-container col-md-7">
-	                                     <custom-widget fetch-data="template.fetchBacklogHealth()">
-	                                    </custom-widget>
-                                    </div> -->
-                            </div>
-                        </div>                    
-                    </div>
-                </div>
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="col-xs-3">
+      <a class="image-container" ng-href="#/">
+        <img class="img-responsive" ng-src="{{template.logoImage}}">
+      </a>
+      </div>
+      <div class="col-xs-6 container-fluid">
+        <h3>SPEEDY</h3>
+        <h4 id="projectName">{{template.projectDetails.name}}</h4>
+        <div id="projectDetails">
+          <label ng-if="(template.projectDetails.monetoryValue && template.projectDetails.monetoryValue !== '')">Revenue:</label>
+          <h5>&nbsp;{{template.projectDetails.monetoryValue}}&emsp;</h5>
+          <label ng-if="(template.projectDetails.teamSize && (template.projectDetails.teamSize > 0 || template.projectDetails.teamSize !=='') )">Team Size:</label>
+          <h5 ng-if="(template.projectDetails.teamSize && (template.projectDetails.teamSize > 0 || template.projectDetails.teamSize !=='') )">&nbsp;{{template.projectDetails.teamSize}}&emsp;</h5>
+          <label ng-if="(template.projectDetails.startDate && template.projectDetails.startDate !=='')">Start Date:</label>
+          <h5>&nbsp;{{template.projectDetails.startDate}}&emsp;</h5>
+          <label ng-if="(template.projectDetails.endDate && template.projectDetails.endDate !=='')">End Date:</label>
+          <h5>&nbsp;{{template.projectDetails.endDate}}&emsp;</h5>
+        </div>
+      </div>
+      <div class="col-xs-3">
+        <div class="pull-right hideShow">
+        <span class="btn" data-toggle="modal" data-target=".modal-hideShow">
+          <span class="fa fa-th"></span> Hide/Show</span>
+      </div>
+    </div>
+    </nav>
+  </div>
+
+  <div ng-if="!template.showRadar" class="xdashboard-widgets xcontainer-fluid" dashboard="ctrl.dashboard">
+
+    <div class="wrapper">
+      <div class="one" ng-if="template.showValueHeader || template.showPeopleHeader">
+        <div ng-show="template.showPeopleHeader" class="category-head cellDoubleWidth" id="people">
+          <div>
+            <img src="../../assets/img/people-icon.png">
+            <h5>PEOPLE</h5>
+            <h6>Are people engaged?</h6>
+          </div>
+        </div>
+        <custom-widget ng-if="template.layout.col0.improvement.show" class="custom-widget" ng-class="template.layout.col0.improvement.classes"
+          fetch-data="template.fetchImprovement()"></custom-widget>
+
+        <!-- HAPPINESS INDEX -->
+        <custom-widget ng-if="template.layout.col0.happiness.show" class="custom-widget" ng-class="template.layout.col0.happiness.classes"
+          fetch-data="template.fetchHappinessIndex()"></custom-widget>
+        <div ng-show="template.showValueHeader" class="category-head cellDoubleWidth" id="quality">
+          <div>
+            <img src="../../assets/img/value-icon.png">
+            <h5>VALUE</h5>
+            <h6>Are we delivering value?</h6>
+          </div>
+        </div>
+        <custom-widget ng-if="template.layout.col0.value.show" class="custom-widget" ng-class="template.layout.col0.value.classes" fetch-data="template.fetchAssignValueMetric()"></custom-widget>
+      </div>
+
+      <div class="two" ng-class="[{ col1Hidden: !(template.showValueHeader || template.showPeopleHeader) }, { col3Hidden: !template.showQualityHeader }]">
+        <div ng-show="template.showSpeedHeader" class="category-head" id="productivity">
+          <div>
+            <img src="../../assets/img/productivity-icon.png">
+            <h5>SPEED</h5>
+            <h6>Are we going fast?</h6>
+          </div>
+        </div>
+        <!-- <custom-widget ng-if="template.layout.col1.backlogToDOR.show" class="custom-widget" ng-class="template.layout.col1.backlogToDOR.classes" fetch-data="template.fetchStoryBacklogtoDOR()"></custom-widget> -->
+
+        <custom-widget ng-if="template.layout.col1.storyDORtoDOD.show" class="custom-widget" ng-class="template.layout.col1.storyDORtoDOD.classes"
+          fetch-data="template.fetchStoryDORtoDOD()" data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle"
+          ng-click="template.customWidgetClick('storyLeadTime')"></custom-widget>
+
+        <!-- <custom-widget ng-if="template.layout.col1.storyLeadTime.show" class="custom-widget" ng-class="template.layout.col1.storyLeadTime.classes" fetch-data="template.fetchStoryLeadTime()"></custom-widget> -->
+
+        <custom-widget ng-if="template.layout.col1.dodToLive.show" class="custom-widget" ng-class="template.layout.col1.dodToLive.classes"
+          fetch-data="template.fetchStoryDODtoLive()" data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle"
+          ng-click="template.customWidgetClick('storyLiveLeadTime')"></custom-widget>
+
+        <custom-widget ng-if="template.layout.col1.sprintPredictability.show" class="custom-widget" ng-class="template.layout.col1.sprintPredictability.classes"
+          fetch-data="template.fetchSprintPredictability()" data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle"
+          ng-click="template.customWidgetClick('sprintPredictability')"></custom-widget>
+
+        <custom-widget ng-if="template.layout.col1.commitmentReliability.show" class="custom-widget" ng-class="template.layout.col1.commitmentReliability.classes"
+          fetch-data="template.commitmentReliability()" data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle"
+          ng-click="template.customWidgetClick('commitmentReliability')"></custom-widget>
+
+        <!-- NUMBER OF CHECK-IN PER DAY   -->
+        <custom-widget ng-if="template.layout.col1.noOfCheckins.show" class="custom-widget" ng-class="template.layout.col1.noOfCheckins.classes"
+          fetch-data="template.fetchNoOfCheckins()" data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle"
+          ng-click="template.customWidgetClick('NoOfCheckins')"></custom-widget>
+
+        <!-- CUMULATIVE FLOW DIAGRAM -->
+        <custom-widget ng-if="template.layout.col1.cfdData.show" class="custom-widget" ng-class="template.layout.col1.cfdData.classes"
+          fetch-data="template.fetchCfdData()" data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle" ng-click="template.customWidgetClick('CfdData')"></custom-widget>
+
+        <!-- BACKLOG HEALTH -->
+        <custom-widget ng-if="template.layout.col1.backlogHealth.show" class="custom-widget" ng-class="template.layout.col1.backlogHealth.classes"
+          fetch-data="template.fetchBacklogHealth()"></custom-widget>
+
+        <!-- TECH DEBT -->
+        <custom-widget ng-if="template.layout.col1.techDebit.show" class="custom-widget" ng-class="template.layout.col1.techDebit.classes"
+          fetch-data="template.fetchTechDebt()"></custom-widget>
+
+           <!-- CI TIME -->
+        <custom-widget ng-if="template.layout.col1.ciTime.show" class="custom-widget" ng-class="template.layout.col1.ciTime.classes" fetch-data="template.fetchCITime()"
+        data-toggle="modal" focus-element="autofocus" on-widget-click="template.customWidgetClick(widgetType)"></custom-widget>
+
+        <custom-widget ng-if="template.layout.col1.envCreationTime.show" class="custom-widget" ng-class="template.layout.col1.envCreationTime.classes"
+          fetch-data="template.fetchEnvCreationTime()"></custom-widget>
+      
+
+        <custom-widget ng-if="template.layout.col1.releaseDeployTime.show" class="custom-widget" ng-class="template.layout.col1.releaseDeployTime.classes"
+          fetch-data="template.fetchReleaseDeployTime()"></custom-widget>
+
+      </div>
+      <div class="three" ng-if="template.showQualityHeader">
+        <div ng-show="template.showQualityHeader" class="category-head">
+          <div>
+            <img src="../../assets/img/quality-icon.png">
+            <h5>QUALITY</h5>
+            <h6>Are we building a quality product?</h6>
+          </div>
+        </div>
+        <!-- <custom-widget ng-if="template.layout.col2.xxxxxxx.show" class="custom-widget" ng-class="template.layout.col2.xxxxxxxx.classes" fetch-data="template.fetchDefectInjectionRatePostlive()"></custom-widget> -->
+        <custom-widget ng-if="template.layout.col2.defectInjectionRate.show" class="custom-widget" ng-class="template.layout.col2.defectInjectionRate.classes"
+          fetch-data="template.fetchDefectInjectionRate()"></custom-widget>
+
+        <custom-widget ng-if="template.layout.col2.autoVsManualTest.show" class="custom-widget" ng-class="template.layout.col2.autoVsManualTest.classes"
+          fetch-data="template.fetchAutoVsManualTest()" data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle"
+          ng-click="template.customWidgetClick('autoPercentage')"></custom-widget>
+
+        <!-- CODE QUALITY -->
+        <custom-widget ng-if="template.layout.col2.codeQuality.show" class="custom-widget" ng-class="template.layout.col2.codeQuality.classes"
+          fetch-data="template.fetchCodeQuality()" data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle"
+          ng-click="template.customWidgetClick('codeQuality')"></custom-widget>
+
+        <custom-widget ng-if="template.layout.col2.jUnitCoverage.show" class="custom-widget" ng-class="template.layout.col2.jUnitCoverage.classes"
+          fetch-data="template.fetchJUnitCoverage()" data-toggle="modal" focus-element="autofocus" on-widget-click="template.customWidgetClick(widgetType)"></custom-widget>
+
+        <custom-widget ng-if="template.layout.col2.appDemonstration.show" class="custom-widget" ng-class="template.layout.col2.appDemonstration.classes"
+          fetch-data="template.fetchAppDemonstration()"></custom-widget>
+      </div>
+    </div>
+
+  </div>
+  <div ng-controller="MaturityRadarController as radar" ng-class="radar.isSpinerLoading ? 'maturity-radar-spiner' : ''" ng-if="template.showRadar"
+    class="maturity-radar">
+  </div>
+  <button ng-click="template.showMaturityRadar()" class="radar-button">Maturity Radar</button>
+  <div id="overlay">
+    <div id="textPopup"></div>
+  </div>
+  <div class="modal-xl">
+    <div class="dialog">
+      <div class="modal fade modal-toggle" role="dialog" aria-labelledby="modalPopUp" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             </div>
+            <div class="modal-body">
+              <div class="form-group" ng-if="template.isCalendarOpen">
+                <custom-calendar from-date="template.startDate" to-date="template.endDate" click="template.applyTrendOverDates(selectedDates)"></custom-calendar>
+              </div>
+              <div class="row" ng-if="template.isTrendOverDropdownActive">
+                <div ng-show="template.errorMessage" class="alert alert-danger fade in">
+                  {{template.errorMessage}}
+                </div>
+                <div class="sprint-dropdown col-md-5">
+                  <span class="sprint-label">From Sprint:</span>
+                  <select name="dashboardType" class="form-control" ng-model="template.selectedFromSprintList" ng-options="x for x in template.allSprintList"
+                    ng-change="template.fromToSplitList()" required>
+                    <option value="" disabled>Select a type</option>
+                  </select>
+                </div>
+                <div class="sprint-dropdown col-md-5">
+                  <span class="sprint-label">To Sprint:</span>
+                  <select name="dashboardType" class="form-control" ng-model="template.selectedToSprintList" ng-options="x for x in template.allSprintList"
+                    ng-change="template.fromToSplitList()" required>
+                    <option value="" disabled>Select a type</option>
+                  </select>
+                </div>
+                <button class="btn btn-sm btn-default" ng-disabled="template.isApplyTrendOverActive" ng-click="template.applyTrendOverDates()">Apply</button>
+              </div>
+              <custom-widget class="custom-widget" chart-modal-dialog="template.selectedChart !== ''"
+                chart-modal-data="template.chartdata">
+              </custom-widget>
+            </div>
+          </div>
         </div>
-        <div ng-controller="MaturityRadarController as radar" ng-class="radar.isSpinerLoading ? 'maturity-radar-spiner' : ''" ng-if="template.showRadar" class="maturity-radar">
-        </div>
-        <button ng-click="template.showMaturityRadar()" class="radar-button">Maturity Radar</button>
+      </div>
     </div>
-    <div id="overlay">
-        <div id="textPopup"></div>
-    </div>
-    <div class="modal-xl">
-        <div class="dialog">        
-            <div class="modal fade modal-toggle" role="dialog" aria-labelledby="modalPopUp" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                  </div>
-                  <div class="modal-body">
-                    <div class="form-group" ng-if="template.isCalendarOpen">
-                        <custom-calendar from-date="template.startDate" to-date="template.endDate" click="template.applyTrendOverDates(selectedDates)"></custom-calendar>
-                    </div>
-                    <div class="row" ng-if="template.isTrendOverDropdownActive">
-                            <div ng-show="template.errorMessage" class="alert alert-danger fade in">
-                                {{template.errorMessage}}
-                            </div>
-                            <div class="sprint-dropdown col-md-5">
-                                <span class="sprint-label">From Sprint:</span>  
-                                <select name="dashboardType"
-                                        class="form-control"                                    
-                                        ng-model="template.selectedFromSprintList" 
-                                        ng-options="x for x in template.allSprintList"
-                                        ng-change="template.fromToSplitList()"
-                                        required>
-                                    <option value="" disabled>Select a type</option>
-                                </select>
-                            </div>
-                            <div  class="sprint-dropdown col-md-5">
-                                <span class="sprint-label">To Sprint:</span>  
-                                <select name="dashboardType"
-                                        class="form-control"
-                                        ng-model="template.selectedToSprintList" 
-                                        ng-options="x for x in template.allSprintList"
-                                        ng-change="template.fromToSplitList()"
-                                        required>
-                                    <option value="" disabled>Select a type</option>
-                                </select>
-                            </div>
-                            <button  class="btn btn-sm btn-default" ng-disabled="template.isApplyTrendOverActive" ng-click="template.applyTrendOverDates()">Apply</button>
-                        </div>
-                    <custom-widget chart-modal-dialog="template.selectedChart !== ''" chart-modal-data="template.chartdata">
-                    </custom-widget>
+  </div>
+  <div class="dialog">
+    <div class="modal fade modal-hideShow" role="dialog" aria-labelledby="modalPopUp" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 style="float: left;">Hide/show widgets</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          </div>
+          <div class="modal-body">
+            <form class="form-horizontal">
+              <div class="form-group">
+                <div class="col-md-4" ng-repeat="(colKey, col) in template.layoutSettings">
+                  {{value | json}}
+                  <div class="checkbox" ng-repeat="(key, value) in col">
+                    <label>
+                      <input ng-model="template.layoutSettings[colKey][key].show" type="checkbox"> {{value.label}}
+                    </label>
                   </div>
                 </div>
               </div>
-              </div>
-            </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <input type="button" value="Save" class="btn btn-default" data-dismiss="modal" ng-click="template.saveHideShow()" />
+          </div>
         </div>
+      </div>
     </div>
+  </div>
+
+
 </div>

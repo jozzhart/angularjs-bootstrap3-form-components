@@ -9,9 +9,12 @@
         .module(HygieiaConfig.module)
         .controller('CapOneTemplateController', CapOneTemplateController);
 
-    CapOneTemplateController.$inject = [];
-    function CapOneTemplateController() {
+    CapOneTemplateController.$inject = ['$scope','$rootScope'];
+    function CapOneTemplateController($scope, $rootScope) {
         var ctrl = this;
+
+        //  Temp work around to allow calling repo widget function 
+        ctrl.repoWidgetFunctions ={} 
 
         ctrl.tabs = [
             { name: "Widget"},
@@ -19,6 +22,11 @@
             { name: "Cloud"}
         ];
 ctrl.dashboardGlobalData=dashboardGlobalData;
+
+        ctrl.generateName = function(url){
+            return _.last(url.split('/'));
+        }
+
 
         ctrl.minitabs = [
             { name: "Quality"},
@@ -43,8 +51,7 @@ ctrl.dashboardGlobalData=dashboardGlobalData;
         
         addBuild.description="Add New";
        
-        
-        
+            
         
         ctrl.dashboardGlobalData.application.components[0].collectorItems.Build=ctrl.dashboardGlobalData.application.components[0].collectorItems.Build||[];
         var buildArray=[];
@@ -108,6 +115,21 @@ ctrl.dashboardGlobalData=dashboardGlobalData;
             ctrl.miniBuildWidgetView = typeof ctrl.dashboardGlobalData.application.components[0].collectorItems.Build[index] === 'undefined' ? ctrl.dashboardGlobalData.application.components[0].collectorItems.Build[0].description : ctrl.dashboardGlobalData.application.components[0].collectorItems.Build[index].description;
         };
         
+        // if we have a repo widget, lets show it
+        if(ctrl.dashboardGlobalData.application.components[0].collectorItems.SCM) ctrl.dashboardGlobalData.application.components[0].collectorItems.SCM[0].show = true;
 
+        //  This shows tabed repos
+        ctrl.showRepoWidget = function(widget){
+          _.each(ctrl.dashboardGlobalData.application.components[0].collectorItems.SCM, function(item) {
+            item.show = false;
+          });
+          widget.show = true;
+        }
+
+        $scope.$watch('$root.logoImage', function() {
+             ctrl.logoImage = $rootScope.logoImage;
+         });
+ 
     }
+    
 })();

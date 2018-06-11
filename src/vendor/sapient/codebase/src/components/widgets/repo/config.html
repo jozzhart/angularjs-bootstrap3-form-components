@@ -16,8 +16,9 @@
 			<option value="" disabled>Select a type</option>
 		</select>
 	</form-group>
-
-	<form-group input="repoUrl"
+	
+	<form-group ng-if="repoConfig.repoOption.name != 'Gerrit'"
+				input="repoUrl"
 				class="text-center"
 				errors="{required:'Repository URL is required', url: 'Please enter a valid URL'}">
 
@@ -31,7 +32,21 @@
 			   required />
 	</form-group>
 
-	<form-group ng-if="repoConfig.repoOption.name == 'GitHub'  || repoConfig.repoOption.name == 'Bitbucket' || repoConfig.repoOption.name == 'Gitlab'"
+	<form-group ng-if="repoConfig.repoOption.name == 'Gerrit'"
+				input="projectName"
+				class="text-center">
+
+		<label class="modal-label">Project Name</label>
+		<input type="text"
+			   name="projectName"
+			   class="form-control text-center"
+			   ng-model="repoConfig.projectName"
+			   placeholder="Enter Project Name"
+			   autocomplete="off"
+			   required />
+	</form-group>
+
+	<form-group ng-if="repoConfig.repoOption.name == 'GitHub'  || repoConfig.repoOption.name == 'Bitbucket' || repoConfig.repoOption.name == 'Gitlab' || repoConfig.repoOption.name == 'Gerrit' || repoConfig.repoOption.name == 'Endevor'"
 				errors="{required:'Branch is required'}"
 				input="gitBranch"
 				class="text-center">
@@ -48,7 +63,7 @@
 
 	</form-group>
 
-	<form-group ng-if="repoConfig.repoOption.name != 'Gitlab'" input="repouser"
+	<form-group ng-if="repoConfig.repoOption.name != 'Gitlab' || repoConfig.repoOption.name != 'Gerrit'" input="repouser"
 				errors="{}">
 
 		<label class="modal-label">Credentials (Optional)</label>

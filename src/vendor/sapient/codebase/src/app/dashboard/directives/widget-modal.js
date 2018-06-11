@@ -20,7 +20,7 @@
                 $scope.close = $attributes.widgetModalClose != 'false';
             },
             template: '<div class="widget-modal">' +
-            '<button type="button" class="widget-modal-close" ng-click="$close()" ng-if="close" aria-hidden="true">&times;</button>' +
+            '<button type="button" class="widget-modal-close" ng-click="$dismiss()" ng-if="close" aria-hidden="true">&times;</button>' +
             '<div class="widget-modal-heading" ng-if="title">{{title}}</div>' +
             '<div class="widget-modal-body" ng-transclude></div>' +
             '</div>'

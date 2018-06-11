@@ -14,11 +14,12 @@
                 options: '=',
                 click: '&',
                 filter: '@',
-                isdetail: '='             
+                isdetail: '=',
+                label: '@'             
             },
             template:
                 "<div class='multi-combo-container'>" +
-                "<text data-target='#{{filter}}' data-toggle='collapse' aria-controls='{{filter}}'>{{filter}}&nbsp;<a class='icon-tag collapsed' data-target='#{{filter}}' data-toggle='collapse' aria-controls='{{filter}}' data-tooltip='{{filter}}'></a></text>" +
+                "<text data-target='#{{filter}}' data-toggle='collapse' aria-controls='{{filter}}'>{{label}}&nbsp;<a class='icon-tag collapsed' data-target='#{{filter}}' data-toggle='collapse' aria-controls='{{filter}}' data-tooltip='{{filter}}'></a></text>" +
                 "<div id={{filter}} class='collapse'>" +
                 "<div class='row'>" +
                 "<div class='col-lg-12'>" +            

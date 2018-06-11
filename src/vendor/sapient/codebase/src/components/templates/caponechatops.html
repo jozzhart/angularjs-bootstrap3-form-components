@@ -3,7 +3,7 @@
         <nav class="navbar navbar-default navbar-fixed-top">
             <div class="container-fluid">
                 <a class="col-md-3 image-container" ng-href="#/">
-                    <img class="img-responsive" src="../../logo/default.gif">
+                    <img class="img-responsive" ng-src="{{template.logoImage}}">
                 </a>
                 <h4 title="{{::ctrl.dashboard.title }}">{{::ctrl.dashboard.title | trunText:50}}</h4>
 

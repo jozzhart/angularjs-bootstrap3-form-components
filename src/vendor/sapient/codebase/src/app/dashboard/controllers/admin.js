@@ -9,12 +9,11 @@
     .controller('AdminController', AdminController);
 
 
-  AdminController.$inject = ['$scope', '$timeout', '$rootScope', 'dashboardData', '$location', '$uibModal', 'userService', 'authService', 'userData', 'dashboardService', 'fileUploadService', '$filter', '$window', 'customDashboardData', 'orderByFilter'];
+  AdminController.$inject = ['$scope', '$timeout', '$rootScope', '$animate', 'dashboardData', '$location', '$uibModal', 'userService', 'authService', 'userData', 'dashboardService', 'fileUploadService', '$filter', '$window', 'customDashboardData', 'orderByFilter'];
 
-  function AdminController($scope, $timeout, $rootScope, dashboardData, $location, $uibModal, userService, authService, userData, dashboardService, fileUploadService, $filter, $window, customDashboardData, orderBy) {
+  function AdminController($scope, $timeout, $rootScope, $animate, dashboardData, $location, $uibModal, userService, authService, userData, dashboardService, fileUploadService, $filter, $window, customDashboardData, orderBy) {
     var ctrl = this;
 
-    
     //  TODO testing refactor
     if ((userService.isAuthenticated() && userService.isAdmin()) || HygieiaConfig.local) {
       $location.path('/admin');
@@ -33,53 +32,159 @@
     ctrl.generateToken = generateToken;
     ctrl.saveConfiguration = saveConfiguration;
     ctrl.saveJiraConfiguration = saveJiraConfiguration;
+    ctrl.saveHudsonConfiguration = saveHudsonConfiguration;
+    ctrl.saveSonarConfiguration = saveSonarConfiguration;
+    ctrl.saveGitHubConfiguration = saveGitHubConfiguration;
+    ctrl.saveGerritConfiguration = saveGerritConfiguration;
+    ctrl.saveGitlabConfiguration = saveGitlabConfiguration;
+    ctrl.saveUdeployConfiguration = saveUdeployConfiguration;
+    ctrl.saveExcelConfiguration = saveExcelConfiguration;
+    ctrl.saveEndevorConfiguration = saveEndevorConfiguration;
     ctrl.errorMessage = '';
+    ctrl.jiraSubmitDisabled = true;
     ctrl.successMessage = '';
     ctrl.tab = "dashboards";
     ctrl.toggleFeatures = {};
-    ctrl.downloadButtonDisabled = true;
-    ctrl.reportHeaders = {
-      projectID: 'Project ID',
-      storyID: 'Story ID',
-      sprintId: 'Sprint ID',
-      storyType: 'Story Type',
-      sEstimate: 'Estimate',
-      bufferedEstimateTime: 'Buffered Estimate'
-    };
+    ctrl.reportHeaders = null;
+    
     ctrl.validationSelect = {
       title: 'Please select'
     }
-
+    ctrl.kpierrorMessage="";
+    ctrl.kpisuccessMessage="";
+    ctrl.saveOrgHierarchy=[];
     if (userService.isAdmin()) {
       ctrl.myadmin = true;
     }
 
     // list of available themes. Must be updated manually
-    ctrl.themes = [{
-        name: 'Dash',
-        filename: 'dash'
-      },
-      {
-        name: 'Dash for display',
-        filename: 'dash-display'
-      },
-      {
-        name: 'Bootstrap',
-        filename: 'default'
-      },
-      {
-        name: 'BS Slate',
-        filename: 'slate'
-      }
-    ];
+    ctrl.themes = [
+        // {
+        //   name: 'Dojo theme',
+        //   filename: 'dmc'
+        // }
+        {
+          name: 'Dash',
+          filename: 'dash'
+        }
+        // {
+        //   name: 'Dash for display',
+        //   filename: 'dash-display'
+        // },
+        // {
+        //   name: 'Bootstrap',
+        //   filename: 'default'
+        // },
+        // {
+        //   name: 'BS Slate',
+        //   filename: 'slate'
+        // }
+      ];
 
-    ctrl.validationForms = [{
+    ctrl.validationForms = [
+    {
       name: 'Sprint Predictability',
-      route: '/api/jiraMVP/sprintpredictability'
-    }];
+      route: '/api/jiraMVP/sprintpredictability?validationFlag=true',
+      filename: 'sprintPredictability',
+      reportHeaders: {
+    	  projectID: 'Project ID',
+          storyID: 'Story ID',
+          sprintId: 'Sprint ID',
+          storyType: 'Story Type',
+          sEstimate: 'Story Points',
+          bufferedEstimateTime: 'Buffered Estimate'
+	   }
+    },
+    {
+        name: 'Commitment Reliability',
+        route: '/api/jiraMVP/commitmentReliability?validationFlag=true',
+        filename: 'commitmentReliability',
+        reportHeaders: {
+        	projectID: 'Project ID',
+            storyID: 'Story ID',
+            sprintId: 'Sprint ID',
+            storyType: 'Story Type',
+            sEstimate: 'Story Points',
+            bufferedEstimateTime: 'Buffered Estimate',
+            commitmentFlag: "Commitment Flag",
+            deliveredFlag: "Delivery Flag"
+    	}
+    },
+    {
+        name: 'Definition of Ready(DoR) to Definition of Done(DoD)',
+        route: '/api/jiraMVP/DorToDod?validationFlag=true',
+        filename: 'DoR-To-DoD',
+        reportHeaders: {
+        	  projectID: 'Project ID',
+	  	      storyID: 'Story ID',
+	  	      sprintId: 'Sprint ID',
+	  	      openDate: "Jira DoR Date",
+	  	      closedDate: "Jira DoD Date",
+	  	      duration: "Duration"
+      	}
+    },
+    {
+        name: 'Definition of Done(DoD) to Live',
+        route: '/api/jiraMVP/DodToLive?validationFlag=true',
+        filename: 'DoD-To-Live',
+        reportHeaders: {
+        	  projectID: 'Project ID',
+	  	      storyID: 'Story ID',
+	  	      sprintId: 'Sprint ID',
+	  	      openDate: "Jira DoD Date",
+	  	      closedDate: "Jira Live Date",
+	  	      duration: "Duration"
+      	}
+    },
+    {
+    	 name: 'Backlog Health',
+         route: '/api/jiraMVP/backlogHealth?validationFlag=true',
+         filename: 'backlogHealth',
+         reportHeaders: {
+        	  sProjectName: 'Project ID',
+         	  sNumber: 'Story ID',
+         	  sTypeName: 'Story Type',
+         	  sStatus: 'Status',
+     	      sEstimate: 'Story Points',
+     	      bufferedEstimateTime: 'Buffered Estimate'
+        }
+    },
+    {
+   	 	name: 'Tech Debt',
+        route: '/api/jiraMVP/techDebt?validationFlag=true',
+        filename: 'techDebt',
+        reportHeaders: {
+        	  sProjectName: 'Project ID',
+	      	  sNumber: 'Story ID',
+	      	  sTypeName: 'Story Type',
+	  	      sEstimate: 'Story Points',
+	  	      bufferedEstimateTime: 'Buffered Estimate'
+      	}
+    },
+    {
+   	 	name: 'Defect Injection Rate',
+        route: '/api/jiraMVP/defectinjectionrate?validationFlag=true',
+        filename: 'DiR',
+        reportHeaders: {
+        	projectID: 'Project ID',
+            storyID: 'Story ID',
+            sprintId: 'Sprint ID',
+            storyType: 'Story Type',
+            defectFlag: 'Defect Injection Flag'
+    	}
+    }
+    ];
 
     ctrl.schema = userData.getConfigurationSchema();
     ctrl.jiraSchema = userData.getJiraConfigurationSchema();
+    ctrl.hudsonSchema = userData.getHudsonConfigurationSchema();
+    ctrl.sonarSchema = userData.getSonarConfigurationSchema();
+    ctrl.githubSchema = userData.getGitHubConfigurationSchema();
+    ctrl.gerritSchema = userData.getGerritConfigurationSchema();
+    ctrl.gitlabSchema = userData.getGitlabConfigurationSchema();
+    ctrl.udeploySchema = userData.getUdeployConfigurationSchema();
+    ctrl.excelSchema = userData.getExcelConfigurationSchema();
+    ctrl.endevorSchema = userData.getEndevorConfigurationSchema();
 
     // used to only show themes option if local storage is available
     if (localStorageSupported) {
@@ -95,35 +200,80 @@
     ctrl.applyLogoImage = applyLogoImage;
     ctrl.uploadOfflineData = uploadOfflineData;
     ctrl.validationData = validationData;
-
+    ctrl.openJiraWarningModal = openJiraWarningModal;
+    
     // request dashboards
     dashboardData.search().then(processResponse);
     userData.getAllUsers().then(processUserResponse);
     userData.apitokens().then(processTokenResponse);
     userData.getConfiguration().then(processConfiguration);
     userData.getJiraConfiguration().then(processJiraConfiguration);
+    userData.getHudsonConfiguration().then(processHudsonConfiguration);
+    userData.getSonarConfiguration().then(processSonarConfiguration);
+    userData.getGitHubConfiguration().then(processGitHubConfiguration);
+    userData.getGerritConfiguration().then(processGerritConfiguration);
+    userData.getGitlabConfiguration().then(processGitlabConfiguration);
+    userData.getUdeployConfiguration().then(processUdeployConfiguration);
+    userData.getExcelConfiguration().then(processExcelConfiguration);
+    userData.getEndevorConfiguration().then(processEndevorConfiguration);
     userData.getFeatureToggle().then(toggleFeatures);
-
-    function validationData(obj) {
-
-      ctrl.validationSelect.title = obj.name;
-
-      return customDashboardData.fetchWidgetDetails(obj.route)
-        .then(function (response) {
-          // TODO Amit please confirm this.  Following loop was trowing an error if storyList wasn't in the response
-          if (!response.storyList) return;
-
-          ctrl.downloadButtonDisabled = false;
-
-          var dumpObj = [];
-          var count = response.storyList.length;
-          for (var i = 0; i < count; i++) {
-            response.storyList[i].sprintId = response.storyList[i].storySprintDetails[0].sprintId;
-            dumpObj.push(response.storyList[i]);
+   
+    $scope.$watchCollection('ctrl.jiradata', function(newVal, oldVal) {
+    	if (ctrl.jiraSubmitDisabled && !_.isUndefined(newVal) && !_.isUndefined(oldVal)) {
+    		ctrl.jiraSubmitDisabled = !ctrl.jiraSubmitDisabled;
+		}
+	});
+    
+    function openJiraWarningModal(cdf) {
+        $uibModal.open({
+            templateUrl: "app/dashboard/views/jiraWarningModal.html",
+            scope : $scope,
+            size: 'sm',
+            controller: function ($scope, $uibModalInstance) {
+            $scope.ok = function () {
+              $uibModalInstance.close();
+              ctrl.saveJiraConfiguration(cdf);
+            };
+            $scope.cancel = function () {
+              $uibModalInstance.dismiss('cancel');
+            };
           }
-          ctrl.dataList = orderBy(dumpObj, 'sprintId', false);
-          return;
-        });
+        })
+      }
+    
+    function validationData(obj) {
+    	
+      $animate.enabled(false);
+      ctrl.validationSelect.title = obj.name;
+      
+      ctrl.reportHeaders = null;
+      setTimeout(function(){
+    	  return customDashboardData.fetchWidgetDetails(obj.route)
+          .then(function (response) {
+            var dumpObj = [];
+            if (response.storyList) {
+  	          var count = response.storyList.length;
+  	          for (var i = 0; i < count; i++) {
+  	            response.storyList[i].sprintId = response.storyList[i].storySprintDetails[0].sprintId;
+  	            dumpObj.push(response.storyList[i]);
+  	          }
+  	          ctrl.dataList = orderBy(dumpObj, 'sprintId', false);
+            } else if (response.featureList) {
+          	  ctrl.dataList = response.featureList;
+            } else if (response.techDebt) {
+          	  ctrl.dataList = response.techDebt.storyList;
+            } else if (response.backlogHealthPercentage) {
+          	  ctrl.dataList = response.backlogHealthPercentage.storyList;
+            }
+            if(ctrl.dataList) {
+            	ctrl.reportHeaders = obj.reportHeaders;
+            	ctrl.filename = obj.filename;
+            }
+            $animate.enabled(true);
+            return;
+          });
+      },1)
+      
     }
 
     getAggregateProjectSetting();
@@ -253,6 +403,124 @@
 
       ctrl.jiradata = response;
     }
+    
+    function processHudsonConfiguration(response) {
+        _.each(response, function (item, key) {
+          if (_.isUndefined(ctrl.hudsonSchema[key]) && key !== 'id') return console.log("item missing from schema: ", key)
+        });
+
+        //  Parse objects and arrays into strings
+        _.each(ctrl.hudsonSchema, function (value, key) {
+          if (value.type === "object") response[key] = response[key] ? $filter('json')(response[key]) : "{}";
+          if (value.type === "array") response[key] = response[key] ? $filter('json')(response[key]) : "[]";
+        });
+        ctrl.hudsondata = response;
+    }
+    
+    function processSonarConfiguration(response) {
+    	
+        _.each(response, function (item, key) {
+          if (_.isUndefined(ctrl.sonarSchema[key]) && key !== 'id') return console.log("item missing from schema: ", key)
+        });
+
+        //  Parse objects and arrays into strings
+        _.each(ctrl.sonarSchema, function (value, key) {
+          if (value.type === "object") response[key] = response[key] ? $filter('json')(response[key]) : "{}";
+          if (value.type === "array") response[key] = response[key] ? $filter('json')(response[key]) : "[]";
+        });
+        
+        ctrl.sonardata = response;
+    }
+    
+    function processGitHubConfiguration(response) {
+
+    	_.each(response, function (item, key) {
+          if (_.isUndefined(ctrl.githubSchema[key]) && key !== 'id') return console.log("item missing from schema: ", key)
+        });
+
+        //  Parse objects and arrays into strings
+        _.each(ctrl.githubSchema, function (value, key) {
+          if (value.type === "object") response[key] = response[key] ? $filter('json')(response[key]) : "{}";
+          if (value.type === "array") response[key] = response[key] ? $filter('json')(response[key]) : "[]";
+        });
+
+        ctrl.githubdata = response;
+    }
+    
+    function processGerritConfiguration(response) {
+
+    	_.each(response, function (item, key) {
+          if (_.isUndefined(ctrl.gerritSchema[key]) && key !== 'id') return console.log("item missing from schema: ", key)
+        });
+
+        //  Parse objects and arrays into strings
+        _.each(ctrl.gerritSchema, function (value, key) {
+          if (value.type === "object") response[key] = response[key] ? $filter('json')(response[key]) : "{}";
+          if (value.type === "array") response[key] = response[key] ? $filter('json')(response[key]) : "[]";
+        });
+
+        ctrl.gerritdata = response;
+    }
+    
+    function processEndevorConfiguration(response) {
+
+    	_.each(response, function (item, key) {
+          if (_.isUndefined(ctrl.endevorSchema[key]) && key !== 'id') return console.log("item missing from schema: ", key)
+        });
+
+        //  Parse objects and arrays into strings
+        _.each(ctrl.endevorSchema, function (value, key) {
+          if (value.type === "object") response[key] = response[key] ? $filter('json')(response[key]) : "{}";
+          if (value.type === "array") response[key] = response[key] ? $filter('json')(response[key]) : "[]";
+        });
+
+        ctrl.endevordata = response;
+    }
+    
+    function processGitlabConfiguration(response) {
+
+        _.each(response, function (item, key) {
+          if (_.isUndefined(ctrl.gitlabSchema[key]) && key !== 'id') return console.log("item missing from schema: ", key)
+        });
+
+        //  Parse objects and arrays into strings
+        _.each(ctrl.gitlabSchema, function (value, key) {
+          if (value.type === "object") response[key] = response[key] ? $filter('json')(response[key]) : "{}";
+          if (value.type === "array") response[key] = response[key] ? $filter('json')(response[key]) : "[]";
+        });
+
+        ctrl.gitlabdata = response;
+    }
+    
+    function processUdeployConfiguration(response) {
+
+        _.each(response, function (item, key) {
+          if (_.isUndefined(ctrl.udeploySchema[key]) && key !== 'id') return console.log("item missing from schema: ", key)
+        });
+
+        //  Parse objects and arrays into strings
+        _.each(ctrl.udeploySchema, function (value, key) {
+          if (value.type === "object") response[key] = response[key] ? $filter('json')(response[key]) : "{}";
+          if (value.type === "array") response[key] = response[key] ? $filter('json')(response[key]) : "[]";
+        });
+
+        ctrl.udeploydata = response;
+    }
+    
+    function processExcelConfiguration(response) {
+
+        _.each(response, function (item, key) {
+          if (_.isUndefined(ctrl.excelSchema[key]) && key !== 'id') return console.log("item missing from schema: ", key)
+        });
+
+        //  Parse objects and arrays into strings
+        _.each(ctrl.excelSchema, function (value, key) {
+          if (value.type === "object") response[key] = response[key] ? $filter('json')(response[key]) : "{}";
+          if (value.type === "array") response[key] = response[key] ? $filter('json')(response[key]) : "[]";
+        });
+
+        ctrl.exceldata = response;
+    }
 
     ctrl.navigateToTab = function (tab) {
       ctrl.tab = tab;
@@ -310,7 +578,7 @@
         ctrl.successMessage = '';
         ctrl.errorMessage = 'An error has occurred';
       })
-    };
+    }
 
     function applyLogoImage() {
       dashboardData.getLogoImage().then(processLogoResponse, processLogoError);
@@ -407,6 +675,7 @@
         .then(function (res) {
           ctrl.successMessage = "Configuration updated";
           $window.scrollTo(0, 0);
+          ctrl.jiraSubmitDisabled = true;
           //  Hide/show features in our view
           //ctrl.toggleFeatures = payload.featureToggle;
         })
@@ -416,6 +685,295 @@
         })
     }
 
+    function saveHudsonConfiguration() {
+
+        ctrl.successMessage = null;
+        ctrl.errorMessage = null;
+
+        var payload = {
+          id: ctrl.hudsondata.id
+        };
+
+        //  Parse the data and covert any previously stringified objects back to object
+        _.each(ctrl.hudsonSchema, function (value, key) {
+          if (value.type === "string" || value.type === "number") return payload[key] = ctrl.hudsondata[key] || '';
+
+          try {
+            payload[key] = JSON.parse(ctrl.hudsondata[key])
+          } catch (e) {
+            ctrl.errorMessage = "There was an error with field: " + key;
+            $window.scrollTo(0, 0);
+          }
+
+        });
+
+        // If any errors, don't submit
+        if (ctrl.errorMessage) return;
+
+        userData.saveHudsonConfiguration(payload)
+          .then(function (res) {
+            ctrl.successMessage = "Configuration updated";
+            $window.scrollTo(0, 0);
+          })
+          .catch(function (err) {
+            ctrl.errorMessage = "There was an error saving your configuration";
+            $window.scrollTo(0, 0);
+          })
+    }
+    
+    function saveSonarConfiguration() {
+
+        ctrl.successMessage = null;
+        ctrl.errorMessage = null;
+
+        var payload = {
+          id: ctrl.sonardata.id
+        };
+
+        //  Parse the data and covert any previously stringified objects back to object
+        _.each(ctrl.sonarSchema, function (value, key) {
+          if (value.type === "string" || value.type === "number") return payload[key] = ctrl.sonardata[key] || '';
+
+          try {
+            payload[key] = JSON.parse(ctrl.sonardata[key])
+          } catch (e) {
+            ctrl.errorMessage = "There was an error with field: " + key;
+            $window.scrollTo(0, 0);
+          }
+
+        });
+
+        // If any errors, don't submit
+        if (ctrl.errorMessage) return;
+
+        userData.saveSonarConfiguration(payload)
+          .then(function (res) {
+            ctrl.successMessage = "Configuration updated";
+            $window.scrollTo(0, 0);
+          })
+          .catch(function (err) {
+            ctrl.errorMessage = "There was an error saving your configuration";
+            $window.scrollTo(0, 0);
+          })
+    }
+    
+    function saveGitHubConfiguration() {
+
+        ctrl.successMessage = null;
+        ctrl.errorMessage = null;
+
+        var payload = {
+          id: ctrl.githubdata.id
+        };
+
+        //  Parse the data and covert any previously stringified objects back to object
+        _.each(ctrl.githubSchema, function (value, key) {
+          if (value.type === "string" || value.type === "number") return payload[key] = ctrl.githubdata[key] || '';
+
+          try {
+            payload[key] = JSON.parse(ctrl.githubdata[key])
+          } catch (e) {
+            ctrl.errorMessage = "There was an error with field: " + key;
+            $window.scrollTo(0, 0);
+          }
+
+        });
+
+        // If any errors, don't submit
+        if (ctrl.errorMessage) return;
+
+        userData.saveGitHubConfiguration(payload)
+          .then(function (res) {
+            ctrl.successMessage = "Configuration updated";
+            $window.scrollTo(0, 0);
+          })
+          .catch(function (err) {
+            ctrl.errorMessage = "There was an error saving your configuration";
+            $window.scrollTo(0, 0);
+          })
+    }
+    
+    function saveGerritConfiguration() {
+
+        ctrl.successMessage = null;
+        ctrl.errorMessage = null;
+
+        var payload = {
+          id: ctrl.gerritdata.id
+        };
+
+        //  Parse the data and covert any previously stringified objects back to object
+        _.each(ctrl.gerritSchema, function (value, key) {
+          if (value.type === "string" || value.type === "number") return payload[key] = ctrl.gerritdata[key] || '';
+
+          try {
+            payload[key] = JSON.parse(ctrl.gerritdata[key])
+          } catch (e) {
+            ctrl.errorMessage = "There was an error with field: " + key;
+            $window.scrollTo(0, 0);
+          }
+
+        });
+
+        // If any errors, don't submit
+        if (ctrl.errorMessage) return;
+
+        userData.saveGerritConfiguration(payload)
+          .then(function (res) {
+            ctrl.successMessage = "Configuration updated";
+            $window.scrollTo(0, 0);
+          })
+          .catch(function (err) {
+            ctrl.errorMessage = "There was an error saving your configuration";
+            $window.scrollTo(0, 0);
+          })
+    }
+    
+    
+    function saveEndevorConfiguration() {
+
+        ctrl.successMessage = null;
+        ctrl.errorMessage = null;
+
+        var payload = {
+          id: ctrl.endevordata.id
+        };
+
+        //  Parse the data and covert any previously stringified objects back to object
+        _.each(ctrl.endevorSchema, function (value, key) {
+          if (value.type === "string" || value.type === "number") return payload[key] = ctrl.endevordata[key] || '';
+
+          try {
+            payload[key] = JSON.parse(ctrl.endevordata[key])
+          } catch (e) {
+            ctrl.errorMessage = "There was an error with field: " + key;
+            $window.scrollTo(0, 0);
+          }
+
+        });
+
+        // If any errors, don't submit
+        if (ctrl.errorMessage) return;
+
+        userData.saveEndevorConfiguration(payload)
+          .then(function (res) {
+            ctrl.successMessage = "Configuration updated";
+            $window.scrollTo(0, 0);
+          })
+          .catch(function (err) {
+            ctrl.errorMessage = "There was an error saving your configuration";
+            $window.scrollTo(0, 0);
+          })
+    }
+    
+    function saveGitlabConfiguration() {
+
+        ctrl.successMessage = null;
+        ctrl.errorMessage = null;
+
+        var payload = {
+          id: ctrl.gitlabdata.id
+        };
+
+        //  Parse the data and covert any previously stringified objects back to object
+        _.each(ctrl.gitlabSchema, function (value, key) {
+          if (value.type === "string" || value.type === "number") return payload[key] = ctrl.gitlabdata[key] || '';
+
+          try {
+            payload[key] = JSON.parse(ctrl.gitlabdata[key])
+          } catch (e) {
+            ctrl.errorMessage = "There was an error with field: " + key;
+            $window.scrollTo(0, 0);
+          }
+
+        });
+
+        // If any errors, don't submit
+        if (ctrl.errorMessage) return;
+
+        userData.saveGitlabConfiguration(payload)
+          .then(function (res) {
+            ctrl.successMessage = "Configuration updated";
+            $window.scrollTo(0, 0);
+          })
+          .catch(function (err) {
+            ctrl.errorMessage = "There was an error saving your configuration";
+            $window.scrollTo(0, 0);
+          })
+    }
+    
+    function saveUdeployConfiguration() {
+
+        ctrl.successMessage = null;
+        ctrl.errorMessage = null;
+
+        var payload = {
+          id: ctrl.udeploydata.id
+        };
+
+        //  Parse the data and covert any previously stringified objects back to object
+        _.each(ctrl.udeploySchema, function (value, key) {
+          if (value.type === "string" || value.type === "number") return payload[key] = ctrl.udeploydata[key] || '';
+
+          try {
+            payload[key] = JSON.parse(ctrl.udeploydata[key])
+          } catch (e) {
+            ctrl.errorMessage = "There was an error with field: " + key;
+            $window.scrollTo(0, 0);
+          }
+
+        });
+
+        // If any errors, don't submit
+        if (ctrl.errorMessage) return;
+
+        userData.saveUdeployConfiguration(payload)
+          .then(function (res) {
+            ctrl.successMessage = "Configuration updated";
+            $window.scrollTo(0, 0);
+          })
+          .catch(function (err) {
+            ctrl.errorMessage = "There was an error saving your configuration";
+            $window.scrollTo(0, 0);
+          })
+    }
+    
+    function saveExcelConfiguration() {
+
+        ctrl.successMessage = null;
+        ctrl.errorMessage = null;
+
+        var payload = {
+          id: ctrl.exceldata.id
+        };
+
+        //  Parse the data and covert any previously stringified objects back to object
+        _.each(ctrl.excelSchema, function (value, key) {
+          if (value.type === "string" || value.type === "number") return payload[key] = ctrl.exceldata[key] || '';
+
+          try {
+            payload[key] = JSON.parse(ctrl.exceldata[key])
+          } catch (e) {
+            ctrl.errorMessage = "There was an error with field: " + key;
+            $window.scrollTo(0, 0);
+          }
+
+        });
+
+        // If any errors, don't submit
+        if (ctrl.errorMessage) return;
+
+        userData.saveExcelConfiguration(payload)
+          .then(function (res) {
+            ctrl.successMessage = "Configuration updated";
+            $window.scrollTo(0, 0);
+          })
+          .catch(function (err) {
+            ctrl.errorMessage = "There was an error saving your configuration";
+            $window.scrollTo(0, 0);
+          })
+    }
+    
     function uploadOfflineData() {
       var file = ctrl.myOfflineData;
       ctrl.errorMessage = null
@@ -435,7 +993,7 @@
         ctrl.successMessage = '';
         ctrl.errorMessage = 'An error has occurred';
       })
-    };
+    }
 
     function toggleFeatures(data) {
       ctrl.toggleFeatures = data;
@@ -462,12 +1020,12 @@
             ctrl.selectedLevel4 = opt.nodeName;
           }
           if (opt.level == "1" && opt.isSelectedValue) {
-            $scope.selectedValue1 = {};
-            $scope.selectedValue1 = opt;
+        	  ctrl.selectedValue1 = {};
+        	  ctrl.selectedValue1 = opt;
           }
           if (opt.level == "2" && opt.isSelectedValue) {
-            $scope.selectedValue2 = {};
-            $scope.selectedValue2 = opt;
+        	  ctrl.selectedValue2 = {};
+        	  ctrl.selectedValue2 = opt;
           }
 
         })

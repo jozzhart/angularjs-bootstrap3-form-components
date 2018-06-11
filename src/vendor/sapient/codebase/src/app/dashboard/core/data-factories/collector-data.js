@@ -58,7 +58,7 @@
             var postData = {
                 message : message
             }
-            return $http.get(encryptRoute + message).then(function (response) {
+            return $http.post(encryptRoute, postData).then(function (response) {
                 return response.data;
             });
         }

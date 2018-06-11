@@ -603,7 +603,7 @@
           }
           else if(description === 'sprintpredictability'){
             return {
-              description :'Number of committed stories delivered / Total number of committed stories',
+              description :'The average story points delivered in the last n sprints divided by the average story points committed in the last n sprints',              
               maturityLevels : {
                 M1:'<25%',
                 M2:'25-50%',
@@ -713,11 +713,11 @@
             return {
               description :'Total number of stories in Product backlog status at the end od last sprint divided by average number of stories delivered in last 3 sprints',
               maturityLevels : {
-                M1:'0-20%',
-                M2:'20-40%',
-                M3:'40-60%',
-                M4:'60-80%',
-                M5:'>= 80%',
+                M1:'0-20',
+                M2:'20-40',
+                M3:'40-60',
+                M4:'60-80',
+                M5:'>= 80',
               }
             }
           }
@@ -735,19 +735,19 @@
           }
           else if(description === 'techdebt'){
             return {
-              description :'Aggregated effort of all Tech Stories in a given project having label TECH_DEBT',
+              description :'Total Story Points of all Technical issues',
               maturityLevels : {
-                M1:'>12 weeks',
-                M2:'6-12 weeks',
-                M3:'2-6 weeks',
-                M4:'< 2 weeks',
-                M5:'< 2 days',
+                M1:'-60',
+                M2:'60-30',
+                M3:'30-10',
+                M4:'10-2',
+                M5:'2-',
               }
             }
           }
           else if(description === 'commitmentreliability'){
             return {
-              description :'The average story points delivered in the last n sprints divided by the average story points committed in the last n sprints',
+              description :'Number of committed stories delivered / Total number of committed stories',
               maturityLevels : {
                 M1:'0-20%',
                 M2:'20-40%',

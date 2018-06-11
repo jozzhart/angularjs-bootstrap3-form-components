@@ -32,14 +32,15 @@
             <h6 class="no-data" ng-if="(subWidget.data && subWidget.data.value === ' ')">
                 {{subWidget.data.unit}}
             </h6>
-            <span class="sub-widget-name">{{subWidget.title}}</span>
+            <span ng-if="subWidget.data" class="sub-widget-name">{{subWidget.title}}</span>
         </div>
     </div>
 
     <div ng-if="widgetInfo.type==='doughnut' || widgetInfo.type==='pie'" class="widget-body">
-        <div ng-if="widgetInfo.data" class="graph-container" ng-class="{'pie-chart':widgetInfo.type==='pie'}">
-            <h5 ng-if="widgetInfo.type==='doughnut'" class="graph-inner-data">{{widgetInfo.data.data[0]}}{{widgetInfo.data.symbol}}</h5>
-            <canvas id="base"
+        <div ng-if="widgetInfo.data" class="canvasWrapper graph-container" ng-class="{'pie-chart':widgetInfo.type==='pie'}">
+            <canvas id="base{{widgetInfo.name}}"
+                height="1"
+                width="1"
                 class="chart-base"
                 chart-type="widgetInfo.type"
                 chart-data="widgetInfo.data.data"
@@ -47,7 +48,9 @@
                 chart-options="widgetInfo.data.options"
                 chart-colors="widgetInfo.data.colors"
             ></canvas>
+            
         </div>
+        <h5 ng-if="widgetInfo.type==='doughnut'" class="graph-inner-data">{{widgetInfo.data.data[0]}}{{widgetInfo.data.symbol}}</h5>
         <h6 class="no-data" ng-if="!widgetInfo.data">
             No Data Available
         </h6>
@@ -96,7 +99,6 @@
         <canvas id="base"           
             ng-if="widgetInfo.data"
             class="chart-base"
-            height="200"
             chart-type="widgetInfo.type"
             chart-data="widgetInfo.data.data"
             chart-labels="widgetInfo.data.labels"

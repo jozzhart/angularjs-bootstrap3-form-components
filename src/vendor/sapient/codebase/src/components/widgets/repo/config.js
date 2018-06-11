@@ -11,7 +11,34 @@
 			'collectorData' ];
 	function RepoConfigController(modalData, $uibModalInstance, collectorData) {
 		var ctrl = this;
-		var widgetConfig = modalData.widgetConfig;
+		var widgetConfig = angular.extend({}, modalData.widgetConfig);
+		var opts = modalData.opts;
+
+		//  If not id passed, clear widget so modal config is empty
+		if(!opts.collectoritemid) {
+			widgetConfig = {
+				options: {}
+			}
+		} else {
+			// Else get the config options for the currently selected widget
+			var selectedRepo = _.find(modalData.dashboard.application.components[0].collectorItems.SCM, function(item) {
+				return item.show;
+			});
+	
+			if(selectedRepo) {
+				if(selectedRepo.options.scm === 'Github') selectedRepo.options.scm = 'GitHub';
+				var options = {
+					scm: {
+						name: selectedRepo.options.scm,
+						value: selectedRepo.options.scm
+					}
+				}
+				angular.extend(widgetConfig.options, selectedRepo.options, options);
+				widgetConfig.collectorItemId = opts.collectoritemid;
+				// delete widgetConfig.options.id;
+			}
+
+		}
 
 		ctrl.repoOptions = [{
 			name: 'GitHub',
@@ -25,6 +52,12 @@
 		}, {
 			name: 'Gitlab',
 			value: 'Gitlab'
+		}, {
+			name: 'Gerrit',
+			value: 'Gerrit'
+		}, {
+			name: 'Endevor',
+			value: 'Endevor'
 		}];
 
 		if (!widgetConfig.options.scm) {
@@ -46,7 +79,8 @@
 		ctrl.gitBranch = widgetConfig.options.branch;
 		ctrl.repouser = widgetConfig.options.userID;
 		ctrl.repopass = widgetConfig.options.password;
-
+		ctrl.collectorItemId = widgetConfig.collectorItemId;
+		ctrl.projectName = widgetConfig.options.projectName;
 		// public variables
 		ctrl.submitted = false;
 		ctrl.collectors = [];
@@ -74,6 +108,7 @@
 				if (widgetConfig.options.scm) {
 					if (ctrl.repoOption.name === widgetConfig.options.scm.name &&
 						ctrl.repoUrl === widgetConfig.options.url &&
+						ctrl.projectName === widgetConfig.options.projectName &&
 						ctrl.gitBranch === widgetConfig.options.branch &&
 						ctrl.repouser === widgetConfig.options.userID &&
 						ctrl.repopass === widgetConfig.options.password) {
@@ -128,7 +163,8 @@
 				url: ctrl.repoUrl,
 				branch: getNonNullString(ctrl.gitBranch),
                 userID: getNonNullString(ctrl.repouser),
-                password: getNonNullString(ctrl.repopass)
+                password: getNonNullString(ctrl.repopass),
+                projectName: ctrl.projectName
 			}
 		}
 
@@ -170,7 +206,19 @@
                     options: getOptions('Gitlab'),
                     uniqueOptions: getUniqueOptions('Gitlab')
 				};
-			}
+			} else if (ctrl.repoOption.name.indexOf("Gerrit") !== -1) {
+				item = {
+					collectorId : _.find(ctrl.collectors, { name: 'Gerrit' }).id,
+                    options: getOptions('Gerrit'),
+                    uniqueOptions: getUniqueOptions('Gerrit')
+				};
+			} else if (ctrl.repoOption.name.indexOf("Endevor") !== -1) {
+				item = {
+						collectorId : _.find(ctrl.collectors, { name: 'Endevor' }).id,
+	                    options: getOptions('Endevor'),
+	                    uniqueOptions: getUniqueOptions('Endevor')
+					};
+				}
 			return collectorData.createCollectorItem(item);
 		}
 
@@ -184,7 +232,8 @@
 			var postObj = {
 				name : "repo",
 				options : {
-					id : widgetConfig.options.id,
+					id : widgetConfig.options.id || "repo0",
+					// id : widgetConfig.options.id,
 					scm : ctrl.repoOption,
 					url : ctrl.repoUrl,
 					branch : ctrl.gitBranch,

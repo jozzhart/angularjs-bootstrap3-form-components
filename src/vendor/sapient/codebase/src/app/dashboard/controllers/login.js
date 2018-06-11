@@ -3,8 +3,8 @@
 (function () {
     'use strict';
     var app = angular.module(HygieiaConfig.module)
-    var inject = ['$location', '$scope', 'authService', 'userService', 'loginRedirectService']
-    function LoginController($location, $scope, authService, userService, loginRedirectService) {
+    var inject = ['$location', '$scope', 'authService', 'userService', 'loginRedirectService', 'dashboardData']
+    function LoginController($location, $scope, authService, userService, loginRedirectService, dashboardData) {
         if (userService.isAuthenticated()) {
             $location.path('/');
             return;
@@ -13,6 +13,11 @@
         login.templateUrl = 'app/dashboard/views/navheader.html';
         login.invalidUsernamePassword = false;
 
+        dashboardData.getMatchVersions()
+        .then(function(data){
+          $scope.version = data.versionDetailsMap;
+        })
+        
 
         authService.getAuthenticationProviders().then(function(response) {
           $scope.authenticationProviders = response.data;
@@ -47,9 +52,9 @@
             $location.path('/signup');
         };
 
-        $scope.standardLogin = { name: 'Standard Login', login: authService.login, signup: signup };
-        $scope.ldapLogin = { name: 'Ldap Login', login: authService.loginLdap };
-        $scope.crowdSsoLogin = { name: 'Crowd SSO Login', login: authService.loginCrowdSso };
+        $scope.standardLogin = { name: 'Speedy Login', login: authService.login, signup: signup };
+        $scope.ldapLogin = { name: 'Speedy Login', login: authService.loginLdap };
+        $scope.crowdSsoLogin = { name: 'Speedy Login', login: authService.loginCrowdSso };
 
     }
     app.controller('LoginController', inject.concat([LoginController]));

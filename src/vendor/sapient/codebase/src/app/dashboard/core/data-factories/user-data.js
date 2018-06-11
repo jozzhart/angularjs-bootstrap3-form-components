@@ -11,19 +11,54 @@
         var userRoute = '/api/users';
         var featureToggleRoute = 'api/featureToggle';
 
+        
         return {
             getAllUsers: getAllUsers,
             promoteUserToAdmin: promoteUserToAdmin,
             demoteUserFromAdmin: demoteUserFromAdmin,
             createToken: createToken,
             apitokens: apitokens,
+            getFeatureToggle: getFeatureToggle,
+            
             getConfiguration: getConfiguration,
+            saveConfiguration: saveConfiguration,      
+            getConfigurationSchema: getConfigurationSchema,
+            
             getJiraConfiguration: getJiraConfiguration,
-            saveConfiguration: saveConfiguration,            
             saveJiraConfiguration: saveJiraConfiguration,
             getJiraConfigurationSchema: getJiraConfigurationSchema,
-            getConfigurationSchema: getConfigurationSchema,
-            getFeatureToggle: getFeatureToggle
+            
+            getHudsonConfiguration: getHudsonConfiguration,
+            saveHudsonConfiguration: saveHudsonConfiguration,
+            getHudsonConfigurationSchema: getHudsonConfigurationSchema,
+            
+            getSonarConfiguration: getSonarConfiguration,
+            saveSonarConfiguration: saveSonarConfiguration,
+            getSonarConfigurationSchema: getSonarConfigurationSchema,
+            
+            getGitHubConfiguration: getGitHubConfiguration,
+            saveGitHubConfiguration: saveGitHubConfiguration,
+            getGitHubConfigurationSchema: getGitHubConfigurationSchema,
+            
+            getGerritConfiguration: getGerritConfiguration,
+            saveGerritConfiguration: saveGerritConfiguration,
+            getGerritConfigurationSchema: getGerritConfigurationSchema,
+            
+            getEndevorConfiguration: getEndevorConfiguration,
+            saveEndevorConfiguration: saveEndevorConfiguration,
+            getEndevorConfigurationSchema: getEndevorConfigurationSchema,
+            
+            getGitlabConfiguration: getGitlabConfiguration,
+            saveGitlabConfiguration: saveGitlabConfiguration,
+            getGitlabConfigurationSchema: getGitlabConfigurationSchema,
+            
+            getUdeployConfiguration: getUdeployConfiguration,
+            saveUdeployConfiguration: saveUdeployConfiguration,
+            getUdeployConfigurationSchema: getUdeployConfigurationSchema,
+            
+            getExcelConfiguration: getExcelConfiguration,
+            saveExcelConfiguration: saveExcelConfiguration,
+            getExcelConfigurationSchema: getExcelConfigurationSchema
         };
 
 
@@ -75,6 +110,54 @@
                 return response.data;
             });
         }
+        
+        function getHudsonConfiguration() {
+            return $http.get('/api/hudson/properties').then(function (response) {
+                return response.data;
+            });
+        }
+        
+        function getSonarConfiguration() {
+            return $http.get('/api/sonar/properties').then(function (response) {
+                return response.data;
+            });
+        }
+        
+        function getGitHubConfiguration() {
+            return $http.get('/api/github/properties').then(function (response) {
+                return response.data;
+            });
+        }
+        
+        function getGerritConfiguration() {
+            return $http.get('/api/gerrit/properties').then(function (response) {
+                return response.data;
+            });
+        }
+        
+        function getEndevorConfiguration() {
+            return $http.get('/api/endevor/properties').then(function (response) {
+                return response.data;
+            });
+        }
+        
+        function getGitlabConfiguration() {
+            return $http.get('/api/gitlab/properties').then(function (response) {
+                return response.data;
+            });
+        }
+        
+        function getUdeployConfiguration() {
+            return $http.get('/api/udeploy/properties').then(function (response) {
+                return response.data;
+            });
+        }
+        
+        function getExcelConfiguration() {
+            return $http.get('/api/excel/properties').then(function (response) {
+                return response.data;
+            });
+        }
 
         function getFeatureToggle() {
             return getPromise(featureToggleRoute);
@@ -92,13 +175,61 @@
             });
         }
         
+        function saveHudsonConfiguration(data) {
+            return $http.put('/api/hudson/properties', data).then(function (response) {
+                return response.data;
+            });
+        }
+        
+        function saveSonarConfiguration(data) {
+            return $http.put('/api/sonar/properties', data).then(function (response) {
+                return response.data;
+            });
+        }
+        
+        function saveGitHubConfiguration(data) {
+            return $http.put('/api/github/properties', data).then(function (response) {
+                return response.data;
+            });
+        }
+        
+        function saveGerritConfiguration(data) {
+            return $http.put('/api/gerrit/properties', data).then(function (response) {
+                return response.data;
+            });
+        }
+        
+        function saveEndevorConfiguration(data) {
+            return $http.put('/api/endevor/properties', data).then(function (response) {
+                return response.data;
+            });
+        }
+        
+        function saveGitlabConfiguration(data) {
+            return $http.put('/api/gitlab/properties', data).then(function (response) {
+                return response.data;
+            });
+        }
+        
+        function saveUdeployConfiguration(data) {
+            return $http.put('/api/udeploy/properties', data).then(function (response) {
+                return response.data;
+            });
+        }
+        
+        function saveExcelConfiguration(data) {
+            return $http.put('/api/excel/properties', data).then(function (response) {
+                return response.data;
+            });
+        }
+        
         function getConfigurationSchema() {
             return {
             	"improvementup": {
                     "type": "number",
                     "inputType": "number",
                     "technical": "false",
-                    "label":"Threshold for Improvement",
+                    "label":"Maturity Level Threshold for Improvement",
                     "description": "Provide a numeric value to compare the maturity levels and show thumbs-up or thumbs-down signals"
                 },
                 "happinessindexdays": {
@@ -112,8 +243,8 @@
                     "type": "number",
                     "inputType": "number",
                     "technical": "false",
-                    "label":"No. of Sprints to consider for Completed stories demoed to PO",
-                    "description": "For the graph to show the number of times Applications/Stories were demonstrated to the client, provide a numeric value to define the number of Sprints for which this data should be shown"
+                    "label":"No. of days to consider for Completed stories demoed to PO",
+                    "description": "For the graph to show the number of times Applications/Stories were demonstrated to the client, provide a numeric value to define the number of days for which this data should be shown"
                 },
                 "envCreationJob": {
                     "type": "string",
@@ -150,6 +281,27 @@
                     "label":"Live Status in JIRA",
                     "description": "This property is used to mark that a Story has been released to the production environment. There are a couple of ways in which this property can be configured:Either provide the status from the JIRA Story status workflow Or a label can be used to mark that the Story has been released to production. This is for cases where Stories are closed before being released to production, (since there's a significant period between a Story getting developed, tested and going into production)"
                 },
+                "jiraDORList": {
+                    "type": "array",
+                    "inputType": "text",
+                    "technical": "false",
+                    "label":"DOR Status List in JIRA",
+                    "description": "DOR means Definition of Ready in the context of a Story, defect or a task. This property is used to define the list of DOR status from the JIRA issue status workflow. You need to mention the DOR status as followed in your project"
+                },
+                "jiraDODList": {
+                    "type": "array",
+                    "inputType": "text",
+                    "technical": "false",
+                    "label":"DOD Status List in JIRA",
+                    "description": "DOD means Definition of Done in the context of a Story, defect or a task. This property is used to define the list of DOD status from the JIRA Story status workflow. You need to mention the DOD status as followed in your project"
+                },
+                "jiraLiveList": {
+                    "type": "array",
+                    "inputType": "text",
+                    "technical": "false",
+                    "label":"Live Status List in JIRA",
+                    "description": "This property is used to mark that a Story has been released to the production environment. There are a couple of ways in which this property can be configured:Either provide the list of status from the JIRA Story status workflow Or a label can be used to mark that the Story has been released to production. This is for cases where Stories are closed before being released to production, (since there's a significant period between a Story getting developed, tested and going into production)"
+                },
                 "jiracfdmonth": {
                     "type": "number",
                     "inputType": "number",
@@ -176,7 +328,7 @@
                     "type": "object",
                     "inputType": "textarea",
                     "technical": "false",
-                    "label":"All JIRA statuses representing issues/stories in Backlog state (for CFD)",
+                    "label":"Statuses of work items and corresponding JIRA statuses for CFD",
                     "description": "Story statuses in JIRA should be arranged into five groups. Provide comma-separated status value for each group"
                 },
                 "cfdStatusOrder": {
@@ -186,21 +338,7 @@
                     "label":"Status order for the CFD",
                     "description": "Provide the order of the statuses to be shown on Cummulative flow diagram"
                 },
-                "sprintCountDor": {
-                    "type": "number",
-                    "inputType": "number",
-                    "technical": "false",
-                    "label":"No. of Sprints to calculate DOR",
-                    "description": "Number of Sprints to consider for calculating DOR"
-                },
-                "sprintCountDod": {
-                    "type": "number",
-                    "inputType": "number",
-                    "technical": "false",
-                    "label":"No. of Sprints to calculate DOD",
-                    "description": "Number of Sprints to consider for calculating DOD"
-                },
-                "daysInWeek": {
+               "daysInWeek": {
                     "type": "number",
                     "inputType": "number",
                     "technical": "false",
@@ -338,11 +476,11 @@
                     "label":"JIRA Issue types to be considered for Completed Stories demoed to PO",
                     "description": "JIRA issue types to be considered for Completed Stories demoed to PO widget"
                 },
-                "key": {
+                "encryptionKey": {
                     "type": "string",
                     "inputType": "text",
                     "technical": "true",
-                    "label":"key"
+                    "label":"encryptionKey"
                 },
                 "poolSize": {
                     "type": "string",
@@ -471,6 +609,20 @@
                     "inputType": "text",
                     "technical": "true",
                     "label":"dodToLive"
+                },
+                "sprintCountDor": {
+                    "type": "number",
+                    "inputType": "number",
+                    "technical": "true",
+                    "label":"No. of Sprints to calculate DOR for Trend",
+                    "description": "Number of Sprints to consider for calculating Trend DOR"
+                },
+                "sprintCountDod": {
+                    "type": "number",
+                    "inputType": "number",
+                    "technical": "true",
+                    "label":"No. of Sprints to calculate DOD for Trend",
+                    "description": "Number of Sprints to consider for calculating Trend DOD"
                 },
                 "commitmentReliabilityMaturityLevels": {
                     "type": "array",
@@ -681,10 +833,608 @@
                     "inputType": "text",
                     "technical": "true",
                     "label":"fieldValueYes"
+                },
+                "leakageLabels": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"leakageLabels"
+                },
+                "issueTypeNamesForFTPRcalculation": {
+                    "type": "array",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"issueTypeNamesForFTPRcalculation"
+                },
+                "issueTypeNamesForReopenRatecalculation": {
+                    "type": "array",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"issueTypeNamesForReopenRatecalculation"
+                },
+                "closedStatusForReopenRatecalculation": {
+                    "type": "array",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"closedStatusForReopenRatecalculation"
+                },
+                "closedStatusForFTPRcalculation": {
+                    "type": "array",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"closedStatusForFTPRcalculation"
+                },
+                "issueClosedStatusForFTPRcalculation": {
+                    "type": "array",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"issueClosedStatusForFTPRcalculation"
+                },
+                "issueClosedStatusForReopenRatecalculation": {
+                    "type": "array",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"issueClosedStatusForReopenRatecalculation"
+                },
+                "jiraDefectStatus": {
+                    "type": "object",
+                    "inputType": "textarea",
+                    "technical": "true",
+                    "label":"jiraDefectStatus"
+                },
+                "isAutomableFieldValue": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"isAutomableFieldValue"
+                },
+                "defectFixRateStatus":{
+                	"type": "string",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"defectFixRateStatus"
+                },
+                "defectFixRateTypes": {
+                    "type": "array",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"defectFixRateTypes"
+                },
+                "defectFixRateGraphDateFormat": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"defectFixRateGraphDateFormat"
+                },
+                "defectFixRateXDays": {
+                    "type": "number",
+                    "inputType": "number",
+                    "technical": "true",
+                    "label":"defectFixRateXDays"
+                },
+                "jiraPerformanceDefectLabels": {
+                    "type": "array",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"jiraPerformanceDefectLabels"
+                },
+                "defectRejectionResolutionField": {
+                    "type": "array",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"defectRejectionResolutionField"
+                },
+                "defectRejectionJiraAttribute": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"defectRejectionJiraAttribute"
+                },
+                "defectRejectionAttributeValue": {
+                    "type": "array",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"defectRejectionAttributeValue"
+                },
+                "kanoahProjectKey": {
+                    "type": "array",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"kanoahProjectKey"
+                },
+                "isAutomatedValidKeys": {
+                    "type": "array",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"isAutomatedValidKeys"
+                },
+                "isAutomableValidKeys": {
+                    "type": "array",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"isAutomableValidKeys"
+                },
+                "securityJobName": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"securityJobName"
+                },
+                "securityJiraAttribute": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"securityJiraAttribute"
+                },
+                "securityJiraAttributeValue": {
+                    "type": "array",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"securityJiraAttributeValue"
+                },
+                "accessibilityJobname": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"accessibilityJobname"
+                },
+                "jiraJqlURL": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"jiraJqlURL"
+                },
+                "accessibilityJiraAttribute": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"accessibilityJiraAttribute"
+                },
+                "speedyCurrentVersionResponseKey": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"speedyCurrentVersionResponseKey"
+                },
+                "organisationLevel": {
+                    "type": "object",
+                    "inputType": "textarea",
+                    "technical": "true",
+                    "label":"organisationLevel"
+                },
+                "gitTargetBranch": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"gitTargetBranch"
+                },
+                "unitOfChart": {
+                    "type": "object",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"unitOfChart"
+                },
+                "numberOfUnitsInChart": {
+                    "type": "number",
+                    "inputType": "number",
+                    "technical": "true",
+                    "label":"numberOfUnitsInChart"
+                },
+                "daysInMonth": {
+                    "type": "number",
+                    "inputType": "number",
+                    "technical": "true",
+                    "label":"daysInMonth"
+                },
+                "daysInYear": {
+                    "type": "number",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"daysInYear"
+                },
+                "aggregationMaturityRange": {
+                    "type": "object",
+                    "inputType": "textarea",
+                    "technical": "true",
+                    "label":"aggregationMaturityRange"
+                },
+                "jiraBacklog": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"jiraBacklog"
+                },
+                "jiraBacklogList": {
+                    "type": "array",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"jiraBacklogList"
+                },
+                "backlogToDor": {
+                    "type": "array",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"backlogToDor"
+                },
+                "backlogToLive": {
+                    "type": "array",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"backlogToLive"
+                },
+                "jiraBacklogToDorIssueType": {
+                    "type": "array",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"jiraBacklogToDorIssueType"
+                },
+                "dirPostLiveDays": {
+                    "type": "number",
+                    "inputType": "number",
+                    "technical": "true",
+                    "label":"dirPostLiveDays"
+                },
+                "jiraPostLive": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"jiraPostLive"
+                },
+                "defectInjectionRatePostLive": {
+                    "type": "array",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"defectInjectionRatePostLive"
+                },
+                "frontendPerformaceJobName": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"frontendPerformaceJobName"
+                },
+                "backendPerformaceJobName": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"backendPerformaceJobName"
+                },
+                "accessibilityJiraAttributeValue": {
+                    "type": "array",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"accessibilityJiraAttributeValue"
+                },
+                "releaseValue": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"releaseValue"
+                },
+                "regressionFolderLabel": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"regressionFolderLabel"
+                },
+                "workStream": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"workStream"
+                },
+                "performanceNoOfDays": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"performanceNoOfDays"
                 }
             }
         }
         
+        function getHudsonConfigurationSchema() {
+        	return {
+        		"cron": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "false",
+                    "label":"Refresh frequency",
+                    "description": "Frequency at which data should be fetched from Hudson/Jenkins. The value should be a standard cron value in UNIX format."
+                },
+                "servers": {
+                    "type": "array",
+                    "inputType": "text",
+                    "technical": "false",
+                    "label":"Jenkins URL",
+                    "description": "Jenkins URL from which the Speedy plugin has been configured to fetch the data"
+                },
+                "usernames": {
+                    "type": "array",
+                    "inputType": "text",
+                    "technical": "false",
+                    "label":"Jenkins username",
+                    "description": "Username to be used to access data from Jenkins"
+                },
+                "apiKeys": {
+                    "type": "array",
+                    "inputType": "text",
+                    "technical": "false",
+                    "label":"ApiKey for Jenkins",
+                    "description": "Encrypted password for accessing data from Jenkins. In order to get the API key, log in to Jenkins with the user configured, go to the user account and click Configure. Under API token, click on Show API token and copy and paste the value in the properties file"
+                },
+                "pageSize": {
+                    "type": "number",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"pageSize"
+                },
+                "folderDepth": {
+                    "type": "number",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"folderDepth"
+                },
+                "envCreationJob": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"envCreationJob",
+                    "description": "Name of the Jenkins job on the Continuous Deployement pipeline which provisions the environment"
+                },
+                "relAndDeployJob": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"relAndDeployJob",
+                    "description": "Name of the Jenkins job on the CD pipeline which deploys the build on the provisioned environment"
+                }
+        	}
+        }
+        
+        function getSonarConfigurationSchema() {
+        	return {
+        		"cron": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "false",
+                    "label":"Refresh frequency",
+                    "description": "Frequency at which data should be fetched from Somar. The value should be a standard cron value in UNIX format."
+                },
+                "servers": {
+                    "type": "array",
+                    "inputType": "text",
+                    "technical": "false",
+                    "label":"Sonar Server URL",
+                    "description": "Sonar server URL from where data will be fetched"
+                },
+                "versions": {
+                    "type": "array",
+                    "inputType": "text",
+                    "technical": "false",
+                    "label":"Sonar Server version",
+                    "description": "Sonar server version"
+                },
+                "username": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "false",
+                    "label":"Sonar Username",
+                    "description": "Username to fetch data from Sonar"
+                },
+                "password": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "false",
+                    "label":"Sonar Password",
+                    "description": "Password to fetch data from Sonar (Base64 encoded)"
+                },
+                "sonarClient": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "false",
+                    "label":"Sonar Client",
+                    "description": "Use this property to specify the Sonar version. If the version is older than version 6 e.g. sonar version 5.6 or 5.2, specify sonarClient else sonar6Client"
+                },
+                "metrics": {
+                    "type": "array",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"Sonar Metrics",
+                    "description": "All the metrics which should be fetched from Sonar"
+                }
+        	}
+        }
+        
+        function getGitHubConfigurationSchema() {
+        	return {
+        		"cron": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "false",
+                    "label":"Refresh frequency",
+                    "description": "Frequency at which data should be fetched from Github. The value should be a standard cron value in UNIX format."
+                },
+                "errorThreshold": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"Error Threshold"
+                },
+                "encryptionKey": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"Encryption Key"
+                }
+        	}
+        }
+        
+        function getGerritConfigurationSchema() {
+        	return {
+        		"cron": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "false",
+                    "label":"Refresh frequency",
+                    "description": "Frequency at which data should be fetched from Gerrit. The value should be a standard cron value in UNIX format."
+                },
+                "host": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "false",
+                    "label":"Gerrit Host",
+                    "description":"Gerrit host"
+                },               
+                "encryptionKey": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"Encryption Key"
+                },
+                "firstRunHistoryDays": {
+                    "type": "number",
+                    "inputType": "number",
+                    "technical": "true",
+                    "label":"First run history days"
+                }
+        	}
+        }
+        
+        function getEndevorConfigurationSchema() {
+        	return {
+        		"cron": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "false",
+                    "label":"Refresh frequency",
+                    "description": "Frequency at which data should be fetched from Endevor excel sheet. The value should be a standard cron value in UNIX format."
+                },
+                "filepath": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "false",
+                    "label":"Path to the endevor excel sheet",
+                    "description":"Path where the excel file exists"
+                },               
+                "encryptionKey": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"Encryption Key"
+                }
+        	}
+        }
+        
+        function getGitlabConfigurationSchema() {
+        	return {
+        		"cron": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "false",
+                    "label":"Refresh frequency",
+                    "description": "Frequency at which data should be fetched from Gitlab. The value should be a standard cron value in UNIX format."
+                },
+                "protocol": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "false",
+                    "label":"Gitlab protocol",
+                    "description": "Gitlab protocol (optional, defaults to 'http')"
+                },
+                "host": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "false",
+                    "label":"Gitlab Host",
+                    "description": "Gitlab host (If no value provided defaults to gitlab.com)"
+                },
+                "port": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "false",
+                    "label":"Gitlab port",
+                    "description": "Gitlab port (optional, defaults to protocol default port)"
+                },
+                "path": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "false",
+                    "label":"Gitlab path",
+                    "description": "Gitlab path (optional, if your instance of gitlab requires a path)"
+                },
+                "apiToken": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "false",
+                    "label":"Gitlab apiToken",
+                    "description": "Gitlab API Token (required, user token the collector will use by default, can be overridden on a per repo basis from the UI. API token provided by Gitlab)"
+                },
+                "selfSignedCertificate": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "false",
+                    "label":"Self Signed Certificate",
+                    "description": "If your instance of Gitlab is using a self-signed certificate, set to true, default is false"
+                }
+        	}
+        }
+        
+        function getUdeployConfigurationSchema() {
+        	return {
+        		"cron": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "false",
+                    "label":"Refresh frequency",
+                    "description": "Frequency at which data should be fetched from Urban Code. The value should be a standard cron value in UNIX format."
+                },
+                "servers": {
+                    "type": "array",
+                    "inputType": "text",
+                    "technical": "false",
+                    "label":"Urban Code Server URL",
+                    "description": "Urban Code Server URL"
+                },
+                "username": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "false",
+                    "label":"Urban Code Username",
+                    "description": "Username to fetch data from Urban Code"
+                },
+                "password": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "false",
+                    "label":"Urban Code Password",
+                    "description": "Password to fetch data from Urban Code"
+                },
+                "token": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "false",
+                    "label":"Urban Code token",
+                    "description": "UrbanCode Token can be used instead of Urbancode username and password"
+                }
+        	}
+        }
+        
+        function getExcelConfigurationSchema() {
+        	return {
+        		"cron": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "false",
+                    "label":"Refresh frequency",
+                    "description": "Frequency at which data should be fetched from Excel. The value should be a standard cron value in UNIX format."
+                },
+                "filePath": {
+                    "type": "string",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"Excel File Path"
+                }
+        	}
+        }
         
         function getJiraConfigurationSchema() {
             return {
@@ -698,7 +1448,7 @@
                 "deltaStartDate": {
                     "type": "string",
                     "inputType": "text",
-                    "technical": "false",
+                    "technical": "true",
                     "label":"Delta data start date and time",
                     "description": "Date and time from when the delta data should be fetched"
                 },
@@ -720,7 +1470,7 @@
                     "type": "string",
                     "inputType": "text",
                     "technical": "false",
-                    "label":"Encrypetd JIRA Credentials",
+                    "label":"Base 64 encoded JIRA Credentials",
                     "description": "Credentials in Base64 encoding in the form of username:password, to fetch JIRA data using REST service"
                 },
                 "storyFirstStatus": {
@@ -996,7 +1746,37 @@
                     "technical": "true",
                     "label":"JIRA field that captures issues/stories Live status"
                     //"description": "For the Cumulative Flow Diagram, provide the number of months (in the past) for which data should be graphically presented"
-                }
+                },
+                "jiraWorkStreamFieldName":{
+               	 "type": "string",
+                    "inputType": "text",
+                    "technical": "true",
+                    "label":"jiraWorkStreamFieldName"
+               },
+               "jiraReopeningCounterName": {
+               	"type": "string",
+                   "inputType": "text",
+                   "technical": "true",
+                   "label":"jiraReopeningCounterName"
+               },
+               "storyDemonstratedField":{
+               	"type": "string",
+                   "inputType": "text",
+                   "technical": "true",
+                   "label":"storyDemonstratedField"
+               },
+               "storyDemonstratedFieldName":{
+               	"type": "string",
+                   "inputType": "text",
+                   "technical": "true",
+                   "label":"storyDemonstratedFieldName"
+               },
+               "storyDemonstratedLabelValue":{
+               	"type": "string",
+                   "inputType": "text",
+                   "technical": "true",
+                   "label":"storyDemonstratedLabelValue"
+               }
             }
         }
     }

@@ -3,7 +3,7 @@
         <nav class="navbar navbar-default navbar-fixed-top">
             <div class="container-fluid">
                 <a class="col-md-3 image-container" ng-href="#/">
-                    <img class="img-responsive" src="../../logo/default.gif">
+                    <img class="img-responsive" ng-src="{{template.logoImage}}">
                 </a>
 
                 <h4 title="{{::ctrl.dashboard.title }}">{{::ctrl.dashboard.title | trunText:50}}</h4>
@@ -29,38 +29,37 @@
                         <widget name="feature" widget-title="Feature"></widget>
 
 
-
-
-                        <div class="container-fluid">
-
-                            <ul class="nav nav-tabs build-nav-tabs" style="margin-top: 10px">
+                        <div class="container-fluid" ng-if="template.dashboardGlobalData.application.components[0].collectorItems.SCM">
+                            <ul class="nav nav-tabs" style="margin-top: 10px">
                                 <li class="text-lg auth-modal-tab"
-                                    ng-repeat="tab in template.dashboardGlobalData.application.components[0].collectorItems.Build"
-                                    ng-click="template.miniBuildToggleView($index)"
-                                    ng-class="{'active':tab.description == template.miniBuildWidgetView} ">
+                                    ng-repeat="tab in template.dashboardGlobalData.application.components[0].collectorItems.SCM"
+                                    ng-click="template.showRepoWidget(tab)"
+                                    ng-class="{'active':tab.show == true } ">
         
                                     <a class="textColor-Performance"
                                     ng-class="{'fa fa-plus-circle':tab.description=='Add New'}"
-                                    data-toggle="tab">&nbsp; {{tab.description}}</a>
-        
+                                    data-toggle="tab">&nbsp; {{ template.generateName(tab.options.url) }} {{tab.options.branch}}</a>
                                 </li>
-        
+                                <li class="text-lg auth-modal-tab"
+                                    ng-click="template.repoWidgetFunctions.configModal({collectoritemid: null})">
+                                    <a class="textColor-Performance fa fa-plus-circle">&nbsp; New</a>
+                                </li>
                             </ul>
                         </div>
-
-
-
-
-                        <widget name="repo"></widget>
-                        <widget name="repo"></widget>
-
-
-
-
-
-
-
-                        
+                        <div ng-repeat="tab in template.dashboardGlobalData.application.components[0].collectorItems.SCM">
+                            <div class="container-fluid" widget-container
+                                dashboard="ctrl.dashboard"
+                                ng-if="tab.show==true">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <widget name="repo" collectoritemid="{{tab.id}}"></widget>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div ng-if="!template.dashboardGlobalData.application.components[0].collectorItems.SCM">
+                          <widget name="repo"></widget>
+                        </div>
                     </div>
                 </div>
              </div>

@@ -5,7 +5,7 @@
     'use strict';
 
     angular
-        .module(HygieiaConfig.module + '.core', [])
+        .module(HygieiaConfig.module + '.core')
         .factory('customDashboardData', customDashboardData);
     
     customDashboardData.$inject = ['$http'];
@@ -65,7 +65,7 @@
                 'improvement': 'Kaizen Mindset - Retrospectives regularly held and action items recorded and progressed',
                 'citime': 'TIME TO FIX A BROKEN BUILD: Time lag between broken (including compilation or quality gate failure) build to the fixed build <br> CODE BUILD TIME: Time required to build the deployable packet, passing all gates of CI  (incl. code quality, sanity etc.) <br> FUNCTIONAL TEST EXECUTION TIME: Time taken to execute the testing',
                 'commitmentReliability': 'The average story points delivered in the last 3 sprints divided by the average story points committed in the last 3 sprints',
-                'techDebt': 'Aggregated effort of all tech stories in given project having label TECH_DEBT',
+                'techDebt': 'Total Story Points of all Technical Debt issues',
                 'agingIssue':'Ageing analysis of the open issues,  median of the difference between issue create date and current date',
                 'issues': 'All the open P1 issues of type issue',
                 'sonarTechDebt': 'Aggregated effort from the Sonar related to tech debt',

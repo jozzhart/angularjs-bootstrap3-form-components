@@ -10,7 +10,7 @@
 
     function signupData($http) {
         var testDetailRoute = 'test-data/signup_detail.json';
-        var SignupDetailRoute = '/api/registerUser';
+        var SignupDetailRoute = '/api/createUser';
 
         return {
             signup: signup
@@ -29,10 +29,11 @@
             });
         }
 
-      function signup(id,passwd){
+      function signup(id,passwd,securityQ){
         var postData={
     				'username': id,
-    				'password': passwd
+    				'password': passwd,
+    				'securityQuestion': securityQ
     			};
           if(HygieiaConfig.local)
           {

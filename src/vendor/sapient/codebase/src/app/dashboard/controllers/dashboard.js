@@ -27,9 +27,10 @@ var dashboardGlobalData={};
         if(!dashboard) {
             $location.path('/');
         }
-        if($location.$$path.startsWith("/dashboard/")) {
+        if($location.path().indexOf("/dashboard/") === 0) {
             ctrl.isDashboardUrl = true;
         }
+
         // set the template and make sure it has access to the dashboard objec
         // dashboard is guaranteed by the resolve setting in the route
         dashboardGlobalData=dashboard;

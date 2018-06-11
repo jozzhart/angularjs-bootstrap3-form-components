@@ -35,7 +35,7 @@
                 },
                 template: '<div class="form-group" ng-class="{\'has-error\':hasError}">' +
                 '<div ng-transclude></div>' +
-                '<div ng-if="hasError">' +
+                '<div ng-if="hasError" class="form-errors">' +
                 '<p ng-repeat="(key,error) in form[input].$error" class="help-block" ng-if="error">{{messages[key] || key + " validation failed"}}</p>' +
                 '</div></div>',
                 link: function (scope, element, attrs, ctrl) {

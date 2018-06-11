@@ -14,12 +14,16 @@
         var LdapLoginDetailRoute = '/api/login/ldap';
         var CrowdSsoLoginDetailRoute = '/api/login/crowdsso';
         var authenticationProvidersRoute = '/api/authenticationProviders';
+        var resetPasswordRoute = '/api/resetPassword';
+        var setSecurityQuestionRoute = '/api/setSecurityQuestion';
 
         return {
             login: login,
             loginLdap: loginLdap,
             loginCrowdSso: loginCrowdSso,
-            getAuthenticationProviders: getAuthenticationProviders
+            getAuthenticationProviders: getAuthenticationProviders,
+            resetPassword: resetPassword,
+            setSecurityQuestion: setSecurityQuestion
         };
 
 
@@ -44,7 +48,39 @@
 
       function loginCrowdSso(id, password) {
         return callLogin(CrowdSsoLoginDetailRoute, id, password);
-      }     
+      }   
+
+      function setSecurityQuestion(credentials) {
+        return $http.post(setSecurityQuestionRoute, credentials)
+      }
+      
+      function resetPassword(credentials) {
+
+        return $http.post(resetPasswordRoute, credentials)
+
+        // return $http({
+        //   method: 'POST',
+        //   url: resetPasswordRoute,
+        //   headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        //   data: {
+        //     'username': id,
+        //     'password': password,
+        //     securityQuestion: securityQuestion
+        //   },
+        //   transformRequest: function(data) {
+        //       var str = [];
+        //       for(var p in data)
+        //       str.push(encodeURIComponent(p) + "=" + encodeURIComponent(data[p]));
+        //       return str.join("&");
+        //   }
+        // }).then(function(response) {
+        //   return response;
+        // },
+        //   function(response) {
+        //     return response;
+        // })
+      }
+
 
       function callLogin(route, id, passwd){
         var postData={

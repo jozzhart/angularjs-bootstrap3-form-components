@@ -48,8 +48,13 @@
             scope.widgetDefinition = widgetManager.getWidget(attrs.name);
             scope.title = attrs.title || scope.widgetDefinition.view.defaults.title;
             scope.header = attrs.header ? attrs.header != 'false' : true;
+            scope.collectoritemid = attrs.collectoritemid || null;
 
-
+            // Temp work around to allow template controller to call local function
+            if(attrs.name === 'repo' && scope.$parent.$parent.$parent.$parent.template) {
+                scope.$parent.$parent.$parent.$parent.template.repoWidgetFunctions.configModal = scope.configModal;
+            }
+            
             // when the widget loads, register it with the container which will then call back to process
             // the widget with the proper config value if it's already been configured on the dashboard
             containerController.registerWidget({
@@ -120,7 +125,7 @@
             $scope.init = init;
 
             // method implementations
-            function configModal() {
+            function configModal(opts) {
                 // load up a modal in the context of the settings defined in
                 // the config property when the widget was registered
                 var modalConfig = angular.extend({
@@ -129,7 +134,8 @@
                         modalData: function () {
                             return {
                                 dashboard: $scope.dashboard,
-                                widgetConfig: $scope.widgetConfig
+                                widgetConfig: $scope.widgetConfig,
+                                opts: opts
                             };
                         }
                     }
@@ -156,7 +162,7 @@
                         $scope.widgetConfig.collectorItemIds = [$scope.widgetConfig.collectorItemId];
                         delete $scope.widgetConfig.collectorItemId;
                     }
-
+                    
                     dashboardData
                         .upsertWidget($scope.dashboard.id, $scope.widgetConfig)
                         .then(function (response) {
@@ -178,8 +184,14 @@
                             // TODO: should probably call back to the widget's getState method
                             $scope.state = WidgetState.READY;
 
+                            if($scope.dashboard.application && $scope.dashboard.application.components[0] && $scope.dashboard.application.components[0].collectorItems.SCM) {
+                                var newItem = _.last($scope.dashboard.application.components[0].collectorItems.SCM)
+                                newItem.show = true;
+                            }
+
                             init();
                         });
+
                 }
             }
 

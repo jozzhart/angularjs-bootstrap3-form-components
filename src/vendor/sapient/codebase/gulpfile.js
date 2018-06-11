@@ -247,9 +247,10 @@ gulp.task('views', function () {
 gulp.task('fonts', function () {
   return gulp
     .src([
-      'bower_components/**/*'
+      'bower_components/**/*',
+      'src/assets/fonts/*'
     ])
-    .pipe(filter('**/*.{eot,ttf,woff,woff2}'))
+    .pipe(filter('**/*.{eot,ttf,woff,woff2,otf}'))
     .pipe(flatten())
     .pipe(gulp.dest(hygieia.dist + 'fonts'));
 });

@@ -143,9 +143,25 @@ var localStorageSupported = (function () {
       });
 
     })
-    .run(function ($rootScope, loginRedirectService) {
+    .run(function ($http, $rootScope, loginRedirectService) {
       $rootScope.$on('$locationChangeStart', function (event, nextPath, currentPath) {
         loginRedirectService.saveCurrentPath(currentPath);
       });
+
+      var thmeName = localStorage.getItem('theme', theme);
+
+      $http.get('../helpers/common-resource.json')
+        .success(function(data, status, headers, config) {
+            thmeName = thmeName || theme;
+            $rootScope.commonResourseConfig = data[thmeName] || data['dash'];            
+            $rootScope.$broadcast('common-resourse-loaded');
+        })
+        .error(function(data, status, headers, config) {
+            // log error
+            
+        });
+    })
+    .run(function ($rootScope) {
+      $rootScope.localStorageSupported = localStorageSupported;
     });
 })();

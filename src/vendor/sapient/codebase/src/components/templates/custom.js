@@ -2,19 +2,171 @@
  * Controller for the dashboard route.
  * Render proper template.
  */
-
 (function () {
     'use strict';
 
     angular
-        .module(HygieiaConfig.module + '.core')
+        .module(HygieiaConfig.module)
         .controller('CustomTemplateController', CustomTemplateController);
 
     CustomTemplateController.$inject = ['$scope','$rootScope','$http', '$q', 'customDashboardData', 'dashboardData'];
-    function CustomTemplateController($scope, $rootScope, $http, $q, customDashboardData, dashboardData ) {
+    function CustomTemplateController($scope, $rootScope, $http, $q, customDashboardData, dashboardData) {
         var ctrl = this,
-            widgetHoverText;            
-  
+            widgetHoverText; 
+
+        //  Note this is stored in local store, so if any chages are made to it 
+        //  must add some script to apply to the local store    
+        var defaultLayout = {
+            col0: {
+                improvement: {
+                    label: 'Improvement',
+                    show: true,
+                    classes: 'cellDoubleWidth'
+                },
+                happiness: {
+                    label: 'Happiness Index',
+                    show: true,
+                    classes: 'cellDoubleWidth cellDoubleHeight'
+                },
+                value: {
+                    label: 'Assign Value Metrics',
+                    show: true,
+                    classes: 'cellDoubleWidth'
+                }    
+            },
+            col1: {
+                // backlogToDOR: {
+                //     label: 'Backlog to DOR',
+                //     show: true,
+                //     classes: 'cellDoubleWidth'
+                // },
+                storyDORtoDOD: {
+                    label: 'DOR to DOD',
+                    show: true,
+                    classes: 'cellDoubleWidth'
+                },
+                dodToLive: {
+                    label: 'DOD to Live',
+                    show: true,
+                    classes: 'cellDoubleWidth'
+                },
+                // storyLeadTime: {
+                //     label: 'Lead Time',
+                //     show: true,
+                //     classes: 'cellDoubleWidth'
+                // },
+                sprintPredictability: {
+                    label: 'Sprint Predictability',
+                    show: true,
+                    classes: ''
+                },
+                commitmentReliability: {
+                    label: 'Commitment Reliability',
+                    show: true,
+                    classes: ''
+                },
+                cfdData: {
+                    label: 'Cumulative Flow Diagram',
+                    show: true,
+                    classes: 'cellDoubleWidth'
+                },
+                backlogHealth: {
+                    label: 'Backlog Health',
+                    show: true,
+                    classes: 'cellDoubleWidth'
+                },
+                noOfCheckins: {
+                    label: 'No. of Checkins',
+                    show: true,
+                    classes: 'cellDoubleWidth'
+                },
+                ciTime: {
+                    label: 'CI Time',
+                    show: true,
+                    classes: 'cellTripleWidth'
+                },
+                releaseDeployTime: {
+                    label: 'Release Deploy Time',
+                    show: true,
+                    classes: ''
+                },
+                techDebit: {
+                    label: 'Tech Debt',
+                    show: true,
+                    classes: ''
+                },
+                envCreationTime: {
+                    label: 'Env. Creatation Time',
+                    show: true,
+                    classes: ''
+                },
+            },
+            col2: {
+                defectInjectionRate: {
+                    label: 'Defect Injection Rate',
+                    show: true,
+                    classes: ''
+                },
+                autoVsManualTest: {
+                    label: 'Automated Test %',
+                    show: true,
+                    classes: ''
+                },
+                codeQuality: {
+                    label: 'Code Quality',
+                    show: true,
+                    classes: 'cellDoubleWidth'
+                },
+                jUnitCoverage: {
+                    label: 'jUnit Coverage',
+                    show: true,
+                    classes: 'cellDoubleWidth'
+                },
+                appDemonstration: {
+                    label: 'Completed Stories are Demonstrated to Product Owner',
+                    show: true,
+                    classes: 'cellDoubleWidth'
+                }
+            }
+           
+        }
+
+
+        //  Layout management
+        ctrl.layout =  defaultLayout;
+        if($rootScope.localStorageSupported) {
+            //  If layout hasn't ben set yet
+            if(!localStorage.getItem('layout')) localStorage.setItem('layout', JSON.stringify(defaultLayout));
+
+            var layout = JSON.parse(localStorage.getItem('layout'));
+
+            //  Breaking change to layout config, need to reset
+            if(!layout.col0) {
+                localStorage.setItem('layout', JSON.stringify(defaultLayout))
+                ctrl.layout =  defaultLayout;
+            } else {
+                ctrl.layout = layout;
+            }       
+        }
+        ctrl.layoutSettings = angular.copy(ctrl.layout)
+        
+        ctrl.saveHideShow = function() {
+            ctrl.layout = angular.copy(ctrl.layoutSettings);
+            localStorage.setItem('layout', JSON.stringify(ctrl.layout))
+        }        
+
+        //  Careful here, using the controller alias used in the html template
+        $scope.$watch('template.layout', function(newValue, oldValue) {
+            ctrl.showPeopleHeader = ctrl.layout.col0.improvement.show || ctrl.layout.col0.happiness.show;
+            ctrl.showValueHeader = ctrl.layout.col0.value.show;
+            ctrl.showSpeedHeader = _.find(ctrl.layout.col1, function(widget){
+                return widget.show; 
+            });
+            ctrl.showQualityHeader = _.find(ctrl.layout.col2, function(widget){
+                return widget.show; 
+            });
+        });
+
         customDashboardData.fetchHelpers().then(function(response) {
             ctrl.resourceHelpers = response;
         });
@@ -23,6 +175,13 @@
                 ctrl.showRadar = false;
                 ctrl.startDate = '';
                 ctrl.endDate = '' ;
+                var commonResourseConfig = $rootScope.commonResourseConfig;
+                if(commonResourseConfig) {
+                    ctrl.firstColumnBgColor = commonResourseConfig[0];
+                    ctrl.secondColumnBgColor = commonResourseConfig[1];
+                    ctrl.thirdColumnBgColor = commonResourseConfig[2];
+                    ctrl.fourthColumnBgColor = commonResourseConfig[3];
+                }
                 fetchProjectDetails();
                 widgetHoverText = customDashboardData.fetchWidgetHoverText();
             },
@@ -43,9 +202,10 @@
                 switch (selectedChart) {
                     case 'NoOfCheckins':
                         var noOfCheckinsOptions = {
+                            elements: { point: { radius:1.3, hoverRadius: 1.3 } },
                             maintainAspectRatio: false,
                             tooltips: {
-                                enabled: false
+                                enabled: true
                             },
                             scales: {
                             yAxes: [
@@ -160,9 +320,10 @@
                     case 'AppDemonstration':
                         ctrl.isCalendarOpen = false;
                         var appDemonstrationOptions = {
+                            elements: { point: { radius:1.3, hoverRadius: 1.3 } },
                             maintainAspectRatio: false,
                             tooltips: {
-                                enabled: false
+                                enabled: true
                             },
                             scales: {
                             yAxes: [
@@ -209,6 +370,12 @@
                 ctrl.selectedFromSprintList = '';
                 ctrl.selectedToSprintList = '';
                 switch (ctrl.selectedChart) {
+                    case 'NoOfCheckins':
+                        ctrl.fetchNoOfCheckins();
+                        break; 
+                    case 'CfdData':
+                        ctrl.fetchCfdData();
+                        break;                         
                     case 'autoPercentage':
                         ctrl.fetchTrendOverAutoVsManualTest();
                         break; 
@@ -247,13 +414,33 @@
                         ctrl.isTrendOverDropdownActive = false;
                         ctrl.isCalendarOpen = false;
                         break;
+
                 }
             }
+
 
             ctrl.trendOverChartModal = function() {
                 ctrl.chartdata = {};
                 ctrl.isTrendOverDropdownActive = false;
                 switch (ctrl.selectedChart) {
+                    case 'NoOfCheckins':
+                        ctrl.chartdata = _.assign({}, ctrl.noOfCheckins);
+                        if(ctrl.chartdata['data']) {
+                            ctrl.chartdata['data']['dialogoptions'] =  ctrl.chartdata['data']['options'];
+                        }
+                        ctrl.startDate = ctrl.chartdata.startDate || '';
+                        ctrl.endDate = ctrl.chartdata.endDate || '';
+                        ctrl.isCalendarOpen = false;
+                        break;
+                    case 'CfdData':
+                        ctrl.chartdata = _.assign({}, ctrl.cfdData);
+                        if(ctrl.chartdata['data']) {
+                            ctrl.chartdata['data']['dialogoptions'] =  ctrl.chartdata['data']['options'];
+                        }
+                        ctrl.startDate = ctrl.chartdata.startDate || '';
+                        ctrl.endDate = ctrl.chartdata.endDate || '';
+                        ctrl.isCalendarOpen = false;
+                        break;
                     case 'autoPercentage':
                         ctrl.chartdata = _.assign({}, ctrl.trendOverAutoVsManualTest);
                         if(ctrl.chartdata['data']) {
@@ -518,7 +705,7 @@
                                       display: true,
                                       position: 'left',
                                       ticks: {
-                                        fontSize: 4
+                                        fontSize: 8
                                       }
                                     }
                                   ],
@@ -527,7 +714,7 @@
                                       id: 'x-axis',
                                       display: true,
                                       ticks: {
-                                        fontSize: 4
+                                        fontSize: 8
                                       },
                                       gridLines: {
                                         display: false
@@ -537,8 +724,9 @@
                                 }
                             },
                             datasetOverride: {
-                                backgroundColor: 'rgba(0,0,0,0)',
-                                borderColor: '#709dca'
+                                backgroundColor: ctrl.secondColumnBgColor,
+                                borderColor: '#66666654',
+                                borderWidth: "0.8",
                             }
                         };
                     }
@@ -562,9 +750,12 @@
                             data: response.data,
                             labels: response.labels,
                             options: {
+                                elements: { point: { radius:1.3, hoverRadius: 1.3 } },
                                 maintainAspectRatio: false,
                                 tooltips: {
-                                    enabled: false
+                                    enabled: true,
+                                    titleFontSize: 7,
+                                    bodyFontSize: 7
                                 },
                                 scales: {
                                   yAxes: [
@@ -574,7 +765,7 @@
                                       display: true,
                                       position: 'left',
                                       ticks: {
-                                        fontSize: 4
+                                        fontSize: 8
                                       }
                                     }
                                   ],
@@ -583,7 +774,7 @@
                                       id: 'x-axis',
                                       display: true,
                                       ticks: {
-                                        fontSize: 4
+                                        fontSize: 8
                                       },
                                       gridLines: {
                                         display: false
@@ -593,19 +784,21 @@
                                 }
                             },
                             datasetOverride: {
-                                backgroundColor: 'rgba(0,0,0,0)',
-                                borderColor: '#709dca'
+                                backgroundColor: ctrl.secondColumnBgColor,
+                                borderColor: '#66666654',
+                                borderWidth: "0.8",
                             }
                         };
                     }
                     var noOfCheckins = {
                         name: 'noOfCheckins',
-                        title: 'Number of Check-in Per Day in Master',
+                        title: 'Number of Check-in Per Day',
                         type: 'line',
                         tooltipText: widgetHoverText.noOfCheckins,
                         data: graphData
                     };
                     ctrl.noOfCheckins = noOfCheckins;
+                    ctrl.trendOverChartModal()
                     return noOfCheckins;
                  }); 
             };
@@ -632,7 +825,7 @@
                                       display: true,
                                       position: 'left',
                                       ticks: {
-                                        fontSize: 4
+                                        fontSize: 8
                                       }
                                     }
                                   ],
@@ -641,7 +834,7 @@
                                       id: 'x-axis',
                                       display: true,
                                       ticks: {
-                                        fontSize: 4
+                                        fontSize: 8
                                       },
                                       gridLines: {
                                         display: false
@@ -652,7 +845,7 @@
                             },
                             datasetOverride: {
                                 backgroundColor: 'rgba(0,0,0,0)',
-                                borderColor: '#709dca'
+                                borderWidth: "0.8",
                             }
                         };
                     }
@@ -679,7 +872,7 @@
                             labels: response.monthList,
                             series: response.statusList,
                             colors: [
-                                '#3f0f99',
+                                ctrl.secondColumnBgColor,
                                 '#f4424e',
                                 '#2b3547',
                                 '#1194db',
@@ -690,21 +883,21 @@
                                 responsive: true,
                                 maintainAspectRatio: false,
                                 tooltips: {
-                                    enabled: false
+                                    enabled: true
                                 },
                                 scales: {
                                     yAxes: [{
                                         stacked: true,
                                         ticks  : {
                                             beginAtZero: true,
-                                            fontSize: 3
+                                            fontSize: 8
                                         }
                                     }],
                                     xAxes: [{
                                         stacked: true,
                                         ticks  : {
                                             beginAtZero: true,
-                                            fontSize: 3
+                                            fontSize: 8
                                         }
                                     }]
                                 },
@@ -714,7 +907,7 @@
                                     position: 'bottom',
                                     labels: {
                                         boxWidth: 3,
-                                        fontSize: 3
+                                        fontSize: 8
                                     }
                                 }
                             }
@@ -727,7 +920,9 @@
                         tooltipText: widgetHoverText.cfd,
                         data: graphData
                     };
+
                     ctrl.cfdData = cfdData;
+                    ctrl.trendOverChartModal();
                     return cfdData;
                  });
             };
@@ -766,8 +961,8 @@
                                 }
                             },
                             datasetOverride: {
-                                hoverBackgroundColor: '#2d9b4f',
-                                backgroundColor: '#5fb24f',
+                                backgroundColor: '#2d9b4f',
+                                hoverBackgroundColor: ctrl.firstColumnBgColor,
                                 borderColor: '#709dca'
                             }
                         };
@@ -795,6 +990,7 @@
                                 '#f8b2b5'
                             ],
                             options: {
+                                elements: { point: { radius:1.3, hoverRadius: 1.3 } },
                                 maintainAspectRatio: false,
                                 tooltips: {
                                     enabled: false
@@ -807,7 +1003,7 @@
                                       display: true,
                                       position: 'left',
                                       ticks: {
-                                        fontSize: 4
+                                        fontSize: 8
                                       }
                                     }
                                   ],
@@ -816,7 +1012,7 @@
                                       id: 'x-axis',
                                       display: true,
                                       ticks: {
-                                        fontSize: 4
+                                        fontSize: 8
                                       },
                                       gridLines: {
                                         display: false
@@ -826,8 +1022,9 @@
                                 }
                             },
                             datasetOverride: {
-                                backgroundColor: 'rgba(0,0,0,0)',
-                                borderColor: '#ad1852'
+                                backgroundColor: ctrl.thirdColumnBgColor,
+                                borderColor: '#66666654',
+                                borderWidth: "0.8",                             
                             }
                         };
                     }
@@ -860,7 +1057,7 @@
                             data: [sprintPredictablity, 100-fillSprintPredictablityPercentage],
                             symbol: response.sprintPredictablity.unit,
                             colors: [
-                                '#2779bc',
+                                ctrl.thirdColumnBgColor,
                                 '#e2e2e2'
                             ],
                             options: {
@@ -868,7 +1065,9 @@
                                     display: false
                                 },
                                 tooltips: {
-                                    enabled: false
+                                    enabled: true,
+                                    titleFontSize: 7,
+                                    bodyFontSize: 7
                                 },
                                 cutoutPercentage: 70
                             }
@@ -913,7 +1112,7 @@
                             data: [autoPercentage, 100-fillAutoPercentage],
                             labels: ['Automated', 'Manual'],
                             colors: [
-                                '#b2174f',
+                                ctrl.thirdColumnBgColor,
                                 '#e2e2e2'
                             ],
                             options: {
@@ -939,7 +1138,6 @@
             ctrl.fetchCodeQuality = function() {
                 var route = '/api/mdquality/static-analysis';
                 return customDashboardData.fetchWidgetDetails(route).then(function(response) {
-                    console.log('comone', response)
                     var graphData,
                         qualityGrade,
                         colors = [
@@ -971,7 +1169,7 @@
                             break;
                     };
 
-                    colors[qualityGrade-1] = '#b2174f';
+                    colors[qualityGrade-1] = ctrl.thirdColumnBgColor;
 
                     if(qualityGrade) {
                         graphData = {
@@ -1177,12 +1375,13 @@
                 var button = $('.radar-button');
                 ctrl.showRadar = !ctrl.showRadar;
                 if(ctrl.showRadar) {
-                    button.text('Executive Dashboard');
+                    button.text('Team Dashboard');
                 }else {
                     button.text('Maturity Radar');
                     d3.select(".maturity-radar").select("svg").remove();
                 }
             };
+
 
             ctrl.commitmentReliability = function() {
                 var route = '/api/jiraMVP/commitmentReliability';
@@ -1424,8 +1623,9 @@
                                 }
                             },
                             datasetOverride: {
-                                backgroundColor: 'rgba(0,0,0,0)',
-                                borderColor: '#709dca'
+                                backgroundColor: ctrl.secondColumnBgColor,
+                                borderColor: '#66666654',
+                                borderWidth: "0.8",
                             }
                         };
                     }
@@ -1487,8 +1687,9 @@
                                 }
                             },
                             datasetOverride: {
-                                backgroundColor: 'rgba(0,0,0,0)',
-                                borderColor: '#709dca'
+                                backgroundColor: ctrl.secondColumnBgColor,
+                                borderColor: '#66666654',
+                                borderWidth: "0.8",
                             }
                         };
                     }
@@ -1557,8 +1758,9 @@
                                 }
                             },
                             datasetOverride: {
-                                backgroundColor: 'rgba(0,0,0,0)',
-                                borderColor: '#709dca'
+                                backgroundColor: ctrl.secondColumnBgColor,
+                                borderColor: '#66666654',
+                                borderWidth: "0.8",
                             }
                         };
                     }
@@ -1627,8 +1829,9 @@
                                 }
                             },
                             datasetOverride: {
-                                backgroundColor: 'rgba(0,0,0,0)',
-                                borderColor: '#709dca'
+                                backgroundColor: ctrl.secondColumnBgColor,
+                                borderColor: '#66666654',
+                                borderWidth: "0.8",
                             }
                         };
                     }
@@ -1697,8 +1900,9 @@
                                 }
                             },
                             datasetOverride: {
-                                backgroundColor: 'rgba(0,0,0,0)',
-                                borderColor: '#709dca'
+                                backgroundColor: ctrl.secondColumnBgColor,
+                                borderColor: '#66666654',
+                                borderWidth: "0.8",
                             }
                         };
                     }
@@ -1783,8 +1987,9 @@
                                 }
                             },
                             datasetOverride: {
-                                backgroundColor: 'rgba(0,0,0,0)',
-                                borderColor: '#709dca'
+                                backgroundColor: ctrl.secondColumnBgColor,
+                                borderColor: '#66666654',
+                                borderWidth: "0.8",
                             }
                         };
                     }
@@ -1853,8 +2058,9 @@
                                 }
                             },
                             datasetOverride: {
-                                backgroundColor: 'rgba(0,0,0,0)',
-                                borderColor: '#709dca'
+                                backgroundColor: ctrl.secondColumnBgColor,
+                                borderColor: '#66666654',
+                                borderWidth: "0.8",
                             }
                         };
                     }
@@ -1923,8 +2129,9 @@
                                 }
                             },
                             datasetOverride: {
-                                backgroundColor: 'rgba(0,0,0,0)',
-                                borderColor: '#709dca'
+                                backgroundColor: ctrl.secondColumnBgColor,
+                                borderColor: '#66666654',
+                                borderWidth: "0.8",
                             }
                         };
                     }
@@ -1954,6 +2161,7 @@
                             data: response.data,
                             labels: response.labels,
                             options: {
+                                elements: { point: { radius:1.3, hoverRadius: 1.3 } },
                                 maintainAspectRatio: false,
                                 tooltips: {
                                     enabled: true
@@ -1997,8 +2205,9 @@
                                 }
                             },
                             datasetOverride: {
-                                backgroundColor: 'rgba(0,0,0,0)',
-                                borderColor: '#709dca'
+                                backgroundColor: ctrl.secondColumnBgColor,
+                                borderColor: '#66666654',
+                                borderWidth: "0.8",
                             }
                         };
                     }
@@ -2070,8 +2279,9 @@
                                 }
                             },
                             datasetOverride: {
-                                backgroundColor: 'rgba(0,0,0,0)',
-                                borderColor: '#709dca'
+                                backgroundColor: ctrl.secondColumnBgColor,
+                                borderColor: '#66666654',
+                                borderWidth: "0.8",
                             }
                         };
                     }
@@ -2096,8 +2306,8 @@
                     var graphData;
                     if(response && response.data && response.data.length) {
                         graphData = {
-                            data: response.data,//["35", "5", "4", "1"],
-                            labels: response.labels,//["P4 - Minor", "P1 - Blocker", "P2 - Critical", "P3 - Major"],//response.labels,
+                            data: response.data,
+                            labels: response.labels,
                             options: {
                                 maintainAspectRatio: false,
                                 tooltips: {
@@ -2132,7 +2342,9 @@
                                 }
                             },
                             datasetOverride: {
-                                backgroundColor: '#b2174f'
+                                backgroundColor: ctrl.thirdColumnBgColor,
+                                borderColor: '#66666654',
+                                borderWidth: "0.8",
                             }
                         };
                     }
@@ -2211,8 +2423,9 @@
                                 }
                             },
                             datasetOverride: {
-                                backgroundColor: 'rgba(0,0,0,0)',
-                                borderColor: '#709dca'
+                                backgroundColor: ctrl.secondColumnBgColor,
+                                borderColor: '#66666654',
+                                borderWidth: "0.8",
                             }
                         };
                     }
@@ -2284,8 +2497,9 @@
                                 }
                             },
                             datasetOverride: {
-                                backgroundColor: 'rgba(0,0,0,0)',
-                                borderColor: '#709dca'
+                                backgroundColor: ctrl.secondColumnBgColor,
+                                borderColor: '#66666654',
+                                borderWidth: "0.8",
                             }
                         };
                     }

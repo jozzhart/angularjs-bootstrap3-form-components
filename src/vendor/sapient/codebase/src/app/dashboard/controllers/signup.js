@@ -104,7 +104,8 @@
         }
 
         function processSignUp() {
-            authService.register({username:document.suf.id.value, password:document.suf.password.value}).then(processSuccessfulResponse, processFailureResponse);
+            authService.register({username:document.suf.id.value, password:document.suf.password.value, securityQuestion: document.suf.secutiryQuestion.value })
+            .then(processSuccessfulResponse, processFailureResponse);
         }
 
         function processIsValidCaptchaFailureResponse(response) {

@@ -139,6 +139,9 @@
             ftprLabels.push(key);
             ftprSeries.push({meta: key+" : " + val, value: val});
          });
+        if(Object.keys(data.reopenRate).length === 1) {
+          Object.assign(data.reopenRate, {"":""})// fix for point hallo is not displaying properly if less than one item.
+        }
          _.forEach(data.reopenRate, function (val, key) {
             reopenRateLabels.push(key);
             reopenRateSeries.push({meta: key+" : " + val, value: val});

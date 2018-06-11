@@ -1,9 +1,9 @@
-<div>
+<div ng-controller="CapOneTemplateController as template">
     <div id="header">
 
         <nav class="navbar navbar-default navbar-fixed-top">
             <a class="col-md-3 image-container" ng-href="#/">
-                <img class="img-responsive" src="../../logo/default.gif">
+                <img class="img-responsive" ng-src="{{template.logoImage}}">
             </a>
 
             <div title="{{::ctrl.dashboard.title }}">{{::ctrl.dashboard.title | trunText:50}}</div>

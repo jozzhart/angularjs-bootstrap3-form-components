@@ -43,7 +43,7 @@
                 textPopup.html('<p>' + $(event.target).attr('data-tooltip-text') + '<br /><a target="_blank" href="https://confluence.devops.lloydsbanking.com/display/ENGTRAN/KPI+Definitions">Further details</a></p>');
                 textPopup.offset({
                     top: sourceOffset.top,
-                    left: sourceOffset.left + 10
+                    left: sourceOffset.left - textPopup.width() - 20
                 });
             };
 

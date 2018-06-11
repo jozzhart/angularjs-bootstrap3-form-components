@@ -52,9 +52,6 @@
 
             pullDashboards();
            
-            $scope.$watch('$root.logoImage', function() {
-                ctrl.logoImage = $rootScope.logoImage;
-            });
             $scope.$watch('$root.versionDetailsMap', function() {
                 ctrl.currentVersion = $rootScope.versionDetailsMap && $rootScope.versionDetailsMap.currentVersion || '-';
                 ctrl.latestVersion = $rootScope.versionDetailsMap && $rootScope.versionDetailsMap.latestVersion || '-';
@@ -266,12 +263,9 @@
         function processLogoResponse(data) {
             ctrl.logoImage =  "data:image/png;base64,"+ data.image;
             $rootScope.logoImage = ctrl.logoImage;
-            if(localStorageSupported) {
-                localStorage.removeItem('logoImage');
-                localStorage.setItem('logoImage', ctrl.logoImage);
-            }
         }
         function processLogoError(data) {
+            console.log('logo error', data)
             ctrl.logoImage = '';
             $rootScope.logoImage = '';
         }       

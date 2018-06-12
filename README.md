@@ -1,5 +1,9 @@
 # Speedy Components
 
+## Under heavy development
+
+Only some of the components demoed here are actually integrated into the LBG speedy codebase.
+
 ### An AngularJs library for the speedy project to extend apon the CapitalOne Hygieia Project.
 
 This is a collection of components, modules, services and directives that extend the functionality of the Hygieia project.  The library utilises ES6 features and is transpiled using webpack. 

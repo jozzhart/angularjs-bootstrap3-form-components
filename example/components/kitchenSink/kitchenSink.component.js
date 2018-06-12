@@ -7,7 +7,6 @@ angular.module('example.components').component('exampleKitchenSink', {
       <spdy-basic content="{{$ctrl.basicContent}}"></spdy-basic>
     </div>
   </div>
-  <div marked src="'README.md'"></div>
   <spdy-input-text name="{{$ctrl.inputText[0].name}}" description="{{$ctrl.inputText[0].description}}" value="inputText[0].value" required="{{$ctrl.inputText[0].required}}"></spdy-input-text>
   <spdy-input-text name="{{$ctrl.inputText[1].name}}" description="{{$ctrl.inputText[1].description}}" value="inputText[1].value" required="{{$ctrl.inputText[1].required}}"></spdy-input-text>
   <spdy-input-number name="{{$ctrl.inputNumber.name}}" description="{{$ctrl.inputNumber.description}}" value="inputNumber.value"></spdy-input-number>

@@ -9,6 +9,14 @@ class TeamDashboardController {
     this.$scope = $scope;
     this.customDashboardData = customDashboardData;
 
+    this.insights = [{
+      message: "It looks like your DOR to DOD is slipping.",
+      cta: {
+        title: "Find out how to improve this",
+        link: "https://confluence.devops.lloydsbanking.com/display/ET/Speedy+FAQ"
+      }
+    }]
+
    }
 
   $onInit() {

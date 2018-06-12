@@ -4,11 +4,11 @@ class ChatController {
 
   constructor() {
     this.minimised = true;
-    this.insightsCount = 1;
+    this.insightsCount = null;
   }
 
   $onInit() {
-    console.log('chat component initialised');
+    this.insightsCount = this.insights.length;
   }
 
   $onChanges() {
@@ -23,17 +23,16 @@ class ChatController {
     this.minimised = !this.minimised;
   }
 
-  
-  also(){
-    this.insightsCount = null;
-    console.log()
+  //  TODO - implement
+  insightSeen(){
+    // Once seen remove from array?
   }
 }
 
 let ChatComponent = {
   template: ChatTemplate,
   bindings: {
-    content: '@'
+    insights: '<'
   },
   controller: ChatController
 }

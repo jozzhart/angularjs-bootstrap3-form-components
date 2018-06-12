@@ -1,15 +1,17 @@
 <div class="panel panel-default" ng-class="{ minimised: $ctrl.minimised }"> 
     <div class="panel-heading" ng-click="$ctrl.showHide()"> 
       <h3 class="panel-title"><img src="../dist/assets/img/bot.png" />  
-        Insights <span ng-if="$ctrl.insightsCount" class="badge badge-error">{{$ctrl.insightsCount}}</span>
+        Insights 
+        <!-- <span ng-if="$ctrl.insightsCount" class="badge badge-error">{{$ctrl.insightsCount}}</span> -->
         <span class="glyphicon glyphicon-triangle-bottom pull-right"></span> 
         <span class="glyphicon glyphicon-triangle-top pull-right"></span> 
       </h3> 
       <p>I'm here to provide some insights into your metrics.</p> 
     </div> 
     <div class="panel-body"> 
-      <div class="bubble">It looks like your DOR to DOD is slipping. 
-        <a ng-click="$ctrl.also()" target="_blank" href="https://confluence.devops.lloydsbanking.com/display/ET/Speedy+FAQ">Find out how to improve this <span class="glyphicon glyphicon-new-window"></span></a> 
+      <div class="bubble" ng-repeat="insight in $ctrl.insights">
+        {{insight.message}} 
+        <a ng-click="$ctrl.insightSeen()" target="_blank" href="{{insight.cta.link}}">{{insight.cta.title}}<span class="glyphicon glyphicon-new-window"></span></a> 
       </div> 
     </div> 
     <div class="panel-footer"> 

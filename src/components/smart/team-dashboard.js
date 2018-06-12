@@ -9,37 +9,11 @@ class TeamDashboardController {
     this.$scope = $scope;
     this.customDashboardData = customDashboardData;
 
-    this.minimised = true;
-
-    this.insightsCount = 1;
-    
-    this.firstColumnBgColor = "#02874f";
-    this.secondColumnBgColor = "#18519d";
-    this.thirdColumnBgColor = "#b2174f";
-    this.fourthColumnBgColor = "#d74f14";
-    
-
-    // this.fetchData = function () {
-    //   return $q(function (resolve, reject) {
-    //     setTimeout(resolve({
-    //       title: 'Mocked Widget'
-    //     }), 1);
-    //   })
-    // };
-  }
-
-  showHide(state) {
-    this.minimised = state === 'hide' ? true : false;
-  }
-
-  
-  also(){
-    this.insightsCount = null;
-    console.log()
-  }
+   }
 
   $onInit() {
 
+    // Currently hard coding the colors
     // this.customDashboardData.fetchHelpers()
     // .then(function(response) {
 

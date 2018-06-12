@@ -15,6 +15,9 @@ componentsModule.component('spdyInputTextarea', InputTextareaComponent);
 import NavComponent from './dumb/nav/nav.component'
 componentsModule.component('spdyNav', NavComponent);
 
+import ChatComponent from './dumb/chat/chat.component'
+componentsModule.component('spdyChat', ChatComponent);
+
 import StatusComponent from './smart/status'
 componentsModule.component('spdyStatus', StatusComponent);
 

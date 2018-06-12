@@ -6285,6 +6285,9 @@ body {
   height: 0;
   padding: 0;
 }
+.statusPage .widget-modal-body {
+  background: white;
+}
 
 
 /*# sourceMappingURL=main.css.map*/

@@ -1,38 +1,43 @@
 <spdy-nav></spdy-nav>
-<div class="statusPage">
-  <div class="col-lg-8 col-lg-push-2">
-    <div class="widget-modal r">
-      <div class="widget-modal-heading">
-        <h1 class="page-header">Collectors status</h1>
-      </div>
-      <div class="widget-modal-body">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Status</th>
-              <th>Name</th>
-              <th>Last Execution</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr ng-repeat-start="collector in $ctrl.collectors">
-              <td>
-                <span ng-if="!collector.errors.length" class="glyphicon glyphicon-thumbs-up "></span>
-                <span ng-if="collector.errors.length" class="glyphicon glyphicon-thumbs-down"></span>
-              </td>
-              <td>{{collector.collectorName}}</td>
-              <td>{{collector.lastExecuted | date:'EEE, dd MMM @ HH:mm a'}}</td>
-            </tr>
-            <tr ng-repeat-end ng-if="collector.errors.length">
-              <td colspan="3">
-                <div class="alert alert-danger">
-                  <p ng-if="collector.errors.length"><strong>{{collector.errors[0].errorCode}}</strong>: {{collector.errors[0].errorMessage}}</p>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+<div class="container">
+  <div class="row">
+  <div class="statusPage">
+    <div class="col-lg-8 col-lg-push-2">
+      <div class="widget-modal r">
+        <div class="widget-modal-heading">
+          <h1 class="page-header">Collectors status</h1>
+        </div>
+        <div class="widget-modal-body">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Status</th>
+                <th>Name</th>
+                <th>Last Execution</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat-start="collector in $ctrl.collectors">
+                <td>
+                  <span ng-if="!collector.errors.length" class="glyphicon glyphicon-thumbs-up "></span>
+                  <span ng-if="collector.errors.length" class="glyphicon glyphicon-thumbs-down"></span>
+                </td>
+                <td>{{collector.collectorName}}</td>
+                <td>{{collector.lastExecuted | date:'EEE, dd MMM @ HH:mm a'}}</td>
+              </tr>
+              <tr ng-repeat-end ng-if="collector.errors.length">
+                <td colspan="3">
+                  <div class="alert alert-danger">
+                    <p ng-if="collector.errors.length">
+                      <strong>{{collector.errors[0].errorCode}}</strong>: {{collector.errors[0].errorMessage}}</p>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
+</div>
 </div>

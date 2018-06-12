@@ -24,7 +24,6 @@ class TeamDashboardController {
     // Currently hard coding the colors
     // this.customDashboardData.fetchHelpers()
     // .then(function(response) {
-
     angular.extend(this, this.$controller('CustomTemplateController', {
       $scope: this.$scope,
       $rootScope: {

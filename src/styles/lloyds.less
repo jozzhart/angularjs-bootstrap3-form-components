@@ -1,130 +1,110 @@
 @import "bootstrap";
-
 @lloyds-primary-racing: #024731;
-@lloyds-primary-core:   #006a4d;
-@lloyds-primary-apple:  #77b800;
-
-@lloyds-secondary-blue:        #2178b0;
-@lloyds-secondary-dark-blue:   #002973;
-@lloyds-secondary-purple:      #481468;
-@lloyds-secondary-red:         #dc2a4d;
-@lloyds-secondary-orange:      #d24702;
-@lloyds-secondary-sand:        #c8d882;
+@lloyds-primary-core: #006a4d;
+@lloyds-primary-apple: #77b800;
+@lloyds-secondary-blue: #2178b0;
+@lloyds-secondary-dark-blue: #002973;
+@lloyds-secondary-purple: #481468;
+@lloyds-secondary-red: #dc2a4d;
+@lloyds-secondary-orange: #d24702;
+@lloyds-secondary-sand: #c8d882;
 @lloyds-secondary-muted-green: #2d8259;
-@lloyds-secondary-gray:        #68777c;
-
-
+@lloyds-secondary-gray: #68777c;
 //  TODO - revist, should just use pure bootstrap import
-@brand-primary:         @lloyds-primary-core;
-@brand-success:         @lloyds-primary-apple;
-@brand-info:            @lloyds-primary-core;
-@brand-warning:         @lloyds-secondary-orange;
-@brand-danger:          @lloyds-secondary-red;
-
-
-@border-radius-base:        0;
-@border-radius-large:       0;
-@border-radius-small:       0;
-
-
+@brand-primary: @lloyds-primary-core;
+@brand-success: @lloyds-primary-apple;
+@brand-info: @lloyds-primary-core;
+@brand-warning: @lloyds-secondary-orange;
+@brand-danger: @lloyds-secondary-red;
+@border-radius-base: 0;
+@border-radius-large: 0;
+@border-radius-small: 0;
 //== Navbar
 //
 //##
-
 // Basics of a navbar
-@navbar-height:                    60px;
-@navbar-margin-bottom:             @line-height-computed;
-@navbar-border-radius:             @border-radius-base;
-@navbar-padding-horizontal:        floor((@grid-gutter-width / 2));
-@navbar-padding-vertical:          ((@navbar-height - @line-height-computed) / 2);
-@navbar-collapse-max-height:       50px;
-
-@navbar-default-color:             @text-color;
-@navbar-default-bg:                white;
-@navbar-default-border:            darken(@navbar-default-bg, 6.5%);
-
+@navbar-height: 80px;
+@navbar-margin-bottom: @line-height-computed;
+@navbar-border-radius: @border-radius-base;
+@navbar-padding-horizontal: floor((@grid-gutter-width / 2));
+@navbar-padding-vertical: ((@navbar-height - @line-height-computed) / 2);
+@navbar-collapse-max-height: 50px;
+@navbar-default-color: @text-color;
+@navbar-default-bg: white;
+@navbar-default-border: darken(@navbar-default-bg, 6.5%);
 // Navbar links
-@navbar-default-link-color:                @text-color;
-@navbar-default-link-hover-color:          #fff;
-@navbar-default-link-hover-bg:             darken(@navbar-default-bg, 8%);
-@navbar-default-link-active-color:         #fff;
-@navbar-default-link-active-bg:            darken(@navbar-default-bg, 8%);
-@navbar-default-link-disabled-color:       #ccc;
-@navbar-default-link-disabled-bg:          transparent;
-
+@navbar-default-link-color: @text-color;
+@navbar-default-link-hover-color: #fff;
+@navbar-default-link-hover-bg: darken(@navbar-default-bg, 8%);
+@navbar-default-link-active-color: #fff;
+@navbar-default-link-active-bg: darken(@navbar-default-bg, 8%);
+@navbar-default-link-disabled-color: #ccc;
+@navbar-default-link-disabled-bg: transparent;
 // Navbar brand label
-@navbar-default-brand-color:               @navbar-default-link-color;
-@navbar-default-brand-hover-color:         #fff;
-@navbar-default-brand-hover-bg:            none;
-
+@navbar-default-brand-color: @navbar-default-link-color;
+@navbar-default-brand-hover-color: #fff;
+@navbar-default-brand-hover-bg: none;
 // Navbar toggle
-@navbar-default-toggle-hover-bg:           darken(@navbar-default-bg, 8%);
-@navbar-default-toggle-icon-bar-bg:        @text-color;
-@navbar-default-toggle-border-color:       darken(@navbar-default-bg, 8%);
-
-
+@navbar-default-toggle-hover-bg: darken(@navbar-default-bg, 8%);
+@navbar-default-toggle-icon-bar-bg: @text-color;
+@navbar-default-toggle-border-color: darken(@navbar-default-bg, 8%);
 // Inverted navbar
 // Reset inverted navbar basics
-@navbar-inverse-color:                      #ccc;
-@navbar-inverse-bg:                         @lloyds-primary-core;
-@navbar-inverse-border:                     darken(@navbar-inverse-bg, 10%);
-
+@navbar-inverse-color: #ccc;
+@navbar-inverse-bg: @lloyds-primary-core;
+@navbar-inverse-border: darken(@navbar-inverse-bg, 10%);
 // Inverted navbar links
-@navbar-inverse-link-color:                 #ccc;
-@navbar-inverse-link-hover-color:           #fff;
-@navbar-inverse-link-hover-bg:              darken(@navbar-inverse-bg, 12%);
-@navbar-inverse-link-active-color:          @navbar-inverse-link-hover-color;
-@navbar-inverse-link-active-bg:             darken(@navbar-inverse-bg, 12%);
-@navbar-inverse-link-disabled-color:        #ccc;
-@navbar-inverse-link-disabled-bg:           transparent;
-
+@navbar-inverse-link-color: #ccc;
+@navbar-inverse-link-hover-color: #fff;
+@navbar-inverse-link-hover-bg: darken(@navbar-inverse-bg, 12%);
+@navbar-inverse-link-active-color: @navbar-inverse-link-hover-color;
+@navbar-inverse-link-active-bg: darken(@navbar-inverse-bg, 12%);
+@navbar-inverse-link-disabled-color: #ccc;
+@navbar-inverse-link-disabled-bg: transparent;
 // Inverted navbar brand label
-@navbar-inverse-brand-color:                @navbar-inverse-link-color;
-@navbar-inverse-brand-hover-color:          #fff;
-@navbar-inverse-brand-hover-bg:             none;
-
+@navbar-inverse-brand-color: @navbar-inverse-link-color;
+@navbar-inverse-brand-hover-color: #fff;
+@navbar-inverse-brand-hover-bg: none;
 // Inverted navbar toggle
-@navbar-inverse-toggle-hover-bg:            darken(@navbar-inverse-bg, 12%);
-@navbar-inverse-toggle-icon-bar-bg:         #fff;
-@navbar-inverse-toggle-border-color:        darken(@navbar-inverse-bg, 12%);
-
-
+@navbar-inverse-toggle-hover-bg: darken(@navbar-inverse-bg, 12%);
+@navbar-inverse-toggle-icon-bar-bg: #fff;
+@navbar-inverse-toggle-border-color: darken(@navbar-inverse-bg, 12%);
 //== Navs
 //
 //##
-
 //=== Shared nav styles
-@nav-link-padding:                          10px 15px;
-@nav-link-hover-bg:                         @gray-lighter;
-
-@nav-disabled-link-color:                   @gray-light;
-@nav-disabled-link-hover-color:             @gray-light;
-
+@nav-link-padding: 10px 15px;
+@nav-link-hover-bg: @gray-lighter;
+@nav-disabled-link-color: @gray-light;
+@nav-disabled-link-hover-color: @gray-light;
 //== Tabs
-@nav-tabs-border-color:                     white;
-
-@nav-tabs-link-hover-border-color:          @gray-lighter;
-
-@nav-tabs-active-link-hover-bg:             @body-bg;
-@nav-tabs-active-link-hover-color:          @gray;
-@nav-tabs-active-link-hover-border-color:   white;
-
-@nav-tabs-justified-link-border-color:            #ddd;
-@nav-tabs-justified-active-link-border-color:     @body-bg;
-
+@nav-tabs-border-color: white;
+@nav-tabs-link-hover-border-color: @gray-lighter;
+@nav-tabs-active-link-hover-bg: @body-bg;
+@nav-tabs-active-link-hover-color: @gray;
+@nav-tabs-active-link-hover-border-color: white;
+@nav-tabs-justified-link-border-color: #ddd;
+@nav-tabs-justified-active-link-border-color: @body-bg;
 //== Pills
-@nav-pills-border-radius:                   @border-radius-base;
-@nav-pills-active-link-hover-bg:            @component-active-bg;
-@nav-pills-active-link-hover-color:         @component-active-color;
-
-
-
-
-
+@nav-pills-border-radius: @border-radius-base;
+@nav-pills-active-link-hover-bg: @component-active-bg;
+@nav-pills-active-link-hover-color: @component-active-color;
 @font-face {
   font-family: 'lloyds';
   src: url('./lloyds_bank_jack-regularWEB.woff');
   font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'lloyds';
+  src: url('./lloyds_bank_jack-lightWEB.woff');
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'lloyds';
+  src: url('./lloyds_bank_jack-boldWEB.woff');
+  font-weight: bold;
   font-style: normal;
 }
 
@@ -134,36 +114,56 @@ body {
   font-family: 'lloyds';
 }
 
-.navbar-brand {
-  padding: 10px 15px;
-}
-
 .navbar {
   margin-bottom: 0;
   border: 0;
-
   .navbar-brand {
     color: white;
-
+    padding: 5px 0 5px 15px;
     img {
-      height:40px; 
+      height: 70px;
       width: auto;
       background: @lloyds-primary-core;
-      padding: 0 0 0 15px;
+    }
+  }
+  .hideShow {
+    .btn {
+      border-radius: 4px; // background: @brand-primary;
+      background: #005a42;
+      color: white;
+      border: 1px solid #005a42;
+      &:hover {
+        background: @lloyds-primary-racing;
+        border: 1px solid @lloyds-primary-racing; // color: @brand-primary;
+      }
     }
   }
 }
 
 .navbar-inverse {
-  .navbar-nav > li > a {
+  
+  color: white;
+  dl {
+    font-weight: 300;
     color: white;
+    float: left;
+    margin-right: 20px;
+    margin-bottom: 0;
+  }
+  dt {
+    font-weight: 300;
+  }
+  .navbar-nav>li>a:focus {
+    background: none;
+  }
 
+  .navbar-nav>li>a {
+    color: white;
   }
 }
 
 .container {
   background: #efedea;
-
   .jumbotron {
     background: @lloyds-secondary-muted-green;
     color: white;
@@ -172,7 +172,7 @@ body {
 }
 
 .tabs {
-  margin-bottom: 1em; 
+  margin-bottom: 1em;
 }
 
 .tab-content {
@@ -193,31 +193,5 @@ body {
 }
 
 
-
-
-.navbar .hideShow {
-
-  line-height: 60px; 
-  padding-right: 10px;
-  color: @brand-primary;
-
-  .btn {
-    background: white;
-    border: 1px solid white;
-
-    &:hover {
-      background: #000;
-      color:white;
-      
-    }
-  }
-}
-
-.navbar-inverse .navbar-nav > li > a:focus {
-  background: none;
-}
-
 @import "lloyds-widgets.less";
 @import "lloyds-chat.less";
-
-

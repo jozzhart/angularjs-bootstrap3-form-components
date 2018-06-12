@@ -2,10 +2,29 @@ import NavTemplate from './nav.component.html';
 
 class NavController {
 
-  constructor() {}
+  constructor(customDashboardData, dashboardData) {
+    'ngInject'; // ng-annotate
+
+    this.logo = null;
+    this.projectDetails = null;
+    this.customDashboardData = customDashboardData;
+    this.dashboardData = dashboardData;
+  }
 
   $onInit() {
-    console.log('nav component initialised');
+    console.log('nav component initialised, page:', this.page);
+
+    this.dashboardData.getLogoImage()
+    .then((res)=>{
+      this.logo = res.image;
+    });
+
+
+    this.customDashboardData.fetchProjectDetails()
+    .then((res) => {
+      this.projectDetails = res;
+    });
+
   }
 
   $onChanges() {
@@ -21,7 +40,7 @@ class NavController {
 let NavComponent = {
   template: NavTemplate,
   bindings: {
-    content: '@'
+    page: '@'
   },
   controller: NavController
 }

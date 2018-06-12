@@ -1,5 +1,6 @@
 angular.module('example.components').component('exampleSettings', {
   template: `
+  <spdy-nav></spdy-nav>
   <div class="container"> 
   <h1 class="page-header">Settings</h1>
   <uib-tabset active="active" class="tabs">

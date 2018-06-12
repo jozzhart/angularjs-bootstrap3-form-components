@@ -24,7 +24,4 @@ componentsModule.component('spdyStatus', StatusComponent);
 import TeamDashboardComponent from './smart/team-dashboard'
 componentsModule.component('spdyTeamDashboard', TeamDashboardComponent);
 
-// import CustomWidgetComponent from './sapient/custom-widget.component'
-// componentsModule.component('customWidget', CustomWidgetComponent);
-
 export default componentsModule;

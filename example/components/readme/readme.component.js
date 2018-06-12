@@ -1,6 +1,7 @@
 angular.module('example.components')
 .component('exampleReadme', {
   template: `
+  <spdy-nav></spdy-nav>
   <div class="container">
     <div class="row">
         <div class="col-xs-12" marked="$ctrl.my_markdown"></div>

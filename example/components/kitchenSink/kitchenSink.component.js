@@ -1,5 +1,6 @@
 angular.module('example.components').component('exampleKitchenSink', {
   template: `
+  <spdy-nav></spdy-nav>
   <div class="container">
   <div class="row">
     <div class="jumbotron">

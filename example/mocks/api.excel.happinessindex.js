@@ -4,7 +4,7 @@ angular.module('app')
     $httpBackend.whenGET('/api/excel/happinessindex').respond({
       "maturityLevel": "4",
       "labels": ["03/04/18", "21/03/18", "15/05/18", "17/04/18", "01/05/18"],
-      "data": [3.1, 2.97, 3.03, 3.12, 3.17]
+      "data": [3.8, 3.5, 3.3, 3.1, 3.0]
     });
 
   });

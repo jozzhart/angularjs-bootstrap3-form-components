@@ -13,7 +13,8 @@
   "dependencies": {
     "@uirouter/angularjs": "^1.0.7",
     "angular-marked": "^1.2.2",
-    "bootstrap": "^3.3.7"
+    "bootstrap": "^3.3.7",
+    "font-awesome": "^4.7.0"
   },
   "devDependencies": {
     "angular": "^1.6.0",

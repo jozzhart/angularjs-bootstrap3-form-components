@@ -39,6 +39,7 @@ module.exports = {
     // Absolute output directory
     path: path.join(__dirname, 'dist'),
     filename: 'index.js',
+    chunkFilename: "[contenthash].js",
   },
 
 

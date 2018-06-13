@@ -9,13 +9,7 @@ class TeamDashboardController {
     this.$scope = $scope;
     this.customDashboardData = customDashboardData;
 
-    this.insights = [{
-      message: "It looks like your DOR to DOD is slipping.",
-      cta: {
-        title: "Find out how to improve this",
-        link: "https://confluence.devops.lloydsbanking.com/display/ET/Speedy+FAQ"
-      }
-    }]
+    this.insights = [];
 
    }
 
@@ -47,6 +41,20 @@ class TeamDashboardController {
       this.showQualityHeader = _.find(this.layout.col2, function(widget){
           return widget.show; 
       });
+    });
+
+    //  Check happiness
+    this.fetchHappinessIndex()
+    .then((res) => {
+      var data = res.data.data;
+
+      if(parseFloat(data[0]) > parseFloat(data[1])) this.insights.push({
+        message: "Your happiness index has fallen over the last 5 weeks.",
+        cta: {
+          title: "Find out how to improve this",
+          link: "https://confluence.devops.lloydsbanking.com/display/ET/Speedy+FAQ"
+        }
+      })
     });
   }
 }

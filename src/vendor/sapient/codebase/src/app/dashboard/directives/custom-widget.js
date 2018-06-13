@@ -49,9 +49,9 @@
 
             scope.hideTooltip = function (e) {
                 var interval = setInterval(function () {
-                    if (!textPopup.is(':hover')) {
-                        clearInterval(interval)
-                        overlayDiv.hide();
+                    if (!$('#textPopup:hover').length) {
+                      clearInterval(interval)
+                      overlayDiv.hide();
                     }
                 }, 500);
             };

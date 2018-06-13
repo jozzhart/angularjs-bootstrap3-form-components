@@ -13,8 +13,8 @@
       <div class="col-md-5 col-sm-6 hidden-xs">
         <!-- Team Dashboard -->
         <div ng-if="$ctrl.page === 'teamDashboard'">
-          <h4 id="projectName">{{$ctrl.projectDetails.name}}</h4>
-          <div id="projectDetails" class="hidden-sm">
+          <h3>{{$ctrl.projectDetails.name}}</h3>
+          <div class="hidden-sm hide">
             <dl ng-if="($ctrl.projectDetails.monetoryValue && $ctrl.projectDetails.monetoryValue !== '')">
               <dt>Revenue:</dt>
               <dd>{{$ctrl.projectDetails.monetoryValue}}&emsp;</dd>
@@ -35,7 +35,7 @@
         </div>
       </div>
       <div class="col-md-4 col-sm-6 col-xs-12">
-        <ul class="nav navbar-nav pull-right">
+        <ul class="nav navbar-nav navbar-right">
           <li ng-if="$ctrl.page === 'teamDashboard'" class="hideShow">
             <div class="navbar-form">
               <button type="button" class="btn btn-default">Maturity Radar</button>

@@ -747,7 +747,7 @@ exports.default = BasicComponent;
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"panel panel-default\" ng-class=\"{ minimised: $ctrl.minimised }\"> \n    <div class=\"panel-heading\" ng-click=\"$ctrl.showHide()\"> \n      <h3 class=\"panel-title\"><img src=\"../dist/assets/img/bot.png\" />  \n        Insights \n        <span ng-if=\"$ctrl.insightsCount\" class=\"badge badge-error\">{{$ctrl.insightsCount}}</span>\n        <span class=\"glyphicon glyphicon-triangle-bottom pull-right\"></span> \n        <span class=\"glyphicon glyphicon-triangle-top pull-right\"></span> \n      </h3> \n      <p>I'm here to provide some insights into your metrics.</p> \n    </div> \n    <div class=\"panel-body\"> \n      <div class=\"bubble\" ng-repeat=\"insight in $ctrl.insights\">\n        {{insight.message}} \n        <a ng-click=\"$ctrl.insightSeen()\" target=\"_blank\" href=\"{{insight.cta.link}}\">{{insight.cta.title}}<span class=\"glyphicon glyphicon-new-window\"></span></a> \n      </div> \n    </div> \n    <div class=\"panel-footer\"> \n      <input type=\"text\" placeholder=\"Potential future chat feature\" style=\"padding: 9px 20px; width: 230px;\" /> \n      <a class=\"btn btn-primary pull-right\">send</a> \n    </div> \n  </div>"
+module.exports = "<div class=\"panel panel-default\" ng-class=\"{ minimised: $ctrl.minimised }\"> \n    <div class=\"panel-heading\" ng-click=\"$ctrl.showHide()\"> \n      <h3 class=\"panel-title\"><img src=\"../dist/assets/img/bot.png\" />  \n        Insights\n        <span ng-if=\"$ctrl.insights.length\" class=\"badge badge-error\">{{$ctrl.insights.length}}</span>\n        <span class=\"glyphicon glyphicon-triangle-bottom pull-right\"></span> \n        <span class=\"glyphicon glyphicon-triangle-top pull-right\"></span> \n      </h3> \n      <p>I'm here to provide some insights into your metrics.</p> \n    </div> \n    <div class=\"panel-body\"> \n      <div class=\"bubble\" ng-repeat=\"insight in $ctrl.insights\">\n        {{insight.message}} \n        <a ng-click=\"$ctrl.insightSeen()\" target=\"_blank\" href=\"{{insight.cta.link}}\">{{insight.cta.title}}<span class=\"glyphicon glyphicon-new-window\"></span></a> \n      </div> \n    </div> \n    <div class=\"panel-footer\"> \n      <input type=\"text\" placeholder=\"Potential future chat feature\" style=\"padding: 9px 20px; width: 230px;\" /> \n      <a class=\"btn btn-primary pull-right\">send</a> \n    </div> \n  </div>"
 
 /***/ }),
 
@@ -785,9 +785,7 @@ var ChatController = function () {
 
   _createClass(ChatController, [{
     key: '$onInit',
-    value: function $onInit() {
-      this.insightsCount = this.insights.length;
-    }
+    value: function $onInit() {}
   }, {
     key: '$onChanges',
     value: function $onChanges() {
@@ -810,6 +808,8 @@ var ChatController = function () {
     key: 'insightSeen',
     value: function insightSeen() {
       // Once seen remove from array?
+      this.insights = [];
+      this.minimised = true;
     }
   }]);
 

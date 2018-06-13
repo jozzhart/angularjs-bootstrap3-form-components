@@ -1,8 +1,8 @@
 <div class="panel panel-default" ng-class="{ minimised: $ctrl.minimised }"> 
     <div class="panel-heading" ng-click="$ctrl.showHide()"> 
       <h3 class="panel-title"><img src="../dist/assets/img/bot.png" />  
-        Insights 
-        <span ng-if="$ctrl.insightsCount" class="badge badge-error">{{$ctrl.insightsCount}}</span>
+        Insights
+        <span ng-if="$ctrl.insights.length" class="badge badge-error">{{$ctrl.insights.length}}</span>
         <span class="glyphicon glyphicon-triangle-bottom pull-right"></span> 
         <span class="glyphicon glyphicon-triangle-top pull-right"></span> 
       </h3> 

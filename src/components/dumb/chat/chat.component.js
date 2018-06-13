@@ -8,7 +8,7 @@ class ChatController {
   }
 
   $onInit() {
-    this.insightsCount = this.insights.length;
+    
   }
 
   $onChanges() {
@@ -26,6 +26,8 @@ class ChatController {
   //  TODO - implement
   insightSeen(){
     // Once seen remove from array?
+    this.insights = [];
+    this.minimised = true;
   }
 }
 

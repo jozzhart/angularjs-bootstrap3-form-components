@@ -8356,7 +8356,7 @@ body {
 .glyphicon-thumbs-up {
   color: green;
 }
-#overlayDiv {
+#overlay {
   display: none;
 }
 #textPopup {

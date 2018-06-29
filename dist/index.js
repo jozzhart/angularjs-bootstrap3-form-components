@@ -747,7 +747,7 @@ exports.default = BasicComponent;
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"panel panel-default\" ng-class=\"{ minimised: $ctrl.minimised }\"> \n    <div class=\"panel-heading\" ng-click=\"$ctrl.showHide()\"> \n      <h3 class=\"panel-title\"><img src=\"../dist/assets/img/bot.png\" />  \n        Insights\n        <span ng-if=\"$ctrl.insights.length\" class=\"badge badge-error\">{{$ctrl.insights.length}}</span>\n        <span class=\"glyphicon glyphicon-triangle-bottom pull-right\"></span> \n        <span class=\"glyphicon glyphicon-triangle-top pull-right\"></span> \n      </h3> \n      <p>I'm here to provide some insights into your metrics.</p> \n    </div> \n    <div class=\"panel-body\"> \n      <div class=\"bubble\" ng-repeat=\"insight in $ctrl.insights\">\n        {{insight.message}} \n        <a ng-click=\"$ctrl.insightSeen()\" target=\"_blank\" href=\"{{insight.cta.link}}\">{{insight.cta.title}}<span class=\"glyphicon glyphicon-new-window\"></span></a> \n      </div> \n    </div> \n    <div class=\"panel-footer\"> \n      <input type=\"text\" placeholder=\"Potential future chat feature\" style=\"padding: 9px 20px; width: 230px;\" /> \n      <a class=\"btn btn-primary pull-right\">send</a> \n    </div> \n  </div>"
+module.exports = "<div class=\"panel panel-default\" ng-class=\"{ minimised: $ctrl.minimised }\"> \n    <div class=\"panel-heading\" ng-click=\"$ctrl.showHide()\"> \n      <h3 class=\"panel-title\"><img src=\"../dist/assets/img/bot.png\" />  \n        Insights\n        <!-- <span ng-if=\"$ctrl.insights.length\" class=\"badge badge-error\">{{$ctrl.insights.length}}</span> -->\n        <span class=\"glyphicon glyphicon-triangle-bottom pull-right\"></span> \n        <span class=\"glyphicon glyphicon-triangle-top pull-right\"></span> \n      </h3> \n      <p>I'm here to provide some insights into your metrics.</p> \n    </div> \n    <div class=\"panel-body\"> \n      <div ng-repeat=\"insight in $ctrl.insights\">\n        <div  class=\"bubble\" ng-class=\"insight.type\" ng-bind-html=\"insight.message\" ng-if=\"insight.type !== 'button'\"></div>\n        <a  class=\"btn btn-default\" ng-click=\"$ctrl.tellMeMore()\" ng-bind-html=\"insight.message\" ng-if=\"insight.type === 'button'\"></a>\n        <!-- <a ng-click=\"$ctrl.insightSeen()\" target=\"_blank\" href=\"{{insight.cta.link}}\">{{insight.cta.title}}<span class=\"glyphicon glyphicon-new-window\"></span></a>  -->\n      </div> \n    </div> \n    <div class=\"panel-footer\"> \n      <input type=\"text\" placeholder=\"Ask me anything!\" ng-model=\"$ctrl.question\" style=\"padding: 9px 20px; width: 230px;\" /> \n      <a class=\"btn btn-primary pull-right\" ng-click=\"$ctrl.sendQuestion()\">send</a> \n    </div> \n  </div>"
 
 /***/ }),
 
@@ -776,11 +776,16 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var ChatController = function () {
-  function ChatController() {
+  function ChatController($http, $sce, $timeout) {
+    'ngInject';
+
     _classCallCheck(this, ChatController);
 
-    this.minimised = true;
+    this.$http = $http;
+    this.minimised = false;
     this.insightsCount = null;
+    this.$sce = $sce;
+    this.$timeout = $timeout;
   }
 
   _createClass(ChatController, [{
@@ -801,15 +806,78 @@ var ChatController = function () {
     value: function showHide() {
       this.minimised = !this.minimised;
     }
-
-    //  TODO - implement
-
   }, {
     key: 'insightSeen',
     value: function insightSeen() {
       // Once seen remove from array?
       this.insights = [];
       this.minimised = true;
+    }
+  }, {
+    key: 'tellMeMore',
+    value: function tellMeMore() {
+      var _this = this;
+
+      var payload = {
+        "currentNode": "",
+        "complete": null,
+        "context": {},
+        "parameters": [],
+        "extractedParameters": {},
+        "speechResponse": "",
+        "intent": {},
+        "input": "How do I improve my happiness",
+        "missingParameters": []
+      };
+
+      this.$http.post('http://localhost:8080/gateway/api/v1', payload).then(function (res) {
+        _this.insights.push({
+          type: "answer",
+          message: _this.$sce.trustAsHtml(res.data.speechResponse[0])
+        });
+
+        _this.$timeout(function () {
+          var scroller = $(".panel-body")[0];
+          console.log('tata', scroller);
+          scroller.scrollTop = scroller.scrollHeight;
+        }, 0, false);
+      });
+    }
+  }, {
+    key: 'sendQuestion',
+    value: function sendQuestion() {
+      var _this2 = this;
+
+      this.insights.push({
+        type: "question",
+        message: this.$sce.trustAsHtml(this.question)
+      });
+
+      var payload = {
+        "currentNode": "",
+        "complete": null,
+        "context": {},
+        "parameters": [],
+        "extractedParameters": {},
+        "speechResponse": "",
+        "intent": {},
+        "input": this.question,
+        "missingParameters": []
+      };
+
+      this.$http.post('http://localhost:8080/gateway/api/v1', payload).then(function (res) {
+
+        _this2.insights.push({
+          type: "answer",
+          message: _this2.$sce.trustAsHtml(res.data.speechResponse[0])
+        });
+
+        _this2.$timeout(function () {
+          var scroller = $(".panel-body")[0];
+          console.log('tata', scroller);
+          scroller.scrollTop = scroller.scrollHeight;
+        }, 0, false);
+      });
     }
   }]);
 
@@ -1265,7 +1333,7 @@ exports.default = StatusComponent;
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<spdy-nav page=\"teamDashboard\"></spdy-nav>\n<div class=\"wrapper\">\n  <div class=\"one\" ng-if=\"$ctrl.showValueHeader || $ctrl.showPeopleHeader\">\n    <div ng-show=\"$ctrl.showPeopleHeader\" class=\"category-head cellDoubleWidth\" id=\"people\">\n      <div>\n        <img src=\"../dist/assets/img/people-icon.png\">\n        <h5>PEOPLE</h5>\n        <h6>Are people engaged?</h6>\n      </div>\n    </div>\n    <custom-widget ng-if=\"$ctrl.layout.col0.improvement.show\" class=\"custom-widget\" ng-class=\"$ctrl.layout.col0.improvement.classes\"\n      fetch-data=\"$ctrl.fetchImprovement()\"></custom-widget>\n\n    <!-- HAPPINESS INDEX -->\n    <custom-widget ng-if=\"$ctrl.layout.col0.happiness.show\" class=\"custom-widget\" ng-class=\"$ctrl.layout.col0.happiness.classes\"\n      fetch-data=\"$ctrl.fetchHappinessIndex()\"></custom-widget>\n    <div ng-show=\"$ctrl.showValueHeader\" class=\"category-head cellDoubleWidth\" id=\"quality\">\n      <div>\n        <img src=\"../dist/assets/img/value-icon.png\">\n        <h5>VALUE</h5>\n        <h6>Are we delivering value?</h6>\n      </div>\n    </div>\n    <custom-widget ng-if=\"$ctrl.layout.col0.value.show\" class=\"custom-widget\" ng-class=\"$ctrl.layout.col0.value.classes\" fetch-data=\"$ctrl.fetchAssignValueMetric()\"></custom-widget>\n  </div>\n\n  <div class=\"two\" ng-class=\"[{ col1Hidden: !($ctrl.showValueHeader || $ctrl.showPeopleHeader) }, { col3Hidden: !$ctrl.showQualityHeader }]\">\n    <div ng-show=\"$ctrl.showSpeedHeader\" class=\"category-head\" id=\"productivity\">\n      <div>\n        <img src=\"../dist/assets/img/productivity-icon.png\">\n        <h5>SPEED</h5>\n        <h6>Are we going fast?</h6>\n      </div>\n    </div>\n    <!-- <custom-widget ng-if=\"$ctrl.layout.col1.backlogToDOR.show\" class=\"custom-widget\" ng-class=\"$ctrl.layout.col1.backlogToDOR.classes\" fetch-data=\"$ctrl.fetchStoryBacklogtoDOR()\"></custom-widget> -->\n\n    <custom-widget ng-if=\"$ctrl.layout.col1.storyDORtoDOD.show\" class=\"custom-widget\" ng-class=\"$ctrl.layout.col1.storyDORtoDOD.classes\"\n      fetch-data=\"$ctrl.fetchStoryDORtoDOD()\" data-toggle=\"modal\" focus-element=\"autofocus\" data-target=\".modal-toggle\"\n      ng-click=\"$ctrl.customWidgetClick('storyLeadTime')\"></custom-widget>\n\n    <!-- <custom-widget ng-if=\"$ctrl.layout.col1.storyLeadTime.show\" class=\"custom-widget\" ng-class=\"$ctrl.layout.col1.storyLeadTime.classes\" fetch-data=\"$ctrl.fetchStoryLeadTime()\"></custom-widget> -->\n\n    <custom-widget ng-if=\"$ctrl.layout.col1.dodToLive.show\" class=\"custom-widget\" ng-class=\"$ctrl.layout.col1.dodToLive.classes\"\n      fetch-data=\"$ctrl.fetchStoryDODtoLive()\" data-toggle=\"modal\" focus-element=\"autofocus\" data-target=\".modal-toggle\"\n      ng-click=\"$ctrl.customWidgetClick('storyLiveLeadTime')\"></custom-widget>\n\n    <custom-widget ng-if=\"$ctrl.layout.col1.sprintPredictability.show\" class=\"custom-widget\" ng-class=\"$ctrl.layout.col1.sprintPredictability.classes\"\n      fetch-data=\"$ctrl.fetchSprintPredictability()\" data-toggle=\"modal\" focus-element=\"autofocus\" data-target=\".modal-toggle\"\n      ng-click=\"$ctrl.customWidgetClick('sprintPredictability')\"></custom-widget>\n\n    <custom-widget ng-if=\"$ctrl.layout.col1.commitmentReliability.show\" class=\"custom-widget\" ng-class=\"$ctrl.layout.col1.commitmentReliability.classes\"\n      fetch-data=\"$ctrl.commitmentReliability()\" data-toggle=\"modal\" focus-element=\"autofocus\" data-target=\".modal-toggle\"\n      ng-click=\"$ctrl.customWidgetClick('commitmentReliability')\"></custom-widget>\n\n    <!-- NUMBER OF CHECK-IN PER DAY   -->\n    <custom-widget ng-if=\"$ctrl.layout.col1.noOfCheckins.show\" class=\"custom-widget\" ng-class=\"$ctrl.layout.col1.noOfCheckins.classes\"\n      fetch-data=\"$ctrl.fetchNoOfCheckins()\" data-toggle=\"modal\" focus-element=\"autofocus\" data-target=\".modal-toggle\"\n      ng-click=\"$ctrl.customWidgetClick('NoOfCheckins')\"></custom-widget>\n\n    <!-- CUMULATIVE FLOW DIAGRAM -->\n    <custom-widget ng-if=\"$ctrl.layout.col1.cfdData.show\" class=\"custom-widget\" ng-class=\"$ctrl.layout.col1.cfdData.classes\"\n      fetch-data=\"$ctrl.fetchCfdData()\" data-toggle=\"modal\" focus-element=\"autofocus\" data-target=\".modal-toggle\" ng-click=\"$ctrl.customWidgetClick('CfdData')\"></custom-widget>\n\n    <!-- BACKLOG HEALTH -->\n    <custom-widget ng-if=\"$ctrl.layout.col1.backlogHealth.show\" class=\"custom-widget\" ng-class=\"$ctrl.layout.col1.backlogHealth.classes\"\n      fetch-data=\"$ctrl.fetchBacklogHealth()\"></custom-widget>\n\n    <!-- TECH DEBT -->\n    <custom-widget ng-if=\"$ctrl.layout.col1.techDebit.show\" class=\"custom-widget\" ng-class=\"$ctrl.layout.col1.techDebit.classes\"\n      fetch-data=\"$ctrl.fetchTechDebt()\"></custom-widget>\n\n       <!-- CI TIME -->\n    <custom-widget ng-if=\"$ctrl.layout.col1.ciTime.show\" class=\"custom-widget\" ng-class=\"$ctrl.layout.col1.ciTime.classes\" fetch-data=\"$ctrl.fetchCITime()\"\n    data-toggle=\"modal\" focus-element=\"autofocus\" on-widget-click=\"$ctrl.customWidgetClick(widgetType)\"></custom-widget>\n\n    <custom-widget ng-if=\"$ctrl.layout.col1.envCreationTime.show\" class=\"custom-widget\" ng-class=\"$ctrl.layout.col1.envCreationTime.classes\"\n      fetch-data=\"$ctrl.fetchEnvCreationTime()\"></custom-widget>\n  \n\n    <custom-widget ng-if=\"$ctrl.layout.col1.releaseDeployTime.show\" class=\"custom-widget\" ng-class=\"$ctrl.layout.col1.releaseDeployTime.classes\"\n      fetch-data=\"$ctrl.fetchReleaseDeployTime()\"></custom-widget>\n\n  </div>\n  <div class=\"three\" ng-if=\"$ctrl.showQualityHeader\">\n    <div ng-show=\"$ctrl.showQualityHeader\" class=\"category-head\">\n      <div>\n        <img src=\"../dist/assets/img/quality-icon.png\">\n        <h5>QUALITY</h5>\n        <h6>Are we building a quality product?</h6>\n      </div>\n    </div>\n    <!-- <custom-widget ng-if=\"$ctrl.layout.col2.xxxxxxx.show\" class=\"custom-widget\" ng-class=\"$ctrl.layout.col2.xxxxxxxx.classes\" fetch-data=\"$ctrl.fetchDefectInjectionRatePostlive()\"></custom-widget> -->\n    <custom-widget ng-if=\"$ctrl.layout.col2.defectInjectionRate.show\" class=\"custom-widget\" ng-class=\"$ctrl.layout.col2.defectInjectionRate.classes\"\n      fetch-data=\"$ctrl.fetchDefectInjectionRate()\"></custom-widget>\n\n    <custom-widget ng-if=\"$ctrl.layout.col2.autoVsManualTest.show\" class=\"custom-widget\" ng-class=\"$ctrl.layout.col2.autoVsManualTest.classes\"\n      fetch-data=\"$ctrl.fetchAutoVsManualTest()\" data-toggle=\"modal\" focus-element=\"autofocus\" data-target=\".modal-toggle\"\n      ng-click=\"$ctrl.customWidgetClick('autoPercentage')\"></custom-widget>\n\n    <!-- CODE QUALITY -->\n    <custom-widget ng-if=\"$ctrl.layout.col2.codeQuality.show\" class=\"custom-widget\" ng-class=\"$ctrl.layout.col2.codeQuality.classes\"\n      fetch-data=\"$ctrl.fetchCodeQuality()\" data-toggle=\"modal\" focus-element=\"autofocus\" data-target=\".modal-toggle\"\n      ng-click=\"$ctrl.customWidgetClick('codeQuality')\"></custom-widget>\n\n    <custom-widget ng-if=\"$ctrl.layout.col2.jUnitCoverage.show\" class=\"custom-widget\" ng-class=\"$ctrl.layout.col2.jUnitCoverage.classes\"\n      fetch-data=\"$ctrl.fetchJUnitCoverage()\" data-toggle=\"modal\" focus-element=\"autofocus\" on-widget-click=\"$ctrl.customWidgetClick(widgetType)\"></custom-widget>\n\n    <custom-widget ng-if=\"$ctrl.layout.col2.appDemonstration.show\" class=\"custom-widget\" ng-class=\"$ctrl.layout.col2.appDemonstration.classes\"\n      fetch-data=\"$ctrl.fetchAppDemonstration()\"></custom-widget>\n  </div>\n</div>\n<div id=\"overlay\">\n  <div id=\"textPopup\"></div>\n</div>\n<spdy-chat insights=\"$ctrl.insights\"></spdy-chat>"
+module.exports = "<spdy-nav page=\"teamDashboard\"></spdy-nav>\n<div class=\"wrapper\">\n  <div class=\"one\" ng-if=\"$ctrl.showValueHeader || $ctrl.showPeopleHeader\">\n    <div ng-show=\"$ctrl.showPeopleHeader\" class=\"category-head cellDoubleWidth\" id=\"people\">\n      <div>\n        <img src=\"../dist/assets/img/people-icon.png\">\n        <h5>PEOPLE</h5>\n        <h6>Are people engaged?</h6>\n      </div>\n    </div>\n    <custom-widget ng-if=\"$ctrl.layout.col0.improvement.show\" class=\"custom-widget\" ng-class=\"$ctrl.layout.col0.improvement.classes\"\n      fetch-data=\"$ctrl.fetchImprovement()\"></custom-widget>\n\n    <!-- HAPPINESS INDEX -->\n    <custom-widget ng-if=\"$ctrl.layout.col0.happiness.show\" class=\"custom-widget\" ng-class=\"$ctrl.layout.col0.happiness.classes\"\n      fetch-data=\"$ctrl.fetchHappinessIndex()\"></custom-widget>\n    <div ng-show=\"$ctrl.showValueHeader\" class=\"category-head cellDoubleWidth\" id=\"quality\">\n      <div>\n        <img src=\"../dist/assets/img/value-icon.png\">\n        <h5>VALUE</h5>\n        <h6>Are we delivering value?</h6>\n      </div>\n    </div>\n    <custom-widget ng-if=\"$ctrl.layout.col0.value.show\" class=\"custom-widget\" ng-class=\"$ctrl.layout.col0.value.classes\" fetch-data=\"$ctrl.fetchAssignValueMetric()\"></custom-widget>\n  </div>\n\n  <div class=\"two\" ng-class=\"[{ col1Hidden: !($ctrl.showValueHeader || $ctrl.showPeopleHeader) }, { col3Hidden: !$ctrl.showQualityHeader }]\">\n    <div ng-show=\"$ctrl.showSpeedHeader\" class=\"category-head\" id=\"productivity\">\n      <div>\n        <img src=\"../dist/assets/img/productivity-icon.png\">\n        <h5>SPEED</h5>\n        <h6>Are we going fast?</h6>\n      </div>\n    </div>\n    <!-- <custom-widget ng-if=\"$ctrl.layout.col1.backlogToDOR.show\" class=\"custom-widget\" ng-class=\"$ctrl.layout.col1.backlogToDOR.classes\" fetch-data=\"$ctrl.fetchStoryBacklogtoDOR()\"></custom-widget> -->\n\n    <custom-widget ng-if=\"$ctrl.layout.col1.storyDORtoDOD.show\" class=\"custom-widget\" ng-class=\"$ctrl.layout.col1.storyDORtoDOD.classes\"\n      fetch-data=\"$ctrl.fetchStoryDORtoDOD()\" data-toggle=\"modal\" focus-element=\"autofocus\" data-target=\".modal-toggle\" ng-click=\"$ctrl.customWidgetClick('storyLeadTime')\"></custom-widget>\n\n    <!-- <custom-widget ng-if=\"$ctrl.layout.col1.storyLeadTime.show\" class=\"custom-widget\" ng-class=\"$ctrl.layout.col1.storyLeadTime.classes\" fetch-data=\"$ctrl.fetchStoryLeadTime()\"></custom-widget> -->\n\n    <custom-widget ng-if=\"$ctrl.layout.col1.dodToLive.show\" class=\"custom-widget\" ng-class=\"$ctrl.layout.col1.dodToLive.classes\"\n      fetch-data=\"$ctrl.fetchStoryDODtoLive()\" data-toggle=\"modal\" focus-element=\"autofocus\" data-target=\".modal-toggle\" ng-click=\"$ctrl.customWidgetClick('storyLiveLeadTime')\"></custom-widget>\n\n    <custom-widget ng-if=\"$ctrl.layout.col1.sprintPredictability.show\" class=\"custom-widget\" ng-class=\"$ctrl.layout.col1.sprintPredictability.classes\"\n      fetch-data=\"$ctrl.fetchSprintPredictability()\" data-toggle=\"modal\" focus-element=\"autofocus\" data-target=\".modal-toggle\"\n      ng-click=\"$ctrl.customWidgetClick('sprintPredictability')\"></custom-widget>\n\n    <custom-widget ng-if=\"$ctrl.layout.col1.commitmentReliability.show\" class=\"custom-widget\" ng-class=\"$ctrl.layout.col1.commitmentReliability.classes\"\n      fetch-data=\"$ctrl.commitmentReliability()\" data-toggle=\"modal\" focus-element=\"autofocus\" data-target=\".modal-toggle\"\n      ng-click=\"$ctrl.customWidgetClick('commitmentReliability')\"></custom-widget>\n\n    <!-- NUMBER OF CHECK-IN PER DAY   -->\n    <custom-widget ng-if=\"$ctrl.layout.col1.noOfCheckins.show\" class=\"custom-widget\" ng-class=\"$ctrl.layout.col1.noOfCheckins.classes\"\n      fetch-data=\"$ctrl.fetchNoOfCheckins()\" data-toggle=\"modal\" focus-element=\"autofocus\" data-target=\".modal-toggle\" ng-click=\"$ctrl.customWidgetClick('NoOfCheckins')\"></custom-widget>\n\n    <!-- CUMULATIVE FLOW DIAGRAM -->\n    <custom-widget ng-if=\"$ctrl.layout.col1.cfdData.show\" class=\"custom-widget\" ng-class=\"$ctrl.layout.col1.cfdData.classes\"\n      fetch-data=\"$ctrl.fetchCfdData()\" data-toggle=\"modal\" focus-element=\"autofocus\" data-target=\".modal-toggle\" ng-click=\"$ctrl.customWidgetClick('CfdData')\"></custom-widget>\n\n    <!-- BACKLOG HEALTH -->\n    <custom-widget ng-if=\"$ctrl.layout.col1.backlogHealth.show\" class=\"custom-widget\" ng-class=\"$ctrl.layout.col1.backlogHealth.classes\"\n      fetch-data=\"$ctrl.fetchBacklogHealth()\"></custom-widget>\n\n    <!-- TECH DEBT -->\n    <custom-widget ng-if=\"$ctrl.layout.col1.techDebit.show\" class=\"custom-widget\" ng-class=\"$ctrl.layout.col1.techDebit.classes\"\n      fetch-data=\"$ctrl.fetchTechDebt()\"></custom-widget>\n\n    <!-- CI TIME -->\n    <custom-widget ng-if=\"$ctrl.layout.col1.ciTime.show\" class=\"custom-widget\" ng-class=\"$ctrl.layout.col1.ciTime.classes\" fetch-data=\"$ctrl.fetchCITime()\"\n      data-toggle=\"modal\" focus-element=\"autofocus\" on-widget-click=\"$ctrl.customWidgetClick(widgetType)\"></custom-widget>\n\n    <custom-widget ng-if=\"$ctrl.layout.col1.envCreationTime.show\" class=\"custom-widget\" ng-class=\"$ctrl.layout.col1.envCreationTime.classes\"\n      fetch-data=\"$ctrl.fetchEnvCreationTime()\"></custom-widget>\n\n\n    <custom-widget ng-if=\"$ctrl.layout.col1.releaseDeployTime.show\" class=\"custom-widget\" ng-class=\"$ctrl.layout.col1.releaseDeployTime.classes\"\n      fetch-data=\"$ctrl.fetchReleaseDeployTime()\"></custom-widget>\n\n  </div>\n  <div class=\"three\" ng-if=\"$ctrl.showQualityHeader\">\n    <div ng-show=\"$ctrl.showQualityHeader\" class=\"category-head\">\n      <div>\n        <img src=\"../dist/assets/img/quality-icon.png\">\n        <h5>QUALITY</h5>\n        <h6>Are we building a quality product?</h6>\n      </div>\n    </div>\n    <!-- <custom-widget ng-if=\"$ctrl.layout.col2.xxxxxxx.show\" class=\"custom-widget\" ng-class=\"$ctrl.layout.col2.xxxxxxxx.classes\" fetch-data=\"$ctrl.fetchDefectInjectionRatePostlive()\"></custom-widget> -->\n    <custom-widget ng-if=\"$ctrl.layout.col2.defectInjectionRate.show\" class=\"custom-widget\" ng-class=\"$ctrl.layout.col2.defectInjectionRate.classes\"\n      fetch-data=\"$ctrl.fetchDefectInjectionRate()\"></custom-widget>\n\n    <custom-widget ng-if=\"$ctrl.layout.col2.autoVsManualTest.show\" class=\"custom-widget\" ng-class=\"$ctrl.layout.col2.autoVsManualTest.classes\"\n      fetch-data=\"$ctrl.fetchAutoVsManualTest()\" data-toggle=\"modal\" focus-element=\"autofocus\" data-target=\".modal-toggle\"\n      ng-click=\"$ctrl.customWidgetClick('autoPercentage')\"></custom-widget>\n\n    <!-- CODE QUALITY -->\n    <custom-widget ng-if=\"$ctrl.layout.col2.codeQuality.show\" class=\"custom-widget\" ng-class=\"$ctrl.layout.col2.codeQuality.classes\"\n      fetch-data=\"$ctrl.fetchCodeQuality()\" data-toggle=\"modal\" focus-element=\"autofocus\" data-target=\".modal-toggle\" ng-click=\"$ctrl.customWidgetClick('codeQuality')\"></custom-widget>\n\n    <custom-widget ng-if=\"$ctrl.layout.col2.jUnitCoverage.show\" class=\"custom-widget\" ng-class=\"$ctrl.layout.col2.jUnitCoverage.classes\"\n      fetch-data=\"$ctrl.fetchJUnitCoverage()\" data-toggle=\"modal\" focus-element=\"autofocus\" on-widget-click=\"$ctrl.customWidgetClick(widgetType)\"></custom-widget>\n\n    <custom-widget ng-if=\"$ctrl.layout.col2.appDemonstration.show\" class=\"custom-widget\" ng-class=\"$ctrl.layout.col2.appDemonstration.classes\"\n      fetch-data=\"$ctrl.fetchAppDemonstration()\"></custom-widget>\n  </div>\n</div>\n<div id=\"overlay\">\n  <div id=\"textPopup\"></div>\n</div>\n<spdy-chat insights=\"$ctrl.insights\"></spdy-chat>\n\n\n\n<div class=\"modal-xl\">\n  <div class=\"dialog\">\n    <div class=\"modal fade modal-toggle\" role=\"dialog\" aria-labelledby=\"modalPopUp\" aria-hidden=\"true\">\n      <div class=\"modal-dialog\">\n        <div class=\"modal-content\">\n          <div class=\"modal-header\">\n            <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\">&times;</button>\n          </div>\n          <div class=\"modal-body\">\n              {{$ctrl.chartdata | json}}\n            <div class=\"form-group\" ng-if=\"$ctrl.isCalendarOpen\">\n              <custom-calendar from-date=\"$ctrl.startDate\" to-date=\"$ctrl.endDate\" click=\"$ctrl.applyTrendOverDates(selectedDates)\"></custom-calendar>\n            </div>\n            <div class=\"row\" ng-if=\"$ctrl.isTrendOverDropdownActive\">\n              <div ng-show=\"$ctrl.errorMessage\" class=\"alert alert-danger fade in\">\n                {{$ctrl.errorMessage}}\n              </div>\n              <div class=\"sprint-dropdown col-md-5\">\n                <span class=\"sprint-label\">From Sprint:</span>\n                <select name=\"dashboardType\" class=\"form-control\" ng-model=\"$ctrl.selectedFromSprintList\" ng-options=\"x for x in $ctrl.allSprintList\"\n                  ng-change=\"$ctrl.fromToSplitList()\" required>\n                  <option value=\"\" disabled>Select a type</option>\n                </select>\n              </div>\n              <div class=\"sprint-dropdown col-md-5\">\n                <span class=\"sprint-label\">To Sprint:</span>\n                <select name=\"dashboardType\" class=\"form-control\" ng-model=\"$ctrl.selectedToSprintList\" ng-options=\"x for x in $ctrl.allSprintList\"\n                  ng-change=\"$ctrl.fromToSplitList()\" required>\n                  <option value=\"\" disabled>Select a type</option>\n                </select>\n              </div>\n              <button class=\"btn btn-sm btn-default\" ng-disabled=\"$ctrl.isApplyTrendOverActive\" ng-click=\"$ctrl.applyTrendOverDates()\">Apply</button>\n            </div>\n            \n            <custom-widget class=\"custom-widget\" chart-modal-dialog=\"true\" chart-modal-data=\"$ctrl.chartdata\">\n            </custom-widget>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -1294,13 +1362,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var TeamDashboardController = function () {
-  function TeamDashboardController(HealthService, $q, $scope, $controller, customDashboardData) {
+  function TeamDashboardController(HealthService, $q, $scope, $controller, customDashboardData, $sce) {
     'ngInject'; // ng-annotate
 
     _classCallCheck(this, TeamDashboardController);
 
     this.$controller = $controller;
     this.$scope = $scope;
+    this.$sce = $sce;
     this.customDashboardData = customDashboardData;
 
     this.insights = [];
@@ -1311,10 +1380,13 @@ var TeamDashboardController = function () {
     value: function $onInit() {
       var _this = this;
 
-      // Currently hard coding the colors
-      // this.customDashboardData.fetchHelpers()
-      // .then(function(response) {
-      angular.extend(this, this.$controller('CustomTemplateController', {
+      this.chartdata = {
+        data: 'wow'
+
+        // Currently hard coding the colors
+        // this.customDashboardData.fetchHelpers()
+        // .then(function(response) {
+      };angular.extend(this, this.$controller('CustomTemplateController', {
         $scope: this.$scope,
         $rootScope: {
           commonResourseConfig: {
@@ -1326,30 +1398,54 @@ var TeamDashboardController = function () {
         }
       }));
 
-      this.$scope.$watch('this.layout', function (newValue, oldValue) {
+      // console.log(this.chartModalDialog)
+      this.customWidgetClick = function () {
+        this.trendOverChartModal();
+      };
 
-        _this.showPeopleHeader = _this.layout.col0.improvement.show || _this.layout.col0.happiness.show;
-        _this.showValueHeader = _this.layout.col0.value.show;
+      this.trendOverChartModal = function () {
 
-        _this.showSpeedHeader = _.find(_this.layout.col1, function (widget) {
-          return widget.show;
-        });
-        _this.showQualityHeader = _.find(_this.layout.col2, function (widget) {
-          return widget.show;
-        });
-      });
+        console.log('aiaiaiaiaiaiaiiaiai parent');
+
+        console.log(this.chartdata);
+      };
+
+      console.log(this);
+
+      // setInterval(()=>{
+      //   console.log('interval', this)
+      //   console.log('interval', this.$scope)
+      // }, 100000)
+
+      //  this.$scope.$watch('this.layout', (newValue, oldValue) => {
+
+      //     this.showPeopleHeader = this.layout.col0.improvement.show || this.layout.col0.happiness.show;
+      //     this.showValueHeader = this.layout.col0.value.show;
+
+      //     this.showSpeedHeader = _.find(this.layout.col1, function(widget){
+      //         return widget.show; 
+      //     });
+      //     this.showQualityHeader = _.find(this.layout.col2, function(widget){
+      //         return widget.show; 
+      //     });
+      //   });
+
 
       //  Check happiness
       this.fetchHappinessIndex().then(function (res) {
         var data = res.data.data;
 
-        if (parseFloat(data[0]) > parseFloat(data[1])) _this.insights.push({
-          message: "Your happiness index has fallen over the last 5 weeks.",
+        if (parseFloat(data[0]) > parseFloat(data[1])) _this.insights = [{
+          type: "answer",
+          message: _this.$sce.trustAsHtml("Your happiness index has fallen over the last 5 weeks."),
           cta: {
             title: "Find out how to improve this",
             link: "https://confluence.devops.lloydsbanking.com/display/ET/Speedy+FAQ"
           }
-        });
+        }, {
+          type: "button",
+          message: _this.$sce.trustAsHtml("Tell me more.")
+        }];
       });
     }
   }]);
@@ -1458,10 +1554,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var HealthService = function () {
   function HealthService($http) {
+    'ngInject';
+
     _classCallCheck(this, HealthService);
 
-    console.log('constructor');
-    'ngInject';
     this.$http = $http;
   }
 
@@ -2077,6 +2173,10 @@ module.exports = "<div class=\"widget-content\">\n    <div class=\"widget-title\
         var ctrl = this,
             widgetHoverText; 
 
+            ctrl.chartdata = {
+              data: 'wow'
+            }
+
         //  Note this is stored in local store, so if any chages are made to it 
         //  must add some script to apply to the local store    
         var defaultLayout = {
@@ -2219,16 +2319,16 @@ module.exports = "<div class=\"widget-content\">\n    <div class=\"widget-title\
         }        
 
         //  Careful here, using the controller alias used in the html template
-        $scope.$watch('template.layout', function(newValue, oldValue) {
-            ctrl.showPeopleHeader = ctrl.layout.col0.improvement.show || ctrl.layout.col0.happiness.show;
-            ctrl.showValueHeader = ctrl.layout.col0.value.show;
-            ctrl.showSpeedHeader = _.find(ctrl.layout.col1, function(widget){
-                return widget.show; 
-            });
-            ctrl.showQualityHeader = _.find(ctrl.layout.col2, function(widget){
-                return widget.show; 
-            });
-        });
+        // $scope.$watch('template.layout', function(newValue, oldValue) {
+        //     ctrl.showPeopleHeader = ctrl.layout.col0.improvement.show || ctrl.layout.col0.happiness.show;
+        //     ctrl.showValueHeader = ctrl.layout.col0.value.show;
+        //     ctrl.showSpeedHeader = _.find(ctrl.layout.col1, function(widget){
+        //         return widget.show; 
+        //     });
+        //     ctrl.showQualityHeader = _.find(ctrl.layout.col2, function(widget){
+        //         return widget.show; 
+        //     });
+        // });
 
         customDashboardData.fetchHelpers().then(function(response) {
             ctrl.resourceHelpers = response;
@@ -2427,6 +2527,7 @@ module.exports = "<div class=\"widget-content\">\n    <div class=\"widget-title\
             };
 
             ctrl.applyTrendOverDates = function(selectedDates) {
+              console.log('applining trendover dates', ctrl.selectedChart)
                 ctrl.chartdata = {};
                 ctrl.startDate = selectedDates && selectedDates.startDate || '' ;
                 ctrl.endDate = selectedDates && selectedDates.endDate || '';
@@ -2483,7 +2584,14 @@ module.exports = "<div class=\"widget-content\">\n    <div class=\"widget-title\
 
 
             ctrl.trendOverChartModal = function() {
-                ctrl.chartdata = {};
+
+              ctrl.chartdata = {
+                data: 'yupnup'
+              }
+
+              console.log('grrrrrrrrrrrrrrr', ctrl)
+
+                // ctrl.chartdata = {};
                 ctrl.isTrendOverDropdownActive = false;
                 switch (ctrl.selectedChart) {
                     case 'NoOfCheckins':
@@ -2626,6 +2734,8 @@ module.exports = "<div class=\"widget-content\">\n    <div class=\"widget-title\
                     default:
                         break;
                 }
+
+                console.log(ctrl.chartdata)
             }
 
             ctrl.fromToSplitList = function(){
@@ -2663,6 +2773,7 @@ module.exports = "<div class=\"widget-content\">\n    <div class=\"widget-title\
             }
 
             ctrl.customWidgetClick = function(widgetType) {
+              console.log('customeWidgetClick', widgetType)
                 ctrl.chartdata = {};
                 ctrl.selectedChart = widgetType;                
                 ctrl.applyTrendOverDates();

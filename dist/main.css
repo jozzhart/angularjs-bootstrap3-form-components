@@ -8377,10 +8377,11 @@ body {
 }
 .wrapper {
   font-family: 'lloyds';
-  height: calc(100vh - 60px);
+  height: calc(100vh - 80px);
   padding-top: 6px;
   width: 100%;
   background: #efedea;
+  overflow: hidden;
 }
 .wrapper .one,
 .wrapper .two,
@@ -8582,11 +8583,12 @@ body {
   width: calc((69vh - 122px) / 5 - 20px);
 }
 .panel-default {
+  margin-bottom: 0;
   position: absolute;
   right: 20px;
-  bottom: -21px;
+  bottom: 0;
   width: 330px;
-  height: 350px;
+  height: 360px;
   box-shadow: 0 4px 25px 0 rgba(0, 0, 0, 0.6);
   border: 0;
 }
@@ -8620,6 +8622,10 @@ body {
 .panel-default > .panel-heading .glyphicon-triangle-top {
   display: none;
 }
+.panel-default .panel-body {
+  height: 195px;
+  overflow-y: scroll;
+}
 .panel-default .bubble {
   background: #77b800;
   padding: 8px;
@@ -8627,13 +8633,27 @@ body {
   color: white;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 1.4rem;
+  margin-bottom: 1rem;
 }
 .panel-default .bubble a {
   color: white;
   font-weight: bold;
 }
+.panel-default .btn {
+  border-radius: 4px;
+  background: #005a42;
+  color: white;
+  border: 1px solid #005a42;
+  margin-bottom: 1rem;
+}
+.panel-default .btn:hover {
+  background: #024731;
+  border: 1px solid #024731;
+}
+.panel-default .bubble.question {
+  background: #555555;
+}
 .panel-default .panel-footer {
-  display: none;
   bottom: 0;
   position: absolute;
   width: 100%;

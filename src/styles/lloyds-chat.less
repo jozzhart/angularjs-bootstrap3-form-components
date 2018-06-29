@@ -1,6 +1,6 @@
 .panel-default {
   
-  position: absolute; right: 20px; bottom: -21px; width: 330px; height: 350px; 
+  position: absolute; right: 20px; bottom: -21px; width: 330px; height: 360px; 
   box-shadow: 0 4px 25px 0 rgba(0, 0, 0, 0.6);
   border: 0;
 
@@ -41,6 +41,11 @@
 
   }
 
+  .panel-body {
+    height: 195px;
+    overflow-y: scroll;
+  }
+
   .bubble {
     background: @lloyds-primary-apple;
     padding: 8px;
@@ -48,16 +53,35 @@
     color: white;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 1.4rem; 
+    margin-bottom: 1rem;
 
     a {
       color: white;
       font-weight: bold;
     }
 
+    
+
+  }
+
+  .btn {
+    border-radius: 4px; // background: @brand-primary;
+    background: #005a42;
+    color: white;
+    border: 1px solid #005a42;
+    margin-bottom: 1rem;
+
+    &:hover {
+      background: @lloyds-primary-racing;
+      border: 1px solid @lloyds-primary-racing; // color: @brand-primary;
+    }
+  }
+
+  .bubble.question {
+    background: @gray;
   }
 
   .panel-footer {
-    display: none;
     bottom: 0;
     position: absolute;
     width: 100%;

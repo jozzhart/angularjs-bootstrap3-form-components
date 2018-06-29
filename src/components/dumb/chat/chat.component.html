@@ -2,20 +2,21 @@
     <div class="panel-heading" ng-click="$ctrl.showHide()"> 
       <h3 class="panel-title"><img src="../dist/assets/img/bot.png" />  
         Insights
-        <span ng-if="$ctrl.insights.length" class="badge badge-error">{{$ctrl.insights.length}}</span>
+        <!-- <span ng-if="$ctrl.insights.length" class="badge badge-error">{{$ctrl.insights.length}}</span> -->
         <span class="glyphicon glyphicon-triangle-bottom pull-right"></span> 
         <span class="glyphicon glyphicon-triangle-top pull-right"></span> 
       </h3> 
       <p>I'm here to provide some insights into your metrics.</p> 
     </div> 
     <div class="panel-body"> 
-      <div class="bubble" ng-repeat="insight in $ctrl.insights">
-        {{insight.message}} 
-        <a ng-click="$ctrl.insightSeen()" target="_blank" href="{{insight.cta.link}}">{{insight.cta.title}}<span class="glyphicon glyphicon-new-window"></span></a> 
+      <div ng-repeat="insight in $ctrl.insights">
+        <div  class="bubble" ng-class="insight.type" ng-bind-html="insight.message" ng-if="insight.type !== 'button'"></div>
+        <a  class="btn btn-default" ng-click="$ctrl.tellMeMore()" ng-bind-html="insight.message" ng-if="insight.type === 'button'"></a>
+        <!-- <a ng-click="$ctrl.insightSeen()" target="_blank" href="{{insight.cta.link}}">{{insight.cta.title}}<span class="glyphicon glyphicon-new-window"></span></a>  -->
       </div> 
     </div> 
     <div class="panel-footer"> 
-      <input type="text" placeholder="Potential future chat feature" style="padding: 9px 20px; width: 230px;" /> 
-      <a class="btn btn-primary pull-right">send</a> 
+      <input type="text" placeholder="Ask me anything!" ng-model="$ctrl.question" style="padding: 9px 20px; width: 230px;" /> 
+      <a class="btn btn-primary pull-right" ng-click="$ctrl.sendQuestion()">send</a> 
     </div> 
   </div>

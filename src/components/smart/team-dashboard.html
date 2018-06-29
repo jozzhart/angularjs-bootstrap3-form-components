@@ -35,14 +35,12 @@
     <!-- <custom-widget ng-if="$ctrl.layout.col1.backlogToDOR.show" class="custom-widget" ng-class="$ctrl.layout.col1.backlogToDOR.classes" fetch-data="$ctrl.fetchStoryBacklogtoDOR()"></custom-widget> -->
 
     <custom-widget ng-if="$ctrl.layout.col1.storyDORtoDOD.show" class="custom-widget" ng-class="$ctrl.layout.col1.storyDORtoDOD.classes"
-      fetch-data="$ctrl.fetchStoryDORtoDOD()" data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle"
-      ng-click="$ctrl.customWidgetClick('storyLeadTime')"></custom-widget>
+      fetch-data="$ctrl.fetchStoryDORtoDOD()" data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle" ng-click="$ctrl.customWidgetClick('storyLeadTime')"></custom-widget>
 
     <!-- <custom-widget ng-if="$ctrl.layout.col1.storyLeadTime.show" class="custom-widget" ng-class="$ctrl.layout.col1.storyLeadTime.classes" fetch-data="$ctrl.fetchStoryLeadTime()"></custom-widget> -->
 
     <custom-widget ng-if="$ctrl.layout.col1.dodToLive.show" class="custom-widget" ng-class="$ctrl.layout.col1.dodToLive.classes"
-      fetch-data="$ctrl.fetchStoryDODtoLive()" data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle"
-      ng-click="$ctrl.customWidgetClick('storyLiveLeadTime')"></custom-widget>
+      fetch-data="$ctrl.fetchStoryDODtoLive()" data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle" ng-click="$ctrl.customWidgetClick('storyLiveLeadTime')"></custom-widget>
 
     <custom-widget ng-if="$ctrl.layout.col1.sprintPredictability.show" class="custom-widget" ng-class="$ctrl.layout.col1.sprintPredictability.classes"
       fetch-data="$ctrl.fetchSprintPredictability()" data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle"
@@ -54,8 +52,7 @@
 
     <!-- NUMBER OF CHECK-IN PER DAY   -->
     <custom-widget ng-if="$ctrl.layout.col1.noOfCheckins.show" class="custom-widget" ng-class="$ctrl.layout.col1.noOfCheckins.classes"
-      fetch-data="$ctrl.fetchNoOfCheckins()" data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle"
-      ng-click="$ctrl.customWidgetClick('NoOfCheckins')"></custom-widget>
+      fetch-data="$ctrl.fetchNoOfCheckins()" data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle" ng-click="$ctrl.customWidgetClick('NoOfCheckins')"></custom-widget>
 
     <!-- CUMULATIVE FLOW DIAGRAM -->
     <custom-widget ng-if="$ctrl.layout.col1.cfdData.show" class="custom-widget" ng-class="$ctrl.layout.col1.cfdData.classes"
@@ -69,13 +66,13 @@
     <custom-widget ng-if="$ctrl.layout.col1.techDebit.show" class="custom-widget" ng-class="$ctrl.layout.col1.techDebit.classes"
       fetch-data="$ctrl.fetchTechDebt()"></custom-widget>
 
-       <!-- CI TIME -->
+    <!-- CI TIME -->
     <custom-widget ng-if="$ctrl.layout.col1.ciTime.show" class="custom-widget" ng-class="$ctrl.layout.col1.ciTime.classes" fetch-data="$ctrl.fetchCITime()"
-    data-toggle="modal" focus-element="autofocus" on-widget-click="$ctrl.customWidgetClick(widgetType)"></custom-widget>
+      data-toggle="modal" focus-element="autofocus" on-widget-click="$ctrl.customWidgetClick(widgetType)"></custom-widget>
 
     <custom-widget ng-if="$ctrl.layout.col1.envCreationTime.show" class="custom-widget" ng-class="$ctrl.layout.col1.envCreationTime.classes"
       fetch-data="$ctrl.fetchEnvCreationTime()"></custom-widget>
-  
+
 
     <custom-widget ng-if="$ctrl.layout.col1.releaseDeployTime.show" class="custom-widget" ng-class="$ctrl.layout.col1.releaseDeployTime.classes"
       fetch-data="$ctrl.fetchReleaseDeployTime()"></custom-widget>
@@ -99,8 +96,7 @@
 
     <!-- CODE QUALITY -->
     <custom-widget ng-if="$ctrl.layout.col2.codeQuality.show" class="custom-widget" ng-class="$ctrl.layout.col2.codeQuality.classes"
-      fetch-data="$ctrl.fetchCodeQuality()" data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle"
-      ng-click="$ctrl.customWidgetClick('codeQuality')"></custom-widget>
+      fetch-data="$ctrl.fetchCodeQuality()" data-toggle="modal" focus-element="autofocus" data-target=".modal-toggle" ng-click="$ctrl.customWidgetClick('codeQuality')"></custom-widget>
 
     <custom-widget ng-if="$ctrl.layout.col2.jUnitCoverage.show" class="custom-widget" ng-class="$ctrl.layout.col2.jUnitCoverage.classes"
       fetch-data="$ctrl.fetchJUnitCoverage()" data-toggle="modal" focus-element="autofocus" on-widget-click="$ctrl.customWidgetClick(widgetType)"></custom-widget>
@@ -113,3 +109,48 @@
   <div id="textPopup"></div>
 </div>
 <spdy-chat insights="$ctrl.insights"></spdy-chat>
+
+
+
+<div class="modal-xl">
+  <div class="dialog">
+    <div class="modal fade modal-toggle" role="dialog" aria-labelledby="modalPopUp" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          </div>
+          <div class="modal-body">
+              {{$ctrl.chartdata | json}}
+            <div class="form-group" ng-if="$ctrl.isCalendarOpen">
+              <custom-calendar from-date="$ctrl.startDate" to-date="$ctrl.endDate" click="$ctrl.applyTrendOverDates(selectedDates)"></custom-calendar>
+            </div>
+            <div class="row" ng-if="$ctrl.isTrendOverDropdownActive">
+              <div ng-show="$ctrl.errorMessage" class="alert alert-danger fade in">
+                {{$ctrl.errorMessage}}
+              </div>
+              <div class="sprint-dropdown col-md-5">
+                <span class="sprint-label">From Sprint:</span>
+                <select name="dashboardType" class="form-control" ng-model="$ctrl.selectedFromSprintList" ng-options="x for x in $ctrl.allSprintList"
+                  ng-change="$ctrl.fromToSplitList()" required>
+                  <option value="" disabled>Select a type</option>
+                </select>
+              </div>
+              <div class="sprint-dropdown col-md-5">
+                <span class="sprint-label">To Sprint:</span>
+                <select name="dashboardType" class="form-control" ng-model="$ctrl.selectedToSprintList" ng-options="x for x in $ctrl.allSprintList"
+                  ng-change="$ctrl.fromToSplitList()" required>
+                  <option value="" disabled>Select a type</option>
+                </select>
+              </div>
+              <button class="btn btn-sm btn-default" ng-disabled="$ctrl.isApplyTrendOverActive" ng-click="$ctrl.applyTrendOverDates()">Apply</button>
+            </div>
+            
+            <custom-widget class="custom-widget" chart-modal-dialog="true" chart-modal-data="$ctrl.chartdata">
+            </custom-widget>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

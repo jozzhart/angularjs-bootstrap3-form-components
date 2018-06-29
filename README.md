@@ -38,6 +38,32 @@ Live example
 
 To run locally
 ```
-npm run start:dev
+npm run start
 ```
+
+## Chat bot
+
+Set up the chatbot framework
+
+```
+mkdir chatbot
+git clone https://github.com/alfredfrancis/ai-chatbot-framework ./chatbot
+cd chatbot
+docker-compose up
+docker-compose exec iky_backend python manage.py init
+```
+
+You can see the admin interface at
+```
+http://localhost:8080/
+```
+
+Which will allow you to import intents from this repo in chatbot/iky_intents.json
+
+Then go to 
+```
+http://localhost:8000/#/team-dashboard
+```
+
+
 

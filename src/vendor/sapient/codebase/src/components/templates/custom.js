@@ -14,6 +14,10 @@
         var ctrl = this,
             widgetHoverText; 
 
+            ctrl.chartdata = {
+              data: 'wow'
+            }
+
         //  Note this is stored in local store, so if any chages are made to it 
         //  must add some script to apply to the local store    
         var defaultLayout = {
@@ -156,16 +160,16 @@
         }        
 
         //  Careful here, using the controller alias used in the html template
-        $scope.$watch('template.layout', function(newValue, oldValue) {
-            ctrl.showPeopleHeader = ctrl.layout.col0.improvement.show || ctrl.layout.col0.happiness.show;
-            ctrl.showValueHeader = ctrl.layout.col0.value.show;
-            ctrl.showSpeedHeader = _.find(ctrl.layout.col1, function(widget){
-                return widget.show; 
-            });
-            ctrl.showQualityHeader = _.find(ctrl.layout.col2, function(widget){
-                return widget.show; 
-            });
-        });
+        // $scope.$watch('template.layout', function(newValue, oldValue) {
+        //     ctrl.showPeopleHeader = ctrl.layout.col0.improvement.show || ctrl.layout.col0.happiness.show;
+        //     ctrl.showValueHeader = ctrl.layout.col0.value.show;
+        //     ctrl.showSpeedHeader = _.find(ctrl.layout.col1, function(widget){
+        //         return widget.show; 
+        //     });
+        //     ctrl.showQualityHeader = _.find(ctrl.layout.col2, function(widget){
+        //         return widget.show; 
+        //     });
+        // });
 
         customDashboardData.fetchHelpers().then(function(response) {
             ctrl.resourceHelpers = response;
@@ -364,6 +368,7 @@
             };
 
             ctrl.applyTrendOverDates = function(selectedDates) {
+              console.log('applining trendover dates', ctrl.selectedChart)
                 ctrl.chartdata = {};
                 ctrl.startDate = selectedDates && selectedDates.startDate || '' ;
                 ctrl.endDate = selectedDates && selectedDates.endDate || '';
@@ -420,7 +425,14 @@
 
 
             ctrl.trendOverChartModal = function() {
-                ctrl.chartdata = {};
+
+              ctrl.chartdata = {
+                data: 'yupnup'
+              }
+
+              console.log('grrrrrrrrrrrrrrr', ctrl)
+
+                // ctrl.chartdata = {};
                 ctrl.isTrendOverDropdownActive = false;
                 switch (ctrl.selectedChart) {
                     case 'NoOfCheckins':
@@ -563,6 +575,8 @@
                     default:
                         break;
                 }
+
+                console.log(ctrl.chartdata)
             }
 
             ctrl.fromToSplitList = function(){
@@ -600,6 +614,7 @@
             }
 
             ctrl.customWidgetClick = function(widgetType) {
+              console.log('customeWidgetClick', widgetType)
                 ctrl.chartdata = {};
                 ctrl.selectedChart = widgetType;                
                 ctrl.applyTrendOverDates();

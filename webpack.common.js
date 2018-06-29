@@ -59,7 +59,7 @@ module.exports = {
       // Compiles ES6 and ES7 into ES5 code
       test: /\.js$/,
       loader: 'babel-loader',
-      exclude: /node_modules/
+      exclude: /node_modules|vendor/
     }, {
       // HTML LOADER
       // Reference: https://github.com/webpack/raw-loader

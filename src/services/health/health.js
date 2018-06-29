@@ -3,7 +3,6 @@
 class HealthService {
 
   constructor($http) {
-    console.log('constructor')
     'ngInject';
     this.$http = $http;
   }

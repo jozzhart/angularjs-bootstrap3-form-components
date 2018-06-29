@@ -21,25 +21,11 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = merge(common, {
   
-  mode: 'production',
+  mode: 'development',
   devtool: 'source-map',
 
   module: {
     rules: [{
-      // JS LOADER
-      // Reference: https://github.com/babel/babel-loader
-      // Transpile .js files using babel-loader
-      // Compiles ES6 and ES7 into ES5 code
-      test: /\.js$/,
-      loader: 'babel-loader',
-      exclude: /node_modules/
-    }, {
-      // HTML LOADER
-      // Reference: https://github.com/webpack/raw-loader
-      // Allow loading html through js
-      test: /\.html$|.md$/,
-      loader: 'raw-loader'
-    }, {
       test: /\.less$/,
       use: [
       {
@@ -52,9 +38,6 @@ module.exports = merge(common, {
           sourceMap: true
         } // compiles Less to CSS
       }]
-    }, {
-      test: /.jpe?g$|.gif$|.png$|.svg$|.woff$|.woff2$|.ttf$|.eot$/,
-      loader: "url-loader"
     }]
   },
 
@@ -79,49 +62,49 @@ module.exports = merge(common, {
 
 });
 
-var test = {
+// var test = {
   
 
 
-  // // ISTANBUL LOADER
-  // // https://github.com/deepsweet/istanbul-instrumenter-loader
-  // // Instrument JS files with istanbul-lib-instrument for subsequent code coverage reporting
-  // // Skips node_modules and files that end with .spec.js
-  // if (isTest) {
-  //   config.module.rules.push({
-  //     enforce: 'pre',
-  //     test: /\.js$/,
-  //     exclude: [
-  //       /node_modules/,
-  //       /\.spec\.js$/
-  //     ],
-  //     loader: 'istanbul-instrumenter-loader',
-  //     query: {
-  //       esModules: true
-  //     }
-  //   })
-  // }
+//   // // ISTANBUL LOADER
+//   // // https://github.com/deepsweet/istanbul-instrumenter-loader
+//   // // Instrument JS files with istanbul-lib-instrument for subsequent code coverage reporting
+//   // // Skips node_modules and files that end with .spec.js
+//   // if (isTest) {
+//   //   config.module.rules.push({
+//   //     enforce: 'pre',
+//   //     test: /\.js$/,
+//   //     exclude: [
+//   //       /node_modules/,
+//   //       /\.spec\.js$/
+//   //     ],
+//   //     loader: 'istanbul-instrumenter-loader',
+//   //     query: {
+//   //       esModules: true
+//   //     }
+//   //   })
+//   // }
 
-  // plugins= [
-  //     // Reference: http://webpack.github.io/docs/list-of-plugins.html#noerrorsplugin
-  //     // Only emit files when there are no errors
-  //     // new webpack.NoErrorsPlugin(),
+//   // plugins= [
+//   //     // Reference: http://webpack.github.io/docs/list-of-plugins.html#noerrorsplugin
+//   //     // Only emit files when there are no errors
+//   //     // new webpack.NoErrorsPlugin(),
 
-  //     // Reference: http://webpack.github.io/docs/list-of-plugins.html#dedupeplugin
-  //     // Dedupe modules in the output
-  //     // new webpack.optimize.DedupePlugin(),
+//   //     // Reference: http://webpack.github.io/docs/list-of-plugins.html#dedupeplugin
+//   //     // Dedupe modules in the output
+//   //     // new webpack.optimize.DedupePlugin(),
 
-  //     // Reference: http://webpack.github.io/docs/list-of-plugins.html#uglifyjsplugin
-  //     // Minify all javascript, switch loaders to minimizing mode
-  //     // new webpack.optimize.UglifyJsPlugin(),
+//   //     // Reference: http://webpack.github.io/docs/list-of-plugins.html#uglifyjsplugin
+//   //     // Minify all javascript, switch loaders to minimizing mode
+//   //     // new webpack.optimize.UglifyJsPlugin(),
 
-  //     new MiniCssExtractPlugin()
+//   //     new MiniCssExtractPlugin()
 
-  // ],
+//   // ],
 
-  externals: {
-    jQuery : '$'
-  }
+//   externals: {
+//     jQuery : '$'
+//   }
 
-};
+// };
 

@@ -29,17 +29,17 @@ To build
 npm run build
 ```
 
-## Kitchen sink
-
-Demo showing all components 
-
-Live example
-[Kitchen sink demo](https://jozzhart.github.io/speedy-components/example/#/sink)
-
-To run locally
+The library includes an example project that utilises the build library.
 ```
 npm run start
 ```
+
+
+## Live demo
+
+Demo showing all components 
+
+[Live example](https://jozzhart.github.io/speedy-components/example/#/sink)
 
 ## Chat bot
 
@@ -59,10 +59,9 @@ You can see the admin interface at
 ```
 http://localhost:8080/
 ```
-
 Which will allow you to import intents from this repo in chatbot/iky_intents.json
 
-Then go to 
+Working example is available using the exmple app (see above to start).
 ```
 http://localhost:8000/#/team-dashboard
 ```

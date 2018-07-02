@@ -43,6 +43,8 @@ npm run start
 
 ## Chat bot
 
+Chat bot uses the [Iky framework](https://github.com/alfredfrancis/ai-chatbot-framework), an AI powered conversational dialog interface built in Python..  The framework includes a admin UI to manange intents, conversations etc.  The UI component interacts with the framework via a restful API.
+
 Set up the chatbot framework
 
 ```
